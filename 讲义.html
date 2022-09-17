@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>讲义</title>
+</head>
+<body style="font-family: verdana, sans-serif;font-size: 12px;color: #202122;">
+<p><span style="font-size: 19px; ">Today I first gave an <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=230447&amp;type=content&amp;rcode=dalhousie-2471119" target="_self">introduction to this course</a>.</span></p>
+<h2><span style="font-size: 24px;">RAM, Algorithm Analysis and Order Notation</span></h2>
+<p><span style="font-size: 19px;">At the beginning of this course, let us learn some basic stuff about algorithm analysis.</span></p>
+<h2><span style="font-size: 30px; color: rgb(250, 8, 8);" >Chapter1&2</span> </h2>
+<h3><span style="font-size: 19px;">Pseudocode</span></h3>
+<p><span style="font-size: 19px;">Before we analyze algorithms, let us learn how to describe an algorithm precisely. Instead of using "real" code, we use pseudocode to specify an algorithm. In a piece of pseudocode, we use the most clean and concise expressive method to describe a given algorithm. Sometimes, the pseudocode of an algorithm could even use an English sentence to describe a step of this algorithm. For example, if a complicated algorithm requires us to first sort the given input array, then we could write something like "sort the array A in ascending order using mergesort" as its first step. When writing pseudocode, we are not concerned with software engineering issues, such as data abstraction, modularity, and exception &amp; error handling. Thus, pseudocode focuses on conveying the essence of an algorithm.</span></p>
+<p><span style="font-size: 19px;">In this course, you are allowed to follow any convention of pseudocode that you prefer, as long as your pseudocode is readable and consistent. If you do not have any preference yourself, feel free to follow the way in which I write pseudocode, or the convention described in the textbook (Chapter 2).</span></p>
+<h3><span style="font-size: 19px;">Insertion Sort</span></h3>
+<p><span style="font-size: 19px;">Now, let's write down the pseudocode of insertion sort, which is a sorting algorithm taught in a previous course, before we analyze its running time.</span></p>
+<pre><span style="font-size: 19px;">INSERTION-SORT(A[1..N])
+  for j ← 2 to n
+    key ← A[j]</span><br><span style="font-size: 19px;">    i ← j - 1
+    while i &gt; 0 and A[i] &gt; key</span><br><span style="font-size: 19px;">      A[i+1] ← A[i]</span><br><span style="font-size: 19px;">      i ← i - 1</span><br><span style="font-size: 19px;">    A[i+1] ← key</span></pre>
+<p><span style="font-size: 19px;">How to measure the running time of an algorithm? We may be tempted to use wall-clock time, but this is a bad measurement as it highly depends on the computer on which the algorithm is run. Hence, to analyze an algorithm, we need remove computer details such as processor speed, disk and memory, and one way of achieving this is to count the number of elementary operations only. The goal of algorithm analysis is to predict the resources required by an algorithm, and to do this, we need a machine model under which we express our algorithms, and some way of assigning costs of the operations under this model.</span></p>
+<h3><span style="font-size: 19px;">Random Access Machine (RAM)</span></h3>
+<p><span style="font-size: 19px;">We analyze our algorithms under the random-access machine (RAM) model of computation. Algorithms are implimented as computer programs in a RAM.</span></p>
+<p><span style="font-size: 19px;">A figure illustrating RAM:</span></p>
+<p><span style="font-size: 19px;"><img src="ram.png" alt="RAM" title="RAM" width="1426" height="751"></span></p>
+<p><span style="font-size: 19px;">In this machine model, there are unbounded number of local memory cells (words). An integer or a floating-point number can be stored in a memory cell. Program instructions are executed sequentially, i.e., one after another starting from the first to the last; there is no concurrency. The location counter indicates the instruction of the program that is currently being executed.</span></p>
+<p><span style="font-size: 19px;">In this model, the time complexity (running time) is defined as the number of instructions executed, and the space complexity is the number of memory cells accessed.</span></p>
+<p><span style="font-size: 19px;">The instruction set of RAM contains instructions commonly found in real computers, such as arithmetic operations (add, subtract, multiply, divide, remainder, floor, ceiling), data movement (load, store, copy) and control (conditional &amp; unconditional branch). Each instruction uses 1 unit of time.</span></p>
+<p><span style="font-size: 19px;">[Note: I didn't have time to talk about the following paragraph in Section 2 today, but I will talk about it in Section 2 on Friday] There are instructions in real computers that are not listed above. If your algorithm requires them, then make sure to make reasonable assumptions. For example, the exponentiation operation, i.e., computing x to the power of y, would require a numerical algorithm that is costly, and we would NOT assume that there is an instruction in the RAM that can perform this operation. On the other hand, when k is an integer &lt;= the number of bits in a word, then 2<sup>k</sup>&nbsp;can be computed using a left shift. Thus we would assume that 2<sup>k</sup>&nbsp;is a constant-time operation.</span></p>
+<p><span style="font-size: 19px;">&nbsp;</span></p>
+<p><span style="font-size: 19px;">[section 2 students need to finish reading the last paragraph of lecture 1 notes]</span></p>
+<p><span style="font-size: 19px;">There are some limitations of the RAM, and more advanced models have been proposed to address these limitations. For example, to introduce concurrency to the RAM model, the PRAM model of computation was proposed. RAM does not consider memory hierarchy; to address this, models such as the external memory model were proposed. These are typically covered in graduate-level courses. To understand these models, a solid background of analyzing algorithms in the RAM is required. Furthermore, in many cases, algorithm analysis under RAM is sufficient. Thus, in this course, we mainly focus on RAM.</span></p>
+<h3><span style="font-size: 19px;">Analysis of Insertion Sort</span></h3>
+<p><span style="font-size: 19px;"><strong>1. </strong>To analyze algorithms in RAM, we first need understand that the running time of an algorithm is expressed as a function of its input size. This is because the running time of an algorithm normally grows when the size of input grows. We choose reasonable parameters associated with the problem and use them as input size. For example, in sorting, the array size is the input size. In graph algorithms, we often choose the number of vertices and the number of edges as parameters.</span></p>
+<p><span style="font-size: 19px;"><strong>2.</strong> The general steps of analyzing pseudocode are</span></p>
+<ol>
+<li><span style="font-size: 19px;">For each line of pseudocode, count the number of primitive operations in it. Pay attention to the word "primitive" here; sorting an array is not a primitive operation.</span></li>
+<li><span style="font-size: 19px;">Multiply this count with the number of times this line is executed.</span></li>
+<li><span style="font-size: 19px;">Sum up over all lines.</span></li>
+</ol>
+<p><span style="font-size: 19px;"><strong>3.</strong> To use this to analyze insertion sort, we first observe that each line of pseudocode can be implemented using a constant number of RAM instructions. Thus, we let c<sub>i</sub>&nbsp;be the cost of line i, which is a constant. Then, for each value of j in the outer loop, we let t<sub>j</sub>&nbsp;be the number of times that the while loop test in line 4 is executed. With these definitions, we have</span></p>
+<pre><span style="font-size: 19px;"> INSERTION-SORT(A[1..N])              cost                times
+1   for j ← 2 to n                    c<sub>1</sub>                  n
+2     key ← A[j]                      c<sub>2</sub>                  n-1</span><br><span style="font-size: 19px;">3     i ← j - 1                       c<sub>3</sub>                  n-1
+4     while i &gt; 0 and A[i] &gt; key      c<sub>4</sub>                  ∑<sub>j=2,3,...,n</sub> t<sub>j</sub></span><br><span style="font-size: 19px;">5       A[i+1] ← A[i]                 c<sub>5</sub>                  ∑<sub>j=2,3,...,n</sub> (t<sub>j</sub>-1)</span><br><span style="font-size: 19px;">6       i ← i - 1                     c<sub>6</sub>                  ∑<sub>j=2,3,...,n</sub> (t<sub>j</sub>-1)</span><br><span style="font-size: 19px;">7     A[i+1] ← key                    c<sub>7</sub>                  n-1</span></pre>
+<p><span style="font-size: 19px;">Now let's calculate the running time as a function of n:</span></p>
+<p><img src="tn.jpg" alt="T(n)" title="T(n)" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
+<p><span style="font-size: 19px;">This does not tell us much about the time complexity, as t<sub>j</sub>&nbsp;is not known and it depends on the actual input. The only thing that we can say about t<sub>j</sub>&nbsp;is that its value is between 1 and j (inclusive). To make sense of this function, let us see how the input affects the running time.</span></p>
+<p><span style="font-size: 19px;"><strong>4. Best Case</strong>: In the best case, the input array A is already sorted, as this guarantees that t<sub>j</sub>&nbsp;is equal to 1. In this case,</span></p>
+<p><span style="font-size: 19px;">T(n) = c<sub>1</sub>n + c<sub>2</sub>(n-1) + c<sub>3</sub>(n-1) + c<sub>4</sub>(n-1) + c<sub>7</sub>(n-1) = (c<sub>1</sub>&nbsp;+ c<sub>2</sub>&nbsp;+ c<sub>3&nbsp;</sub>+ c<sub>4</sub>&nbsp;+ c<sub>7</sub>) n - (c<sub>2</sub>&nbsp;+ c<sub>3&nbsp;</sub>+ c<sub>4</sub>&nbsp;+ c<sub>7</sub>)</span></p>
+<p><span style="font-size: 19px;">This is a linear function of n, and thus we say the running time is Θ(n).</span></p>
+<p><span style="font-size: 19px;"><strong>5. Worst Case</strong>: The case in which the input array A is reverse sorted is the worst case, as this guarantees that t<sub>j</sub>&nbsp;is equal to j. In this case,</span></p>
+<p><img src="tn2.jpg" alt="worst case" title="worst case" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
+<p><span style="font-size: 19px;">This is a quadratic function of n, and thus we say the running time is Θ(n<sup>2</sup>).</span></p>
+<p><span style="font-size: 19px;"><strong> 6. Average Case</strong>: To perform the average-case analysis, we need assume that each of the n! permutations of A is equally likely. This is much more complicated, and if you are interested, you could read the following book (available in our library) to find out (not required):</span></p>
+<p><span style="font-size: 19px;">The Art of Computer Programming, Volume 3: Sorting and Searching (2nd Edition), Donald E. Knuth.</span></p>
+<p><span style="font-size: 19px;">If you intend to read this to enrich your knowledge, you could start by reading the discussions on inversions in the input array (5.1.1) and other properties of permutations in the same chapter, Before reading 5.2.1: Sorting by Insertion.</span></p>
+<p><span style="font-size: 19px;">In this course, we mainly (though not always) concentrate on worst-case analysis. As pointed out by the textbook, there are many good reasons: Worst-case analysis gives an upper bound on the running time of the algorithm, guaranteeing the algorithm will not be more costly than the result of the analysis. In many practical applications, the worst-case happens very frequently. For example, when searching for records in a real database application, it is very often that the query would look for some key value that is not in the database. Finally, for many algorithms, the average-case running time is roughly as bad the their worst-case running time.</span></p>
+<p><span style="font-size: 19px;">To appreciate the importance of good algorithm design, take the problem of sorting an array of SIN numbers for example. According to the data published by Statistics Canada, at the end of 2015, the population in Canada is roughly 34,880,000. We use this number as the value of n. Then, n<sup>2</sup>&nbsp;is roughly 10<sup>15</sup>. Let's first throw away the constants in the analysis of insertion sort, and say this is the number of instructions required. If we use faster sorting algorithms whose cost is proportional to n lg n (in algorithms, lg n is log<sub>2</sub>&nbsp;n), then for this input, lg n is roughly 25 and n lg n is roughly 10<sup>9</sup>. If the CPU performs 10<sup>11</sup>&nbsp;(100 billion) instructions per second, then insertion sort would require 10<sup>4</sup>&nbsp;seconds which are roughly 3 hours, while mergesort and heapsort would require 1/100 second. There is a big difference. In fact, the number of instructions of insertion sort should be a constant times n<sup>2</sup>, and if the constant is about 20, then it would require a long weekend. If you use mergesort/heapsort, then, even if the constant is 200, the sorting would be done in a matter of seconds.</span></p>
+
+<h2><span style="font-size: 30px;color: rgb(250, 8, 8)">Chapter3</span> </h2>
+<h3><span style="font-size: 19px;">Order (Rate) of Growth</span></h3>
+<p><span style="font-size: 19px;">Another thing to note is that, when presenting the result of analysis, we used Θ to throw away the constant factors. This is because we care about the order (rate) of the growth of the function that represents the running time, and we often care less about the coefficients. Asymptotic notation allows us to make more simplifying abstraction.</span></p>
+<h3><span style="font-size: 19px;">7. Θ-Notation</span></h3>
+<p><span style="font-size: 19px;">First, the definition:</span></p>
+<p><span style="font-size: 19px;">Θ(g(n)) = {f(n): there exist positive constants c<sub>1</sub>, c<sub>2</sub>&nbsp;and n<sub>0</sub>, s.t. 0 &lt;= c<sub>1</sub>g(n) &lt;= f(n) &lt;= c<sub>2</sub>g(n) for all n &gt;= n<sub>0</sub>}</span></p>
+<p><span style="font-size: 19px;">Here we can say that g(n) is an asymptotically tight bound for f(n).</span></p>
+<p><span style="font-size: 19px;">Observe that in the definition, Θ(g(n)) is defined as a set of functions. We however often abuse notation (acceptable here) and say f(n) = Θ(g(n)), and this means that f(n) ∈ Θ(g(n)). Sometimes this allows us to write shorter identities. For example, 20n<sup>2</sup>&nbsp;+ 13n + 1 = 20n<sup>2</sup>&nbsp;+ Θ(n) means 20n<sup>2</sup>&nbsp;+ 13n + 1 = 20n<sup>2</sup>&nbsp;+ f(n) and f(n) ∈ Θ(n) </span></p>
+<p><span style="font-size: 19px;">Now, let's use the definition to prove that n<sup>2</sup>/2 + lg n = Θ(n<sup>2</sup>).</span></p>
+<p><span style="font-size: 19px;">Proof. To prove this claim, we must determine positive constants c<sub>1</sub>, c<sub>2</sub>&nbsp;and n<sub>0</sub>, s.t.</span></p>
+<p><span style="font-size: 19px;">c<sub>1</sub>&nbsp;n<sup>2</sup>&lt;= n<sup>2</sup>/2 + lg n &lt;= c<sub>2</sub>&nbsp;n<sup>2</sup></span></p>
+<p><span style="font-size: 19px;">This is equivalent to c<sub>1</sub>&nbsp;&lt;= 1/2 + (lg n) / n<sup>2</sup>&nbsp;&lt;= c<sub>2</sub></span></p>
+<p><span style="font-size: 19px;">Setting c<sub>1</sub>&nbsp;= 1/4, c<sub>2</sub>&nbsp;= 3/4 and n<sub>0</sub>&nbsp;= 2 would make this inequality hold (make sure that you do verify this).</span></p>
+<p><span style="font-size: 19px;">There are also other choices of values of these constants that would guarantee the inequality, and in your proof, you just have to show the existence of one set, according to the definition.</span></p>
+<p><span style="font-size: 19px;">Note that asymptotic notation applies to asymptotically positive functions only, which are functions whose values are positive for all sufficiently large n.</span></p>
+<h3><span style="font-size: 19px;">8. O-Notation (Asymptotic Upper Bound)</span></h3>
+<p><span style="font-size: 19px;">Definition: O(g(n)) = {f(n): there exist positive constants c and n<sub>0</sub>, s.t. 0 &lt;= f(n) &lt;= c g(n) for all n &gt;= n<sub>0</sub>}</span></p>
+<p><span style="font-size: 19px;">Following this definition, we can determine that n, n<sup>2</sup>, 3n<sup>2</sup>&nbsp;+ 4n + 5 are all O(n<sup>2</sup>), while n<sup>3</sup>&nbsp;is not.</span></p>
+<p><span style="font-size: 19px;">When we say that the running time of insertion sort is O(n<sup>2</sup>), we mean that the worst-case running time of insertion sort is O(n<sup>2</sup>). When we say that an algorithm runs in polynomial time, we mean that there exists a constant k, s.t. the worst-case running time of this algorithm is O(n<sup>k</sup>).</span></p>
+<h3><span style="font-size: 19px;">9. Ω-Notation (Asymptotic Lower Bound)</span></h3>
+<p><span style="font-size: 19px;">Definition: Ω(g(n)) = {f(n): there exist positive constants c and n<sub>0</sub>, s.t. 0 &lt;= c g(n) &lt;= f(n) for all n &gt;= n<sub>0</sub>}</span></p>
+<p><span style="font-size: 19px;">Based on the definitions, we have the following theorem: f(n) = Θ(g(n)) if and only if f(n) = O(g(n)) and f(n) = Ω(g(n)). For example, the statement n<sup>2</sup>/2 + lg n = Θ(n<sup>2</sup>) is equivalent to n<sup>2</sup>/2 + lg n = O(n<sup>2</sup>) and n<sup>2</sup>/2 + lg n = Ω(n<sup>2</sup>).</span></p>
+<p><span style="font-size: 19px;">Some quick examples: n<sup>2</sup>, (lg n) n<sup>2</sup>, 4n<sup>2</sup>+5 are all in Ω(g(n)), while n is not.</span></p>
+<h3><span style="font-size: 19px;">10. o-Notation</span></h3>
+<p><span style="font-size: 19px;">Definition: o(g(n)) = {f(n): for any positive constant c, there exists a constant n<sub>0</sub>, s.t. 0 &lt;= f(n) &lt; c g(n) for all n &gt;= n<sub>0</sub>}</span></p>
+<p><span style="font-size: 19px;">This definition shows that f(n) grows more slowly than g(n).</span></p>
+<p><span style="font-size: 19px;">Another definition of o-Notation is that f(n) = o(g(n)) if</span></p>
+<pre><span style="font-size: 19px;">lim  f(n)/g(n) = 0</span><br><span style="font-size: 19px;">n→∞
+</span></pre>
+<p><span style="font-size: 19px;">By the definition of limits in calculus and the first definition of o-notation, we can see that these two definitions of little-oh are equivalent.</span></p>
+<p><span style="font-size: 19px;">This second definition allows us to perform some quick analysis. For example, 2n = o(n<sup>2</sup>), but 2n<sup>2</sup>&nbsp;≠o(n<sup>2</sup>).</span></p>
+<h3><span style="font-size: 19px;">11. ω-Notation</span></h3>
+<p><span style="font-size: 19px;">First, f(n) = ω(g(n)) if and only if g(n) = o(f(n)).</span></p>
+<p><span style="font-size: 19px;">Formal definition: ω(g(n)) = {f(n): for any positive constant c, there exists a constant n<sub>0</sub>, s.t. 0 &lt;= c g(n) &lt; f(n) for all n &gt;= n<sub>0</sub>}</span></p>
+<p><span style="font-size: 19px;">Another definition using limits: f(n) = ω(g(n)) if</span></p>
+<pre><span style="font-size: 19px;">lim  f(n)/g(n) = ∞
+n→∞ 
+</span></pre>
+<h3><span style="font-size: 19px;">12. Properties</span></h3>
+<p><span style="font-size: 19px;">Here I give some properties of order notation, which are not difficult to prove using definitions. Think about their correctness when reviewing these properties.</span></p>
+<ol>
+<li><span style="font-size: 19px;">Transitivity: If f(n) = Θ(g(n)) and g(n) = Θ(h(n)), then f(n) = Θ(h(n)). This also applies to O, Ω, o and ω.</span></li>
+<li><span style="font-size: 19px;">Reflexivity: f(n) = Θ(f(n)); f(n) = O(f(n)); f(n) = Ω(f(n)). This is however not true for o or ω.</span></li>
+<li><span style="font-size: 19px;">Symmetry: f(n) = Θ(g(n)) if and only if g(n) = Θ(f(n)).</span></li>
+<li><span style="font-size: 19px;">Transpose Symmetry: f(n) = O(g(n)) if and only if g(n) = Ω(f(n)); f(n) = o(g(n)) if and only g(n) = ω(f(n)).</span></li>
+</ol>
+<h3><span style="font-size: 19px;">13. Tricks</span></h3>
+<p><span style="font-size: 19px;">Here I give some tricks that are useful for comparing functions using order notation.</span></p>
+<p><span style="font-size: 19px;">The first trick is that we can determine order notation by computing</span></p>
+<pre><span style="font-size: 19px;">lim  f(n)/g(n) = c
+n→∞ 
+</span></pre>
+<p><span style="font-size: 19px;">If the result, c, is 0, then f(n) = o(g(n)). If c = ∞, then f(n) = ω(g(n)). If 0 &lt; c &lt; ∞, then f(n) = Θ(g(n)), which also implies that both f(n) = O(g(n)) and f(n) = Ω(g(n)) hold.</span></p>
+<p><span style="font-size: 19px;">Let us use this to prove the following claim: Let d be a nonnegative constant integer and a<sub>0</sub>, a<sub>1</sub>, ..., a<sub>d</sub>&nbsp;be constants, in which a<sub>d</sub>&nbsp;&gt; 0. Let p(n) = Σ<sub>c = 0, 1, ..., d</sub>&nbsp;(a<sub>i&nbsp;</sub>n<sup>i</sup>). Then p(n) = Θ(n<sup>d</sup>).</span></p>
+<p><span style="font-size: 19px;">Proof. To prove this, we compute</span></p>
+<p><span style="font-size: 19px;">lim<sub>n → ∞</sub>&nbsp;p(n)/n<sup>d</sup>&nbsp;= lim<sub>n → ∞</sub>&nbsp;(a<sub>0</sub>/n<sup>d</sup>&nbsp;+ a<sub>1</sub>/n<sup>d-1</sup>&nbsp;+ ... + a<sub>d-1</sub>/n + a<sub>d</sub>) = a<sub>d</sub>.</span></p>
+<p><span style="font-size: 19px;">Since a<sub>d</sub>&nbsp;is a positive constant, we claim that p(n) = Θ(n<sup>d</sup>). [end of proof]</span></p>
+<p><span style="font-size: 19px;">There are some useful theorems for limits. Here I present them in a form based on the particular task of comparing two functions of complexity (running time, space, etc).</span></p>
+<p><span style="font-size: 19px;">First, L'Hopital's rule:</span></p>
+<pre><span style="font-size: 19px;">lim  (f(n)/g(n)) = lim  (f'(n)/g'(n))
+n→∞              n→∞
+</span></pre>
+<p><span style="font-size: 19px;">For example,</span></p>
+<pre><span style="font-size: 19px;">lim (ln n / n) = lim ((1/n) / 1) = 0
+n→∞             n→∞</span></pre>
+<p><span style="font-size: 19px;">Thus ln n = o(n).</span></p>
+<p><span style="font-size: 19px;">A more complicated example: Find out the relationship between f(n) = n<sup>n</sup>&nbsp;and g(n) = n!</span></p>
+<p><span style="font-size: 19px;">Solution: By Stirling's approximation</span></p>
+<p><math title="" xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mstyle><mi>n</mi><mo>!</mo><mo>=</mo><msqrt><mn>2</mn><mi>π</mi><mi>n</mi></msqrt><mo stretchy="false">(</mo><mi>n</mi><mrow><mo>/</mo></mrow><mi>e</mi><msup><mo stretchy="false">)</mo><mi>n</mi></msup><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mn>1</mn><mrow><mo>/</mo></mrow><mi>n</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mstyle><annotation encoding="latex">{"version":"1.1","math":"n!=\sqrt{2\pi n} (n/e)^n(1+\Theta(1/n))"}</annotation></semantics></math></p>
+<p><span style="font-size: 19px;">we have</span></p>
+<p><img src="factorial.jpg" alt="factorial" title="factorial" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
+<p><span style="font-size: 19px;">Therefore, f(n) = ω(g(n)).</span></p>
+<p><span style="font-size: 19px;">&nbsp;</span></p>
+<p><span style="font-size: 19px;">Two other useful theorems:</span></p>
+<p><span style="font-size: 19px;">1. If f(n) &lt;= g(n) for all n &gt; 0, then</span></p>
+<pre><span style="font-size: 19px;">lim  f(n) &lt;= lim g(n)
+n→∞         n→∞
+</span></pre>
+<p><span style="font-size: 19px;">2. Squeeze Theorem: If h(n) &lt;= f(n) &lt;= g(n) for all n &gt; 0, and</span></p>
+<pre><span style="font-size: 19px;">lim  h(n) = lim g(n)
+n→∞        n→∞
+</span></pre>
+<p><span style="font-size: 19px;">then</span></p>
+<pre><span style="font-size: 19px;">lim  f(n) = lim g(n)
+n→∞        n→∞
+</span></pre>
+<p><br><span style="font-size: 19px;">Using the squeeze theorem, we have an alternative, simpler approach that can prove n! = o(n<sup>n</sup>): Since</span></p>
+<p><span style="font-size: 19px;">0 &lt;= n! / n<sup>n</sup>&nbsp;= (1/n) (2/n) ... (n/n) &lt;= 1/n</span></p>
+<p><span style="font-size: 19px;">lim<sub>n → ∞</sub>0 = lim<sub>n → ∞</sub>(1/n) = 0</span></p>
+<p><span style="font-size: 19px;">We have</span></p>
+<p><span style="font-size: 19px;">lim<sub>n → ∞</sub>(n! / n<sup>n</sup>) = 0</span></p>
+
+<p><span style="font-size: 19px;">Finally, we can use the following property to break more complicated functions into simpler parts:</span></p>
+<p><span style="font-size: 19px;">If f<sub>1</sub>&nbsp;(n) = O(g<sub>1</sub>(n)) and f<sub>2</sub>&nbsp;(n) = O(g<sub>2</sub>(n)), then</span></p>
+<p><span style="font-size: 19px;">f<sub>1</sub>&nbsp;(n) + f<sub>2</sub>&nbsp;(n) = O(g<sub>1</sub>(n) + g<sub>2</sub>(n))</span></p>
+<p><span style="font-size: 19px;">f<sub>1</sub>&nbsp;(n) f<sub>2</sub>&nbsp;(n) = O(g<sub>1</sub>(n) g<sub>2</sub>(n))</span></p>
+<p><span style="font-size: 19px;">Let us use this property to show the relationship between (n<sup>3</sup>) (lg n)<sup>3</sup>&nbsp;(lg lg n) and (n<sup>4</sup>) (lg n). First we have lg lg n = o(lg n). Thus, (lg n)<sup>3</sup>&nbsp;(lg lg n) = o(lg<sup>4</sup>&nbsp;n) = o(n). Therefore, n<sup>3</sup>&nbsp;(lg n)<sup>3</sup>&nbsp;(lg lg n) = n<sup>3</sup>&nbsp;(o(lg<sup>4</sup>&nbsp;n)) = o(n<sup>4</sup>) = o(n<sup>4</sup>&nbsp;lg n).</span></p>
+<p><span style="font-size: 19px;"></span></p>
+<h2><span style="font-size: 24px;">Algorithm Design and Maximum Subrange Sum</span></h2>
+<p><span style="font-size: 19px;">I will now start talking about algorithm design. Before discussing each algorithm design paradigm, I will show different algorithmic solutions to the maximum subrange sum problem, to show good algorithm design is essential.</span></p>
+<h3><span style="font-size: 19px;">Maximum Subrange Sum</span></h3>
+<p><span style="font-size: 19px;">In this problem, the input is an array x of n possibly negative integers. The output of the algorithm for this problem is the maximum sum found in any subarray (possibly empty) of the input.</span></p>
+<p><span style="font-size: 19px;">In the following example, n = 10 and the content of x is: 31, -41, 59, 26, -53, 58, 97, -93, -23, 84. The output is the sum of the subarray x[3..7], which is 187.</span></p>
+<p><span style="font-size: 19px;">To understand this problem better, let us consider some special cases. First, if all the entries are positive, then the subarray with maximum sum is the entire array x. Second, if all the entries are negative, then the answer is 0, which corresponds to an empty subarray.</span></p>
+<p><span style="font-size: 19px;">I described in class that this abstract problem is from practice.</span></p>
+<h3><span style="font-size: 19px;">Solution 1 (Brute-force)</span></h3>
+<p><span style="font-size: 19px;">In a brute-force solution to this problem we enumerate all possible subarrays, compute the sum of each of them and return the maximum.</span></p>
+<p><span style="font-size: 19px;">In the pseudocode below, make sure to distinguish the letter l and the digit 1:</span></p>
+<pre><span style="font-size: 19px;">maxsubrangesum1(x[1..n])</span><br><span style="font-size: 19px;">  max ← 0
+  for l ← 1 to n do
+    for u ← l to n do</span><br><span style="font-size: 19px;">      sum ← 0</span><br><span style="font-size: 19px;">      for i ← l to u do
+        sum ← sum + x[i]
+        if sum &gt; max then
+          max ← sum
+  return max</span></pre>
+<p><span style="font-size: 19px;">To analyze the running time, we need find out the number of times the statement in the innermost loop is executed. An upper bound would be n<sup>3</sup>. With this it is not difficult to show that the running time is O(n<sup>3</sup>). With greater care, we can show the running time is Θ(n<sup>3</sup>).</span></p>
+<h3><span style="font-size: 19px;">Solution 2</span></h3>
+<p><span style="font-size: 19px;">To improve the running time, we observe that in the previous solution, we perform a lot of recomputation in the innermost loop. For the example given before, to computer the sum of the subarray x[3..5], we do a loop to get the result 32. Then, in the next iteration, we compute the sum of x[3..6], again using a loop. We can however easily compute x[3..6] as x[3..5] + x[6].</span></p>
+<p><span style="font-size: 19px;">We can formalize this observation using the following equation: sum of x[l..u] = sum of x[l..u-1] + x[u].</span></p>
+<pre><span style="font-size: 19px;">maxsubrangesum2(x[1..n])</span><br><span style="font-size: 19px;">  max ← 0
+  for l ← 1 to n do
+    sum ← 0
+    for u ← l to n do</span><br><span style="font-size: 19px;">      sum ← sum + x[u]
+      if sum &gt; max then
+        max ← sum
+  return max</span></pre>
+<p><span style="font-size: 19px;">The running time is Θ(n<sup>2</sup>).</span></p>
+<h3><span style="font-size: 19px;">Solution 3: Another Θ(n<sup>2</sup>)-Time Solution</span></h3>
+<p><span style="font-size: 19px;">We describe another Θ(n<sup>2</sup>)-Time Solution, not because it is more efficient than solution 2, but because it makes use of a standard trick which is good to know.</span></p>
+<p><span style="font-size: 19px;">In this solution, we first precompute the prefix sum array p[0..n], in which p[i] = x[1] + x[2] + ... + x[i], and p[0] = 0 (sum of the empty prefix). We can perform one loop to compute all the entries of p in O(n) time. With this, the sum of x[l..u] can be computed using x[l..u] = p[u] - p[l-1].</span></p>
+<pre><span style="font-size: 19px;">maxsubrangesum3(x[1..n])
+  p[0] ← 0
+  for i ← 1 to n do
+    p[i] ← p[i-1] + x[i]
+</span><br><span style="font-size: 19px;">  max ← 0
+  for l ← 1 to n do
+    for u ← l to n do</span><br><span style="font-size: 19px;">      sum ← p[u] - p[l-1]
+      if sum &gt; max then
+        max ← sum
+  return max</span></pre>
+<h3><span style="font-size: 19px;">Solution 4: Applying an Algorithmic Paradigm: Divide-and-Conquer</span></h3>
+<p><span style="font-size: 19px;">We learned divide-and-conquer when we learned mergesort in a previous course. Now let's apply this idea here.</span></p>
+<p><span style="font-size: 19px;">Our algorithm breaks x into two halves. We can then find the maximum subrange sum in each half in recursive manner. After this, we still need consider subranges that straddle the midpoint. A useful observation is that among these ranges, the one with the maximum sum consists of a maximum-sum suffix of the left half of x, and a maximum-sum prefix of the right half of x. We can construct a proof by contradiction for this.</span></p>
+<p><span style="font-size: 19px;">This gives us the following solution; note that we first need a recursive algorithm which solves this problem for array x[l..u].</span></p>
+<pre><span style="font-size: 19px;">maxsubrangesum4(x, l, u)
+  if l &gt; u then
+    return 0
+  if l = u then
+    return max(0, x[l])
+
+  m ← ⌊(l+u)/2⌋   // midpoint
+
+  suml ← 0  // keep track of the sum of the suffixes of x[l..m]
+  maxleft ← 0  
+  for i ← m downto l do
+    suml ← suml + x[i]
+    maxleft ← max(maxleft, suml)
+
+  sumr ← 0  // keep track of the sum of the prefixes of x[m..u]
+  maxlright ← 0
+  for i ← m+1 to u do
+    sumr ← sumr + x[i]
+    maxright ← max(maxright, sumr)
+
+  maxa ← maxsubrangesum4(x, l, m)
+  maxb ← maxsubrangesum4(x, m+1, u)
+
+  return max(maxa, maxb, maxleft+maxright)</span></pre>
+<p><span style="font-size: 19px;">To use this recursive algorithm to solve the maximum subrange sum problem, call</span></p>
+<pre><span style="font-size: 19px;">maxsubrangesum4(x, l, n)<br></span></pre>
+<p><span style="font-size: 19px;">Let T(n) be the running time. Then we can express T(n) using the following recurrence:</span></p>
+<p><span style="font-size: 19px;">T(n) = T(⌈n/2⌉) + T(⌊n/2⌋) + n if n &gt; 1</span><br><span style="font-size: 19px;">T(n) = 1 if n = 1</span></p>
+<p><span style="font-size: 19px;">To solve it, </span><span style="font-size: 19px;">we can assume n is a power of 2, which guarantees that the left and right half arrays are of the same size. This is a typical and reasonable assumption. Then, it is not difficult to see the running time satisfies T(n) = 1 if n = 1 and T(n) = 2 T(n/2) + n if n &gt; 1. This recurrence is the same as the recurrence for the running time of mergesort, so the running time of our algorithm is also O(n lg n) (later we will learn how to analyze running time given recurrences).</span></p>
+
+
+
+
+</body></html>
