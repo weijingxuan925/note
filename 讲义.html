@@ -125,7 +125,7 @@ n→∞             n→∞</span></pre>
 <p><span style="font-size: 19px;">Thus ln n = o(n).</span></p>
 <p><span style="font-size: 19px;">A more complicated example: Find out the relationship between f(n) = n<sup>n</sup>&nbsp;and g(n) = n!</span></p>
 <p><span style="font-size: 19px;">Solution: By Stirling's approximation</span></p>
-<p><math title="" xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mstyle><mi>n</mi><mo>!</mo><mo>=</mo><msqrt><mn>2</mn><mi>π</mi><mi>n</mi></msqrt><mo stretchy="false">(</mo><mi>n</mi><mrow><mo>/</mo></mrow><mi>e</mi><msup><mo stretchy="false">)</mo><mi>n</mi></msup><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mn>1</mn><mrow><mo>/</mo></mrow><mi>n</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mstyle><annotation encoding="latex">{"version":"1.1","math":"n!=\sqrt{2\pi n} (n/e)^n(1+\Theta(1/n))"}</annotation></semantics></math></p>
+<p><img src="math1.png" alt="math" title="math" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
 <p><span style="font-size: 19px;">we have</span></p>
 <p><img src="factorial.jpg" alt="factorial" title="factorial" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
 <p><span style="font-size: 19px;">Therefore, f(n) = ω(g(n)).</span></p>
@@ -155,6 +155,8 @@ n→∞        n→∞
 <p><span style="font-size: 19px;">f<sub>1</sub>&nbsp;(n) f<sub>2</sub>&nbsp;(n) = O(g<sub>1</sub>(n) g<sub>2</sub>(n))</span></p>
 <p><span style="font-size: 19px;">Let us use this property to show the relationship between (n<sup>3</sup>) (lg n)<sup>3</sup>&nbsp;(lg lg n) and (n<sup>4</sup>) (lg n). First we have lg lg n = o(lg n). Thus, (lg n)<sup>3</sup>&nbsp;(lg lg n) = o(lg<sup>4</sup>&nbsp;n) = o(n). Therefore, n<sup>3</sup>&nbsp;(lg n)<sup>3</sup>&nbsp;(lg lg n) = n<sup>3</sup>&nbsp;(o(lg<sup>4</sup>&nbsp;n)) = o(n<sup>4</sup>) = o(n<sup>4</sup>&nbsp;lg n).</span></p>
 <p><span style="font-size: 19px;"></span></p>
+
+<h2><span style="font-size: 30px;color: rgb(250, 8, 8)">Chapter4</span></h2>
 <h2><span style="font-size: 24px;">Algorithm Design and Maximum Subrange Sum</span></h2>
 <p><span style="font-size: 19px;">I will now start talking about algorithm design. Before discussing each algorithm design paradigm, I will show different algorithmic solutions to the maximum subrange sum problem, to show good algorithm design is essential.</span></p>
 <h3><span style="font-size: 19px;">Maximum Subrange Sum</span></h3>
