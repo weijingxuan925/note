@@ -233,7 +233,6 @@ n→∞        n→∞
 <p><span style="font-size: 19px;">T(n) = T(⌈n/2⌉) + T(⌊n/2⌋) + n if n &gt; 1</span><br><span style="font-size: 19px;">T(n) = 1 if n = 1</span></p>
 <p><span style="font-size: 19px;">To solve it, </span><span style="font-size: 19px;">we can assume n is a power of 2, which guarantees that the left and right half arrays are of the same size. This is a typical and reasonable assumption. Then, it is not difficult to see the running time satisfies T(n) = 1 if n = 1 and T(n) = 2 T(n/2) + n if n &gt; 1. This recurrence is the same as the recurrence for the running time of mergesort, so the running time of our algorithm is also O(n lg n) (later we will learn how to analyze running time given recurrences).</span></p>
 
-1
 
 <h3><span style="font-size: 19px;">Solution 5</span></h3>
 <p><span style="font-size: 19px;">Suppose that we have found the maximum subrange sum for x[1..j-1]. To find it for x[1..j], there are two cases.</span></p>
@@ -245,7 +244,7 @@ n→∞        n→∞
 </span><br><span style="font-size: 19px;">  for i ← 1 to n do
     maxsuffixsum ← max(maxsuffixsum + x[i], 0)</span><br><span style="font-size: 19px;">    maxsofar ← max(maxsofar, maxsuffixsum)</span><br><br><span style="font-size: 19px;">  return maxsofar</span></pre>
 <p><span style="font-size: 19px;">This example requires only O(n) time.</span></p>
-<h3><span style="font-size: 19px;">Algorithm Design Paradigms</span></h3>
+<h3><span style="font-size: 21px; color: red;">Algorithm Design Paradigms</span></h3>
 <p><span style="font-size: 19px;">From these five solutions, we can see that good algorithm design techniques are essential. The following are eight algorithm design paradigms</span></p>
 <ol>
 <li><span style="font-size: 19px;">reduce to know problem</span></li>
@@ -258,10 +257,10 @@ n→∞        n→∞
 <li><span style="font-size: 19px;">probabilistic and randomized solution</span></li>
 </ol>
 <p><span style="font-size: 19px;">&nbsp;</span></p>
-<h2><span style="font-size: 24px;">Reduce to Known Problem</span></h2>
-<p><span style="font-size: 19px;">The first algorithm design paradigm that we will discuss is "reduce to known problem". This is to develop an algorithm for a problem by treating this problem as a special case of a problem that we already know how to solve efficiently. For most of the examples that we will see here, we reduce the problems to sorting, which we know how to solve in O(n lg n) time (e.g., mergesort, heapsort).</span></p>
+<h2><span style="font-size: 24px; color: red;">Reduce to Known Problem</span></h2>
+<p><span style="font-size: 19px;"> The first algorithm design paradigm that we will discuss is "reduce to known problem". This is to develop an algorithm for a problem by treating this problem as a special case of a problem that we already know how to solve efficiently. For most of the examples that we will see here, we reduce the problems to sorting, which we know how to solve in O(n lg n) time (e.g., mergesort, heapsort).</span></p>
 <p><span style="font-size: 19px;">Let's apply this paradigm to solve some problems.</span></p>
-<h3><span style="font-size: 19px;">Element Distinctness (Uniqueness) Problem</span></h3>
+<h3><span style="font-size: 19px;">1. Element Distinctness (Uniqueness) Problem</span></h3>
 <p><span style="font-size: 19px;">This problem asks us to determine whether the elements in a given array of n numbers are distinct.</span></p>
 <p><span style="font-size: 19px;">Solution 1: A brute-force solution is to compare each element to every other element, and this solution requires a double loop. There are n choose 2 pairs of elements to compare. The running time is O(n<sup>2</sup>).</span></p>
 <p><span style="font-size: 19px;">Solution 2: Sort the n numbers, and then we walk through the sorted array, comparing each element with the one immediately to its right. If we find any element that is equal to the element immediately to its right, then we have found a repeated element. If not, then the numbers are distinct. Since sorting requires O(n lg n) time and the computation after sorting requires O(n) time, this solution uses O(n lg n) time.</span></p>
@@ -269,11 +268,11 @@ n→∞        n→∞
 <p><span style="font-size: 19px;">Solution 4: This solution is for a special case in which we know that the input values are relatively small integers between 1 and M. In this case, we can make an array B[1..M], and initialize all its entries to 0. Then we scan x, writing a 1 in B[i] if we encounter i during the scan. Before writing, we check if B[i] has a 1 in it already, and if it does, then we have found a repeated element.</span></p>
 <p><span style="font-size: 19px;">This requires O(M+n) time and O(M+n) space, and it is good if the numbers are small, e.g., M = O(n).</span></p>
 <p><span style="font-size: 19px;">Exercise: how to modify our approach so that we need not initialize the entries of B to 0?</span></p>
-<h3><span style="font-size: 19px;">Set Intersection</span></h3>
+<h3><span style="font-size: 19px;">2. Set Intersection</span></h3>
 <p><span style="font-size: 19px;">In this problem, we are given two sets of integers (represented as two arrays), and each set is of size n, and we compute the intersection of these two sets.</span></p>
 <p><span style="font-size: 19px;">Solution 1: A naive approach is to loop through one array, checking to see if any of its elements is contained in the other. Again, this requires O(n<sup>2</sup>) time.</span></p>
 <p><span style="font-size: 19px;">Solution 2: Sort the first array. Then we loop through the second array, and for each element in the second array, we find out whether it exists in the first array using binary search. This requires O(n lg n) time.</span></p>
-<h3><span style="font-size: 19px;">Collinear Points</span></h3>
+<h3><span style="font-size: 19px;">3. Collinear Points</span></h3>
 <p><span style="font-size: 19px;">In this problem, we are given n points in the plane, and we are to find out whether there are three points that are collinear, i.e., lie along the same line.</span></p>
 <p><span style="font-size: 19px;">Solution 1: For each triple of points, say P<sub>1</sub>&nbsp;= (x<sub>1</sub>, y<sub>1</sub>), P<sub>2</sub>&nbsp;= (x<sub>2</sub>, y<sub>2</sub>) and P<sub>3</sub>&nbsp;= (x<sub>3</sub>, y<sub>3</sub>), compute the slopes of the line connection P<sub>1</sub>&nbsp;with P<sub>2</sub>, and the line connecting P<sub>1</sub>&nbsp;with P<sub>3</sub>. If they are equal, then these three points are collinear. We can easily write a loop of three levels to check each triple exactly once. There are n choose 3 triples, and this require Θ(n<sup>3</sup>) time.</span></p>
 <p><span style="font-size: 19px;">Solution 2: For each point P, compute the slope of each line defined by P and another point in the given set of points. If there is a duplicate element among all these slopes, then there are collinear points. This way we have reduced the problem of finding whether there is a triple of collinear points involving P to the element distinctness problem. Thus this algorithm runs in O(n<sup>2</sup>&nbsp;lg n) time.</span></p>
