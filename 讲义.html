@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html><head>
 <meta charset="utf-8">
 <title>讲义</title>
@@ -279,4 +279,52 @@ n→∞        n→∞
 <p><span style="font-size: 19px;">Note that no one knows whether the problem of collinear points can be solved in O(n<sup>2</sup>) time, and thus our second solution is quite efficient.</span></p>
 
 
+
+<h3><span style="font-size: 19px;">4. Convex Hull</span></h3>
+<p><span style="font-size: 19px;">In this problem, we have a set, Q, of points in the plane, given by the x- and y-coordinates of these points. We would like to compute the convex hull of this point set, i.e., the smallest convex polygon P for which each point in Q is either on the boundary of P or in its interior.</span></p>
+<p><span style="font-size: 19px;">Since the points in Q could possibly lie along the boundary of P, it is not difficult to see that all the vertices of P are in Q.</span></p>
+<p><span style="font-size: 19px;">One way of "computing" the convex hull is to bang nails into a board at the positions where the points are located, put an elastic rubber band around all the nails, and then let go. The law of physics will do the computation and define the convex hull using the rubber band.</span></p>
+<p><span style="font-size: 19px;">This problem has many applications in computer graphics and CAD. Many programs compute the convex hull of a complicated shape, and use it to determine whether the user's mouse clicked on it.</span></p>
+<p><span style="font-size: 19px;">To study the solutions to convex hull, let's first learn some background knowledge in geometry.</span></p>
+<p><span style="font-size: 19px;">Polar angle: The polar angel of a point p with respect to the origin point p<sub>0</sub>&nbsp;is the angle from the x-axis through the origin to the point p<sub>0</sub>, rotating counter clockwise.</span></p>
+<p><span style="font-size: 19px;"><img src="polar.jpg" alt="polar angle" title="polar angle" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
+<p><span style="font-size: 19px;">In the above example, θ is the polar angle of p with respect to p<sub>0</sub>.</span></p>
+<p><span style="font-size: 19px;">Compute the angle between two directed line segments: Let u and v be the vectors representing two directed line segments whose starting endpoints are the the origin point p<sub>0</sub>. How do we compute the angel, θ, between u and v?</span></p>
+<p><span style="font-size: 19px;"><img src="angle.jpg" alt="angle" title="angle" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
+<p><span style="font-size: 19px;">We can use the following equation to compute θ: u⋅v = ||u|| ||v|| cos θ. Here the dot is the dot product of two vectors. Say, u = (x<sub>1</sub>, y<sub>1</sub>) and v = (x<sub>2</sub>, y<sub>2</sub>), then u⋅v = x<sub>1</sub>x<sub>2</sub>&nbsp;+ y<sub>1</sub>y<sub>2</sub>, and ||u|| is the length of u.</span></p>
+<p><span style="font-size: 19px;">Note that we cannot assume arc cos or square root to be a constant-time operation supported by RAM. However, in many algorithms, we just have to compare two angles without computing their actual degrees. Thus, since this equation allows us to compute (cos θ)<sup>2</sup>&nbsp;in constant time, we can make use of it to compare two angles in constant time.</span></p>
+<p><span style="font-size: 19px;">Before introducing our algorithms for convex hull, let's make a simplifying assumption that no three points in the input point set are colinear. This is a common assumption; it is not difficult to modify our algorithms to handle the special cases in which there are colinear points (and yes, these special cases should be taken care of in actual implementation), and we make this assumption so that we can focus on explaining algorithmic ideas.</span></p>
+<p><span style="font-size: 19px;">A naive approach is to consider the line joined by each pair of points, p<sub>1</sub>&nbsp;and p<sub>2</sub>. Then, if all the other points are on the same side of this line, then the line segment between p<sub>1</sub>&nbsp;and p<sub>2</sub>&nbsp;is an edge of the convex hull.</span></p>
+<p><span style="font-size: 19px;">How do we test if all the other points are on the same side of this line? One way of doing this is to first determine the equation of the line, say, Ax+By+C = 0. Then, substitute the coordinates of each of the other points into the left hand side. If the signs of the results are the same, then all the other points are on the same side.</span></p>
+<p><span style="font-size: 19px;">It is not difficult to see the correctness of the algorithm, but the running time is O(n<sup>3</sup>). Can we do better?</span></p>
+<p><span style="font-size: 19px;"><strong>5. Jarvis's March</strong>&nbsp;(Gift Wrapping): A better algorithm of computing convex hull is Jarvis' march. It is also called gift wrapping as its computational process is similar to the process of wrapping a gift: start from an extreme point and wrap it tightly using a piece of paper.</span></p>
+<p><span style="font-size: 19px;">The algorithm is</span></p>
+<ol>
+<li><span style="font-size: 19px;">Start with p<sub>0</sub>, the point with the minimum y-coordinate, breaking ties arbitrarily. p<sub>0</sub>&nbsp;must be on CH(Q), the convex hull of the input point set Q.</span></li>
+<li><span style="font-size: 19px;">The next vertex p<sub>1</sub>&nbsp;on CH(Q) has the smallest polar angel with respect to p<sub>0</sub>, and thus we can find it in linear time. To find the point, p<sub>2</sub>, after p<sub>1</sub>&nbsp;in CH(Q), we further find the point with the smallest polar angel with respect to p<sub>1</sub>, and so on.</span></li>
+<li><span style="font-size: 19px;">When we reach the highest point p<sub>k</sub>, we have constructed the right chain of CH(Q).</span></li>
+<li><span style="font-size: 19px;">The left chain can be computed in a symmetric way. We start from p<sub>k</sub>&nbsp;and choose p<sub>k+1</sub>&nbsp;as the point with the smallest polar angel with respect to p<sub>k</sub>, but from the negative x-axis, and so on.</span></li>
+</ol>
+<p><span style="font-size: 19px;"><img src="jarvis.jpg" alt="Jarvis's March" title="Jarvis's March" width="799" height="479"></span></p>
+<p><span style="font-size: 19px;">If the convex hull has h vertices, then the running time of this algorithm is O(nh), since it uses O(n) time to "march" from one vertex of CH(Q) to the next and there are h vertices. This is O(n<sup>2</sup>) in the worst case.</span></p>
+<p><span style="font-size: 19px;"><strong>6. Graham's Scan</strong>: During Jarvis's march, we repeatedly look for the smallest polar angles all the way, so can we just reduce the problem into sorting by polar angle? It is not as simple as this, since we keep changing origin points. The Graham's scan algorithm still manages to reduce it to sorting, in a subtle way. It has the following steps:</span></p>
+<ol>
+<li><span style="font-size: 19px;">Locate p<sub>0</sub>, the lowest point in Q.</span></li>
+<li><span style="font-size: 19px;">Sort all the other points by their polar angle with respect to p<sub>0</sub>. Let p<sub>1</sub>, p<sub>2</sub>, ..., p<sub>n-1</sub>&nbsp;denote the result of sorting.</span></li>
+<li><span style="font-size: 19px;">Process the points starting with the one with the smallest polar angle. Add each point in turn with the next higher angle. If doing so causes us to make a left turn, continue. Otherwise, we made a right turn, and the point in the middle of the turn is not in CH(Q). Discard it and join the previous point to the new point. Backtrack, discarding points as you go until you end up making a left turn again.</span></li>
+</ol>
+<p><span style="font-size: 19px;"><img src="graham.jpg" alt="Graham's Scan" title="Graham's Scan" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
+<p><span style="font-size: 19px;">The pseudocode for Step 3 is</span></p>
+<pre><span style="font-size: 19px;">s ← an empty stack
+PUSH(p<sub>0</sub>, S)
+PUSH(p<sub>1</sub>, S)
+PUSH(p<sub>2</sub>, S)
+for i ← 3 to n-1 do
+  while the angle formed by points NEXT-TO-TOP(S), TOP(S), and p<sub>i</sub> makes a nonleft turn then
+    POP(S)
+  PUSH(p<sub>i</sub>, S)
+return S<br><br></span></pre>
+<p><span style="font-size: 19px;">In the next lecture, I will talk more about this piece of pseudocode and then analyze the running time.</span></p>
+<p>&nbsp;</p>
+<pre><span style="font-size: 19px;">&nbsp;</span></pre>
 </body></html>
