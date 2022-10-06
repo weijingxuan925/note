@@ -326,5 +326,55 @@ for i ← 3 to n-1 do
 return S<br><br></span></pre>
 <p><span style="font-size: 19px;">In the next lecture, I will talk more about this piece of pseudocode and then analyze the running time.</span></p>
 <p>&nbsp;</p>
+
+<p><span style="font-size: 19px;">To analyze the running time of Graham's scan, it is easy to see that Step 1 requires O(n) time and Step 2 requires O(n lg n) time. Step 3 is not obvious. In Step 3, all the lines excluding the while loop requires O(n) time in total. To bound the cost of the while loop, it suffices to find out how many times the POP operation is executed. To find this out, observe that each point is visited at most twice in the pseudocode for Step 3: once when we add it to CH(Q) using PUSH, and possibly the second time when we discard it using POP. Thus the number of times that POP is executed is at most the number of points. Therefore, Step 3 requires O(n) time. The overall running time of Graham's scan is thus O(n lg n).</span></p>
+<h1><span style="font-size: 24px; color: red;">3. Divide-and-Conquer</span></h1>
+<p><span style="font-size: 19px;">We learned divide-and-conquer in previous courses, and we will learn more about it in this course. The general steps of divide-and-conquer are</span></p>
+<ul>
+<li><span style="font-size: 19px;">DIVIDE the given problem into a number of subproblems</span></li>
+<li><span style="font-size: 19px;">CONQUER the subproblems by solving them recursively</span></li>
+<li><span style="font-size: 19px;">COMBINE the solutions to the subproblems into the solution to the original problem</span></li>
+</ul>
+<p><span style="font-size: 19px;">In this course, we have already seen an example: the 4th solution to the maximum subarray problem.&nbsp;Let T(n) be the running time of that algorithm. Then we can express T(n) using the following recursive formula:</span></p>
+<p><span style="font-size: 19px;">T(n) = T(⌈n/2⌉) + T(⌊n/2⌋) + n if n &gt; 1</span><br><span style="font-size: 19px;">T(n) = 1 if n = 1</span></p>
+<p><span style="font-size: 19px;">To analyze the running time, assume, for simplicity, that n is a power of 2 (I will explain why this is a reasonable assumption). Then T(n) = 2T(n/2) + n if n &gt; 1.</span></p>
+<p><span style="font-size: 19px;">The first approach that I will use to solve the recurrence is called iteration. The idea is to plug the right-hand side of the equation repeatedly into the left-hand side.</span></p>
+<p><span style="font-size: 19px;">Assume that n = 2<sup>k</sup>. Then we have</span></p>
+<p><span style="font-size: 19px;">T(2<sup>k</sup>) = 2T(2<sup>k-1</sup>) + 2<sup>k</sup></span><br><span style="font-size: 19px;">2T(2<sup>k-1</sup>) = 4T(2<sup>k-2</sup>) + 2<sup>k</sup></span><br><span style="font-size: 19px;">...</span><br><span style="font-size: 19px;">2<sup>k-1</sup>T(2) = 2<sup>k</sup>T(1) + 2<sup>k</sup></span></p>
+<p><span style="font-size: 19px;">After summing all these equations, we have T(2<sup>k</sup>) = 2<sup>k</sup>&nbsp;+ k 2<sup>k</sup>&nbsp;= 2<sup>k</sup>(k+1)</span></p>
+<p><span style="font-size: 19px;">Therefore, T(n) = n(lg n + 1) = O(n lg n).</span></p>
+<p><span style="font-size: 19px;">Now, let's discuss why it is OK, in the analysis of the running time of mergesort, to make the simplifying assumption that n is a power of 2. Even if n is not necessarily a power of 2, we still have the following equation:</span></p>
+<p><span style="font-size: 19px;">T(n) = T(2<sup>lg n</sup>) &lt;= T(2<sup>⌈lg n⌉</sup>) = 2<sup>⌈lg n⌉</sup>(⌈lg n⌉ + 1) &lt; 2<sup>lg n + 1</sup>&nbsp;(lg n + 1 + 1) = 2n (lg n + 2) = O(n lg n)</span></p>
+<p><span style="font-size: 19px;">Therefore, in such recurrences, we normally ignore floor and ceiling when we solve them to compute the running time.</span></p>
+<p><span style="font-size: 19px;">Next, let's using a different approach, namely the substitution method, to analyze running time. Study the following table</span></p>
+<pre><span style="font-size: 19px;">n      1    2    4    8   16   32
+T(n)   1    4   12   32   80  192
+T(n)/n 1    2    3    4    5    6</span></pre>
+<p><span style="font-size: 19px;">We can guess that T(n)/n = k + 1, where n = 2<sup>k</sup>.</span></p>
+<p><span style="font-size: 19px;">Thus, our guess is T(2<sup>k</sup>) = (k+1)2<sup>k</sup>.</span></p>
+<p><span style="font-size: 19px;">Now let's prove it by induction. Clearly it is true for k = 0. Assume it is true for k; we will prove it for k+1. We have</span></p>
+<p><span style="font-size: 19px;">T(2<sup>k+1</sup>) = 2T(2<sup>k</sup>) + 2<sup>k+1</sup>&nbsp;= 2(k+1)2<sup>k</sup>&nbsp;+ 2<sup>k+1</sup>&nbsp;= (k+2)2<sup>k+1</sup></span></p>
+<h3><span style="font-size: 19px;">&nbsp;</span></h3>
+<h3><span style="font-size: 19px;">Multiply two n-bit nonnegative numbers</span></h3>
+<p><span style="font-size: 19px;">In this problem, we are given two n-bit numbers, and we are to compute the product of these two. Naturally, this makes sense if n is so large that these numbers do not fit in a word. Thus, an array of n entries are used to store the n bits in each of these numbers.</span></p>
+<p><span style="font-size: 19px;">If we design an algorithm based on the pencil-and-paper method, it would require O(n<sup>2</sup>) time. Now let's see if we can make any improvement using divide-and-conquer.</span></p>
+<p><span style="font-size: 19px;">Let X and Y be the two input n-bit numbers. Assume that the n bits representing X is the concatenation of A and B, and the n bits representing Y is the concatenation of C and D, where A, B, C and D are n/2-bit numbers. If we are to write down pseudocode, we can use arrays of 0/1 digits to represent X, Y, A, B, C and D.</span></p>
+<p><span style="font-size: 19px;"><strong>Solution 1</strong>: This solution is based on the following equation:</span></p>
+<p><span style="font-size: 19px;">XY = (A 2<sup>n/2</sup>&nbsp;+ B) (C 2<sup>n/2</sup>&nbsp;+ D) = (AC) 2<sup>n</sup>&nbsp;+ (AD + BC) 2<sup>n/2</sup>&nbsp;+ BD</span></p>
+<p><span style="font-size: 19px;">This immediately suggests the following idea of doing divide-and-conquer: First, perform four multiplications to compute AC, AD, BC, and BD. That is, solve 4 subproblems of size n/2. Then, use the solutions to these subproblems to compute XY; to do this, we simply perform additions and multiplications by 2<sup>n</sup>&nbsp;(or 2<sup>n/2</sup>), and these multiplications can be performed by appending 0 bits. Thus, we have the following recurrence on running times:</span></p>
+<p><span style="font-size: 19px;">T(n) = 4T(n/2) + cn if n &gt; 1, and T(n) = c if n = 1. c is a constant here.</span></p>
+<p><span style="font-size: 19px;">We use the iteration approach again.</span></p>
+<p><span style="font-size: 19px;">T(2<sup>k</sup>) = 4T(2<sup>k-1</sup>) + c 2<sup>k</sup></span><br><span style="font-size: 19px;">4T(2<sup>k-1</sup>) = 16T(2<sup>k-2</sup>) + 4 c 2<sup>k-1</sup></span><br><span style="font-size: 19px;">...</span><br><span style="font-size: 19px;">4<sup>k-1</sup>T(2) = 4<sup>k</sup>T(1) + 4<sup>k-1</sup>&nbsp;c 2</span></p>
+<p><span style="font-size: 19px;">When we sum up, we get T(2<sup>k</sup>) = c 4<sup>k</sup>&nbsp;+ c (2<sup>k</sup>&nbsp;+ 2<sup>k+1</sup>&nbsp;+ ... + 2<sup>2k-1</sup>) = c 4<sup>k</sup>&nbsp;+ c (4<sup>k</sup>&nbsp;- 2<sup>k</sup>)</span></p>
+<p><span style="font-size: 19px;">Thus T(n) = (c + c) n<sup>2</sup>&nbsp;- cn = O(n<sup>2</sup>).</span></p>
+<p><span style="font-size: 19px;">Thus this solution does not achieve any improvement compared with the pencil-and-paper solution.</span></p>
+<p><span style="font-size: 19px;"><strong>Solution 2: Karatsuba's algorithm</strong></span></p>
+<p><span style="font-size: 19px;">The second solution is based on the following equation</span></p>
+<p><span style="font-size: 19px;">XY = (2<sup>n</sup>&nbsp;+ 2<sup>n/2</sup>) AC + 2<sup>n/2</sup>&nbsp;(A-B)(D-C) + (2<sup>n/2</sup>&nbsp;+ 1) BD</span></p>
+<p><span style="font-size: 19px;">You can easily verify the correctness of this equation by expanding it.</span></p>
+<p><span style="font-size: 19px;">If we design a divide-and-conquer approach based on this equation, we just have to solve 3 subproblems: the computation of AC, (A-B)(D-C) and BD. Thus the running time is</span></p>
+<p><span style="font-size: 19px;">T(n) = 3T(n/2) + cn if n &gt; 1</span><br><span style="font-size: 19px;">T(n) = c if n = 1</span></p>
+<p><span style="font-size: 19px;">We can prove this by induction (left as an exercise): T(2<sup>k</sup>) &lt;= c(3<sup>k+1</sup>&nbsp;- 2<sup>k+1</sup>).&nbsp;</span></p>
+
 <pre><span style="font-size: 19px;">&nbsp;</span></pre>
 </body></html>
