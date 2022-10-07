@@ -389,7 +389,7 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">Let a &gt;=1 and b &gt; 1 be constants. Let f(n) be a function. Let T(n) be defined on nonnegative integers by the recurrence T(n) = a T(n/b) + f(n), where we interpret n/b to mean either ⌊n/b⌋ or ⌈n/b⌉. Then</span></p>
 <ol>
 <li><span style="font-size: 19px;">If f(n) = O(n<sup>log<sub>b</sub>a-ε</sup>) for some constant ε &gt; 0, then T(n) = Θ(n<sup>log<sub>b</sub>a</sup>).</span></li>
-<li><span style="font-size: 19px;">If f(n) = Θ(n<sup>log<sub>b</sub>a</sup>lg<sup>k </sup>b) for some constant k &gt;= 0, then T(n) = Θ(n<sup>log<sub>b</sub>a</sup>&nbsp;lg<sup>k+1</sup>n).</span></li>
+<li><span style="font-size: 19px;">If f(n) = Θ(n<sup>log<sub>b</sub>a</sup>lg<sup>k </sup>n) for some constant k &gt;= 0, then T(n) = Θ(n<sup>log<sub>b</sub>a</sup>&nbsp;lg<sup>k+1</sup>n).</span></li>
 <li><span style="font-size: 19px;">If f(n) = Ω(n<sup>log<sub>b</sub>a+ε</sup>) for some constant ε &gt; 0, and (regularity condition) if a f(n/b) &lt;= c f(n) for some constant c &lt; 1 and all sufficiently large n, then T(n) = Θ(f(n)).</span></li>
 </ol>
 <p><span style="font-size: 19px;">Memorize this. Note that there are gaps between different cases, so this theorem does not address all possible cases of recursion. Let's study some examples.</span></p>
@@ -399,7 +399,7 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">4) T(n) = 2T(n/2) + Θ(n). The solution would be the same as that to the solution to example 2). It is easy to see why by thinking about the definition of order notation.</span></p>
 <p><span style="font-size: 19px;">The solution to T(n) = T(⌈n/2⌉) + T(⌊n/2⌋) + Θ(n) would also be the same, as indicated in the theorem, n/b can be interpreted as its floor/ceiling.</span></p>
 <p><span style="font-size: 19px;">The solution to T(n) = 2T(n/2) + O(n) would be O(n lg n) instead of Θ(n lg n) (think about why).</span></p>
-<p><span style="font-size: 19px;">5) T(n) = 2T(n/2) + n lg n. Here f(n) = n lg n, and n<sup>log<sub>b</sub>a</sup> = n. Since f(n) = &nbsp;Θ(n<sup>log<sub>b</sub>a</sup>lg<sup>k </sup>b) for k = 1, case 2 applies. Then T(n) = Θ(n lg<sup>2</sup> n).</span></p>
+<p><span style="font-size: 19px;">5) T(n) = 2T(n/2) + n lg n. Here f(n) = n lg n, and n<sup>log<sub>b</sub>a</sup> = n. Since f(n) = &nbsp;Θ(n<sup>log<sub>b</sub>a</sup>lg<sup>k </sup>n) for k = 1, case 2 applies. Then T(n) = Θ(n lg<sup>2</sup> n).</span></p>
 <p><span style="font-size: 19px;">6) T(n) = 2T(n/2) + n / lg n. Here f(n) = n / lg n, and n<sup>log<sub>b</sub>a</sup> = n. Case 3 does not apply since f(n) grows more slowly than n<sup>log<sub>b</sub>a</sup>. Case 2 does not apply because f(n) = &nbsp;Θ(n<sup>log<sub>b</sub>a</sup>lg<sup>k </sup>b) for k = -1, but k cannot be negative in case 2. Could case 1 apply? Apparently it does, but in fact it does not. For any ε &gt; 0, we have lim<sub>n→∞</sub>&nbsp;(f(n)/(n<sup>log<sub>b</sub>a+ε</sup>)) = lim<sub>n→∞</sub> (n<sup>ε </sup>/ lg n) = lim<sub>n→∞</sub> (ε ln 2 n<sup>ε</sup>) = ∞.</span></p>
 <p><span style="font-size: 19px;">Thus f(n) = ω(n<sup>log<sub>b</sub>a-ε</sup>) and case 1 cannot apply.</span><span style="font-size: 19px;"></span></p>
 <p><span style="font-size: 19px;">Therefore, master theorem does not apply to this recurrence.</span></p>
@@ -417,7 +417,6 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">Summing up the cost of all levels, we have</span></p>
 <p><span style="font-size: 19px;">T(n) = cn<sup>2</sup>&nbsp;+ (3/16)c n<sup>2</sup>&nbsp;+ (3/16)<sup>2</sup>c n<sup>2</sup>&nbsp;+ ... + (3/16)<sup>h-2</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">= Σ<sub>i=0, 1, ..., h-2</sub>(3/16)<sup>i</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">&lt;= Σ<sub>i=0, 1, ..., ∞</sub>(3/16)<sup>i</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span></p>
 <p><span style="font-size: 19px;">....We will finish the summation in the next lecture.</span></p>
-
 
 
 <pre><span style="font-size: 19px;">&nbsp;</span></pre>
