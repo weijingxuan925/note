@@ -21,7 +21,7 @@
 <h3><span style="font-size: 19px;">Random Access Machine (RAM)</span></h3>
 <p><span style="font-size: 19px;">We analyze our algorithms under the random-access machine (RAM) model of computation. Algorithms are implimented as computer programs in a RAM.</span></p>
 <p><span style="font-size: 19px;">A figure illustrating RAM:</span></p>
-<p><span style="font-size: 19px;"><img src="ram.png" alt="RAM" title="RAM" width="1426" height="751"></span></p>
+<p><span style="font-size: 19px;"><img src="Pictures/ram.png" alt="RAM" title="RAM" width="1426" height="751"></span></p>
 <p><span style="font-size: 19px;">In this machine model, there are unbounded number of local memory cells (words). An integer or a floating-point number can be stored in a memory cell. Program instructions are executed sequentially, i.e., one after another starting from the first to the last; there is no concurrency. The location counter indicates the instruction of the program that is currently being executed.</span></p>
 <p><span style="font-size: 19px;">In this model, the time complexity (running time) is defined as the number of instructions executed, and the space complexity is the number of memory cells accessed.</span></p>
 <p><span style="font-size: 19px;">The instruction set of RAM contains instructions commonly found in real computers, such as arithmetic operations (add, subtract, multiply, divide, remainder, floor, ceiling), data movement (load, store, copy) and control (conditional &amp; unconditional branch). Each instruction uses 1 unit of time.</span></p>
@@ -43,13 +43,13 @@
 2     key ← A[j]                      c<sub>2</sub>                  n-1</span><br><span style="font-size: 19px;">3     i ← j - 1                       c<sub>3</sub>                  n-1
 4     while i &gt; 0 and A[i] &gt; key      c<sub>4</sub>                  ∑<sub>j=2,3,...,n</sub> t<sub>j</sub></span><br><span style="font-size: 19px;">5       A[i+1] ← A[i]                 c<sub>5</sub>                  ∑<sub>j=2,3,...,n</sub> (t<sub>j</sub>-1)</span><br><span style="font-size: 19px;">6       i ← i - 1                     c<sub>6</sub>                  ∑<sub>j=2,3,...,n</sub> (t<sub>j</sub>-1)</span><br><span style="font-size: 19px;">7     A[i+1] ← key                    c<sub>7</sub>                  n-1</span></pre>
 <p><span style="font-size: 19px;">Now let's calculate the running time as a function of n:</span></p>
-<p><img src="tn.jpg" alt="T(n)" title="T(n)" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
+<p><img src="Pictures/tn.jpg" alt="T(n)" title="T(n)" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
 <p><span style="font-size: 19px;">This does not tell us much about the time complexity, as t<sub>j</sub>&nbsp;is not known and it depends on the actual input. The only thing that we can say about t<sub>j</sub>&nbsp;is that its value is between 1 and j (inclusive). To make sense of this function, let us see how the input affects the running time.</span></p>
 <p><span style="font-size: 19px;"><strong>4. Best Case</strong>: In the best case, the input array A is already sorted, as this guarantees that t<sub>j</sub>&nbsp;is equal to 1. In this case,</span></p>
 <p><span style="font-size: 19px;">T(n) = c<sub>1</sub>n + c<sub>2</sub>(n-1) + c<sub>3</sub>(n-1) + c<sub>4</sub>(n-1) + c<sub>7</sub>(n-1) = (c<sub>1</sub>&nbsp;+ c<sub>2</sub>&nbsp;+ c<sub>3&nbsp;</sub>+ c<sub>4</sub>&nbsp;+ c<sub>7</sub>) n - (c<sub>2</sub>&nbsp;+ c<sub>3&nbsp;</sub>+ c<sub>4</sub>&nbsp;+ c<sub>7</sub>)</span></p>
 <p><span style="font-size: 19px;">This is a linear function of n, and thus we say the running time is Θ(n).</span></p>
 <p><span style="font-size: 19px;"><strong>5. Worst Case</strong>: The case in which the input array A is reverse sorted is the worst case, as this guarantees that t<sub>j</sub>&nbsp;is equal to j. In this case,</span></p>
-<p><img src="tn2.jpg" alt="worst case" title="worst case" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
+<p><img src="Pictures/tn2.jpg" alt="worst case" title="worst case" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
 <p><span style="font-size: 19px;">This is a quadratic function of n, and thus we say the running time is Θ(n<sup>2</sup>).</span></p>
 <p><span style="font-size: 19px;"><strong> 6. Average Case</strong>: To perform the average-case analysis, we need assume that each of the n! permutations of A is equally likely. This is much more complicated, and if you are interested, you could read the following book (available in our library) to find out (not required):</span></p>
 <p><span style="font-size: 19px;">The Art of Computer Programming, Volume 3: Sorting and Searching (2nd Edition), Donald E. Knuth.</span></p>
@@ -125,9 +125,9 @@ n→∞             n→∞</span></pre>
 <p><span style="font-size: 19px;">Thus ln n = o(n).</span></p>
 <p><span style="font-size: 19px;">A more complicated example: Find out the relationship between f(n) = n<sup>n</sup>&nbsp;and g(n) = n!</span></p>
 <p><span style="font-size: 19px;">Solution: By Stirling's approximation</span></p>
-<p><img src="math1.png" alt="math" title="math" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
+<p><img src="Pictures/math1.png" alt="math" title="math" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
 <p><span style="font-size: 19px;">we have</span></p>
-<p><img src="factorial.jpg" alt="factorial" title="factorial" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
+<p><img src="Pictures/factorial.jpg" alt="factorial" title="factorial" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
 <p><span style="font-size: 19px;">Therefore, f(n) = ω(g(n)).</span></p>
 <p><span style="font-size: 19px;">&nbsp;</span></p>
 <p><span style="font-size: 19px;">Two other useful theorems:</span></p>
@@ -287,10 +287,10 @@ n→∞        n→∞
 <p><span style="font-size: 19px;">This problem has many applications in computer graphics and CAD. Many programs compute the convex hull of a complicated shape, and use it to determine whether the user's mouse clicked on it.</span></p>
 <p><span style="font-size: 19px;">To study the solutions to convex hull, let's first learn some background knowledge in geometry.</span></p>
 <p><span style="font-size: 19px;">Polar angle: The polar angel of a point p with respect to the origin point p<sub>0</sub>&nbsp;is the angle from the x-axis through the origin to the point p<sub>0</sub>, rotating counter clockwise.</span></p>
-<p><span style="font-size: 19px;"><img src="polar.jpg" alt="polar angle" title="polar angle" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
+<p><span style="font-size: 19px;"><img src="Pictures/polar.jpg" alt="polar angle" title="polar angle" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
 <p><span style="font-size: 19px;">In the above example, θ is the polar angle of p with respect to p<sub>0</sub>.</span></p>
 <p><span style="font-size: 19px;">Compute the angle between two directed line segments: Let u and v be the vectors representing two directed line segments whose starting endpoints are the the origin point p<sub>0</sub>. How do we compute the angel, θ, between u and v?</span></p>
-<p><span style="font-size: 19px;"><img src="angle.jpg" alt="angle" title="angle" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
+<p><span style="font-size: 19px;"><img src="Pictures/angle.jpg" alt="angle" title="angle" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
 <p><span style="font-size: 19px;">We can use the following equation to compute θ: u⋅v = ||u|| ||v|| cos θ. Here the dot is the dot product of two vectors. Say, u = (x<sub>1</sub>, y<sub>1</sub>) and v = (x<sub>2</sub>, y<sub>2</sub>), then u⋅v = x<sub>1</sub>x<sub>2</sub>&nbsp;+ y<sub>1</sub>y<sub>2</sub>, and ||u|| is the length of u.</span></p>
 <p><span style="font-size: 19px;">Note that we cannot assume arc cos or square root to be a constant-time operation supported by RAM. However, in many algorithms, we just have to compare two angles without computing their actual degrees. Thus, since this equation allows us to compute (cos θ)<sup>2</sup>&nbsp;in constant time, we can make use of it to compare two angles in constant time.</span></p>
 <p><span style="font-size: 19px;">Before introducing our algorithms for convex hull, let's make a simplifying assumption that no three points in the input point set are colinear. This is a common assumption; it is not difficult to modify our algorithms to handle the special cases in which there are colinear points (and yes, these special cases should be taken care of in actual implementation), and we make this assumption so that we can focus on explaining algorithmic ideas.</span></p>
@@ -305,7 +305,7 @@ n→∞        n→∞
 <li><span style="font-size: 19px;">When we reach the highest point p<sub>k</sub>, we have constructed the right chain of CH(Q).</span></li>
 <li><span style="font-size: 19px;">The left chain can be computed in a symmetric way. We start from p<sub>k</sub>&nbsp;and choose p<sub>k+1</sub>&nbsp;as the point with the smallest polar angel with respect to p<sub>k</sub>, but from the negative x-axis, and so on.</span></li>
 </ol>
-<p><span style="font-size: 19px;"><img src="jarvis.jpg" alt="Jarvis's March" title="Jarvis's March" width="799" height="479"></span></p>
+<p><span style="font-size: 19px;"><img src="Pictures/jarvis.jpg" alt="Jarvis's March" title="Jarvis's March" width="799" height="479"></span></p>
 <p><span style="font-size: 19px;">If the convex hull has h vertices, then the running time of this algorithm is O(nh), since it uses O(n) time to "march" from one vertex of CH(Q) to the next and there are h vertices. This is O(n<sup>2</sup>) in the worst case.</span></p>
 <p><span style="font-size: 19px;"><strong>6. Graham's Scan</strong>: During Jarvis's march, we repeatedly look for the smallest polar angles all the way, so can we just reduce the problem into sorting by polar angle? It is not as simple as this, since we keep changing origin points. The Graham's scan algorithm still manages to reduce it to sorting, in a subtle way. It has the following steps:</span></p>
 <ol>
@@ -313,7 +313,7 @@ n→∞        n→∞
 <li><span style="font-size: 19px;">Sort all the other points by their polar angle with respect to p<sub>0</sub>. Let p<sub>1</sub>, p<sub>2</sub>, ..., p<sub>n-1</sub>&nbsp;denote the result of sorting.</span></li>
 <li><span style="font-size: 19px;">Process the points starting with the one with the smallest polar angle. Add each point in turn with the next higher angle. If doing so causes us to make a left turn, continue. Otherwise, we made a right turn, and the point in the middle of the turn is not in CH(Q). Discard it and join the previous point to the new point. Backtrack, discarding points as you go until you end up making a left turn again.</span></li>
 </ol>
-<p><span style="font-size: 19px;"><img src="graham.jpg" alt="Graham's Scan" title="Graham's Scan" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
+<p><span style="font-size: 19px;"><img src="Pictures/graham.jpg" alt="Graham's Scan" title="Graham's Scan" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
 <p><span style="font-size: 19px;">The pseudocode for Step 3 is</span></p>
 <pre><span style="font-size: 19px;">s ← an empty stack
 PUSH(p<sub>0</sub>, S)
@@ -411,12 +411,53 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">T(n) = 3T(⌊n/4⌋) + c n<sup>2</sup>&nbsp;if n &gt; 1</span><br><span style="font-size: 19px;">T(n) = c if n = 1</span></p>
 <p><span style="font-size: 19px;">For simplicity, assume that n is a power of 4. Previously, we showed why similar simplifying assumptions are reasonable. Then the recurrence becomes T(n) = 3T(n/4) + c n<sup>2</sup>.</span></p>
 <p><span style="font-size: 19px;">By assigning cost to each node and summing up the costs of the nodes at each level, we have the following figure</span></p>
-<p><span style="font-size: 19px;"><img src="recursiontree.jpg" alt="Recursion Tree" title="Recursion Tree" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
+<p><span style="font-size: 19px;"><img src="Pictures/recursiontree.jpg" alt="Recursion Tree" title="Recursion Tree" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
 <p><span style="font-size: 19px;">We next compute the number, h, of the levels of this tree. The problem size of the root is n, and the problem size of a node at each successive level is 1/4 of that of a node at the level above, and at the leaf level (level h), the problem size is 1. Thus n (1/4)<sup>h-1</sup>&nbsp;= 1, and we have h = log<sub>4</sub>&nbsp;n + 1.</span></p>
 <p><span style="font-size: 19px;">The number of leaves is thus 3<sup>h-1</sup>&nbsp;= 3<sup>log<sub>4</sub>n</sup>&nbsp;= n<sup>log<sub>4</sub>3</sup>.</span></p>
 <p><span style="font-size: 19px;">Summing up the cost of all levels, we have</span></p>
 <p><span style="font-size: 19px;">T(n) = cn<sup>2</sup>&nbsp;+ (3/16)c n<sup>2</sup>&nbsp;+ (3/16)<sup>2</sup>c n<sup>2</sup>&nbsp;+ ... + (3/16)<sup>h-2</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">= Σ<sub>i=0, 1, ..., h-2</sub>(3/16)<sup>i</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">&lt;= Σ<sub>i=0, 1, ..., ∞</sub>(3/16)<sup>i</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span></p>
 <p><span style="font-size: 19px;">....We will finish the summation in the next lecture.</span></p>
+
+<p><span style="font-size: 19px;">Summing up the cost of all levels, we have</span></p>
+<p><span style="font-size: 19px;">T(n) = cn<sup>2</sup>&nbsp;+ (3/16)c n<sup>2</sup>&nbsp;+ (3/16)<sup>2</sup>c n<sup>2</sup>&nbsp;+ ... + (3/16)<sup>h-2</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">= Σ<sub>i=0, 1, ..., h-2</sub>(3/16)<sup>i</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">&lt;= Σ<sub>i=0, 1, ..., ∞</sub>(3/16)<sup>i</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">= (16/13)cn<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">= O(n<sup>2</sup>)</span></p>
+<p><span style="font-size: 19px; color: #ffba59;">Students in Section 2: This was when we lost power.</span></p>
+<p><span style="font-size: 19px;">We often make use of recursion tree to make a good guess, and then prove the guess using substitution method. For this example, we can easily prove by induction that T(n) &lt;= 2cn<sup>2</sup>. In fact, we can even prove that T(n) &lt;= (16/13)cn<sup>2</sup>.</span></p>
+<h3><span style="font-size: 19px;">Closest Pair of Points</span></h3>
+<p><span style="font-size: 19px;">In this problem, we look for the closest pair of points in a set, P, of n points.</span></p>
+<p><span style="font-size: 19px;">The distance between two points (x<sub>1</sub>, y<sub>1</sub>) and (x<sub>2</sub>, y<sub>2</sub>) can be computed as d = √(x<sub>1</sub>-x<sub>2</sub>)<sup>2</sup>+(y<sub>1</sub>-y<sub>2</sub>)<sup>2</sup>. To compare the distance between one pair of points with the distance between another pair, we can compare the square of the distance to avoid the square root operation which cannot be performed in constant time. The brute-force approach will check all the pairs of points and thus will require Θ(n<sup>2</sup>) time.</span></p>
+<p><span style="font-size: 19px;">To design a better solution, we use divide and conquer.</span></p>
+<p><span style="font-size: 19px;"><strong>DIVIDE</strong>: We split P into two subsets P<sub>L</sub>&nbsp;and P<sub>R</sub>&nbsp;of approximately equal size. That is, |P<sub>L</sub>| = ⌈|P|/2⌉, and |P<sub>R</sub>| = ⌊|P|/2⌋. This can be done by sorting points by x-coordinate, and split P in two with a vertical line L through the median of the x-coordinates. Thus P<sub>L</sub>&nbsp;has points on or to the left of L, and P<sub>R</sub>&nbsp;has points on or to the right of R.</span></p>
+<p><span style="font-size: 19px;"><strong>CONQUER</strong>: Find the closest pair of points in P<sub>L</sub>&nbsp;and P<sub>R</sub>&nbsp;recursively. Let δ<sub>L</sub>&nbsp;and δ<sub>R</sub>&nbsp;denote the distances between the closest pairs in P<sub>L</sub>&nbsp;and P<sub>R</sub>&nbsp;respectively. Let δ = min(δ<sub>L</sub>, δ<sub>R</sub>).</span></p>
+<p><span style="font-size: 19px;"><strong>COMBINE</strong>: The closest pair is either the pair with distance δ found recursively during the CONQUER step, or a pair of points, p<sub>L</sub>&nbsp;(coordinates (x<sub>1</sub>, y<sub>1</sub>)) and p<sub>R</sub>&nbsp;(coordinates (x<sub>2</sub>, y<sub>2</sub>)), with p<sub>L</sub>&nbsp;in P<sub>L</sub>&nbsp;and p<sub>R</sub>&nbsp;in P<sub>R</sub>, whose distance is less than δ.</span></p>
+<p><span style="font-size: 19px;">If the latter exists, we make the following observations:</span></p>
+<ol>
+  <li><span style="font-size: 19px;">(x<sub>1</sub>-x<sub>2</sub>)<sup>2</sup>&nbsp;+ (y<sub>1</sub>-y<sub>2</sub>)<sup>2</sup>&nbsp;&lt; δ<sup>2</sup>.</span></li>
+  <li><span style="font-size: 19px;">|x<sub>1</sub>-x<sub>2</sub>| &lt; δ and |y<sub>1</sub>-y<sub>2</sub>| &lt; δ.</span></li>
+  <li><span style="font-size: 19px;">There exists a 2δ ×δ rectangle E centered at line L that contains p<sub>L</sub>&nbsp;and p<sub>R</sub>. See the figure below. The correctness follows from item 2 above: these two points are at most δ units of distance apart vertically, and the distance of neither of them from L could be more than δ.</span><br><span style="font-size: 19px;"><img src="Pictures/recE.jpg" alt="rectangle" title="rectangle" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></li>
+</ol>
+<ol start="4">
+  <li><span style="font-size: 19px;">The left half of E has at most 4 points in P<sub>L</sub>. These four points are at the four corners of the left half of E. This is true because the distance between any two points in P<sub>L</sub>&nbsp;cannot be less than δ. The right half of E has at most 4 points in P<sub>R</sub>&nbsp;for the same reason. See the figure below.</span><br><span style="font-size: 19px;"><img src="Pictures/recE2.jpg" alt="Rectangle, again" title="Rectangle, again" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span><br><span style="font-size: 19px;">Thus the total number of points of P that reside in E cannot be more than 8. In the figure above, two points are duplicate points (those two on L), but here we are interested in an upper bound which does not have to be tight.</span></li>
+</ol>
+<p><span style="font-size: 19px;">From these observations, we have the following efficient process of finding p<sub>L</sub>&nbsp;and p<sub>R</sub>:</span></p>
+<ol>
+  <li><span style="font-size: 19px;">Sort the points in the strip of width 2δ centered at L by y-coordinate. We need not consider points that are not in this strip.</span></li>
+  <li><span style="font-size: 19px;">For these points, compare each of them with 7 other points that follow it. This is sufficient for the purpose of finding p<sub>L</sub>&nbsp;and p<sub>R</sub>, since in the worst case, there are at most 6 points between them by observation 4.</span></li>
+</ol>
+<p><span style="font-size: 19px;">To analyze the running time, we have the following recurrence T(n) = 2T(n/2) + O(n lg n). The O(n lg n) is due to the sorting in both the divide (by x-coordinate) and the combine (by y-coordinate) steps. We solved this recurrence using the master theorem previously and found that T(n) = O(n lg<sup>2</sup>&nbsp;n) time.</span></p>
+<p><span style="font-size: 19px;"><strong>Speed-up</strong>: To avoid sorting for each recursive call, at the beginning of the algorithm, we sort all the points by x-coordinate and store them in an array X. We then sort all the points by y-coordinate and store them in an array Y. Then, with care, we will make use of these two arrays to avoid sorting in recursive calls.</span></p>
+<p><span style="font-size: 19px;">The content of array X will not change during the recursive calls. In the divide step, we divide X[p..r] (the set P) into X[p..q] (the set P<sub>L</sub>) and X[q+1..r] (the set P<sub>R</sub>), where q = ⌊(p+r)/2⌋.</span></p>
+<p><span style="font-size: 19px;">When dividing P into P<sub>L</sub>&nbsp;and P<sub>R</sub>, we split Y into Y<sub>L</sub>&nbsp;and Y<sub>R</sub>&nbsp;by performing a linear scan in P. For each point encountered during this scan, we check whether it is in P<sub>L</sub>&nbsp;or P<sub>R</sub>, and copy it to either Y<sub>L</sub>&nbsp;or Y<sub>R</sub>&nbsp;accordingly. We then use Y<sub>L</sub>&nbsp;and Y<sub>R</sub>&nbsp;as arguments for recursive calls.</span></p>
+<p><span style="font-size: 19px;">In the combine step, to sort the points in the strip of width 2δ centered at L, we perform a linear scan in Y and extract these points.</span></p>
+<p><span style="font-size: 19px;">The above strategy allows us to perform sorting by x-coordinate once and by y-coordinate once during the entire execution of the algorithm.</span></p>
+<p><span style="font-size: 19px;">The running time now has two parts: the part for sorting at the beginning (O(n lg n) time), and the part for the recursive algorithm (T(n) time). We now have T(n) = 2T(n/2) + O(n), and thus T(n) = O(n lg n). The total running time is thus O(n lg n) + T(n) = O(n lg n).</span></p>
+<h2><span style="font-size: 24px;">Invent (or Augment) a Data Structure</span></h2>
+<p><span style="font-size: 19px;">The 4th algorithm design paradigm is to invent or augment a data structure. Data structures is one filed of algorithms, and we often use data structures as essential building blocks of algorithms. Previously we already saw one example of using data structures to design an algorithm. This is the maxsubrange3 algorithm, discussed in a previous lecture. In this algorithm, we created a prefix sum array p and used it to compute a subrange sum. Now let's see more examples.</span></p>
+<h3><span style="font-size: 19px;">Abelian Square Detection in Strings</span></h3>
+<p><span style="font-size: 19px;">In a string, an Abelian square is a substring of the form xx', where |x| = |x'| (|x| is the length of x), and x is a permutation of x'. For example, the English word reappear is an abelian square, in which x = reap and x' = pear, and so is the DNA fragment AACGTCAGAT.</span></p>
+<p><span style="font-size: 19px;">The problem we consider is: Given string S[1..n], determine if it has an abelian square. For example, if S = preappearance, then the answer is true.</span></p>
+<p><span style="font-size: 19px;">How do we determine whether x is a permutation of x'? One way of doing this is to sort both strings, and compare the sorted strings symbol by symbol. If the sorted strings are equal, then x is a permutation of x'.&nbsp;</span></p>
+
+
 
 
 <pre><span style="font-size: 19px;">&nbsp;</span></pre>
