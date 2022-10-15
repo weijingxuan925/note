@@ -525,4 +525,79 @@ return false</span></pre>
 </ul>
 
 <pre><span style="font-size: 19px;">&nbsp;</span></pre>
+
+
+
+<p><span style="font-size: 19px;">Now let's come up with a strategy that would work. From the counterexample above, we can see that if an activity ends really late, then choosing it would prevent us from scheduling many activities. This gives us some idea.</span></p>
+<p><span style="font-size: 19px;">The following greedy algorithm will compute an optimal solution:</span></p>
+<ul>
+<li><span style="font-size: 19px;">Sort activities by finish time in increasing order</span></li>
+<li><span style="font-size: 19px;">Start with the first, and choose the next possible activity compatible with previous ones</span></li>
+</ul>
+<p><span style="font-size: 19px;">I obtained the solution to the example in the figure using this strategy.</span></p>
+<p><span style="font-size: 19px;">How to prove that this algorithm works? Let's look at a larger example and try to make some observations.</span></p>
+<pre><span style="font-size: 19px;">i     s<sub>i</sub>    f<sub>i</sub>
+1     1     4
+2     3     5
+3     0     6
+4     5     7
+5     3     9
+6     5     9
+7     6     10
+8     8     11
+9     8     12
+10    2     14
+11    12    16</span></pre>
+<p><span style="font-size: 19px;">The greedy algorithm will select activities 1, 4, 8, 11.</span></p>
+<p><span style="font-size: 19px;">First, let's see some intuition about why the solution computed by the greedy algorithm is optimal. For the above example, let activities (a<sub>1</sub>, a<sub>2</sub>, ..., a<sub>k</sub>) be an optimal answer. If we replace a<sub>1</sub>&nbsp;by activity 1, then (1, a<sub>2</sub>, ..., a<sub>k</sub>) is still an optimal solution, since activity 1 finishes no later than a<sub>1</sub>does, so&nbsp;a<sub>2</sub>, ..., a<sub>k</sub>&nbsp;are compatible with activity 1. We can continue and replace a<sub>2</sub>, ..., a<sub>k</sub>&nbsp;by 4, 8, 11 in the same fashion, and this way we have transformed the optimal answer to the answer given by the greedy algorithm, and they must both have the same number of activities.</span></p>
+<p><span style="font-size: 19px;">Now let's formalize the above idea and come up with a correctness proof.</span></p>
+<p><span style="font-size: 19px;">Proof. Let (a<sub>1</sub>, a<sub>2</sub>, ..., a<sub>k</sub>) be the answer given by the greedy algorithm, in which a<sub>i</sub>&nbsp;takes place before a<sub>i+1</sub>&nbsp;for all 1 &lt;= i &lt;= k-1. Let (b<sub>1</sub>, b<sub>2</sub>, ..., b<sub>m</sub>) be an optimal answer, in which b<sub>i</sub>&nbsp;takes place before b<sub>i+1</sub>&nbsp;for all 1 &lt;= i &lt;= m-1. We prove that k = m.</span></p>
+<p><span style="font-size: 19px;">To prove this, we prove by induction on i that a<sub>i</sub>&nbsp;finishes no later than b<sub>i</sub>. This is sufficient because, with this claim, if k &lt; m, then b<sub>k+1</sub>&nbsp;starts after a<sub>k</sub>&nbsp;finishes, and is thus compatible with a<sub>1</sub>, a<sub>2</sub>, ..., a<sub>k</sub>. The greedy algorithm could have scheduled b<sub>k+1</sub>&nbsp;after a<sub>k</sub>, since b<sub>k+1</sub>&nbsp;finishes after a<sub>k</sub>&nbsp;does and is compatible with previously selected activities, but it didn't. This is a contradiction, so we cannot have k &lt; m.</span></p>
+<p><span style="font-size: 19px;">Now let's prove the above claim by induction. The base case holds since a<sub>1</sub>&nbsp;ends no later than any other activity.</span></p>
+<p><span style="font-size: 19px;">Assume that the claim holds for i, and we prove it for i+1. Let S be the set of activities compatible with (a<sub>1</sub>, a<sub>2</sub>, ..., a<sub>i</sub>), and S' be the set of activities compatible with (b<sub>1</sub>, b<sub>2</sub>, ..., b<sub>i</sub>). Then S contains all the activities whose starting time is greater than equal to the finish time of a<sub>i</sub>, and S' contains all the activities whose starting time is greater than equal to the finish time of b<sub>i</sub>. By the induction hypothesis, a<sub>i</sub>&nbsp;finishes no later than b<sub>i</sub>. Therefore, S' is a subset of S. Since b<sub>k+1</sub>&nbsp;is in S', it is also in S. By the greedy strategy, a<sub>i+1</sub>&nbsp;has the earliest finish time among activities in S, and thus it finishes no later than b<sub>i+1</sub>.</span></p>
+<p><span style="font-size: 19px;">Pseudocode of the greedy algorithm:</span></p>
+<pre><span style="font-size: 19px;">Activity_Selection(s, f, n)
+sort both s and f by f[i] in increasing order
+A ← {1}
+k ← 1
+for i ← 2 to n do
+  if s[i] &gt;= f[k] then
+    A ← A ∪ {i}
+    k ← i
+return A</span></pre>
+<p><span style="font-size: 19px;">The time complexity is O(n lg n).</span></p>
+<h3><span style="font-size: 19px;">Knapsack Problem</span></h3>
+<p><span style="font-size: 19px;">In the input, we have n items, and each item i has a weight w<sub>i</sub>&nbsp;(in kg) and a value v<sub>i</sub>&nbsp;(in dollar amount). We also have a knapsack, which has a maximum weight, W, that it can hold.</span></p>
+<p><span style="font-size: 19px;">The problem is which items we should choose to maximize the value we can hold in our knapsack.</span></p>
+<p><span style="font-size: 19px;">(Think of the example of the thief mentioned in class.)</span></p>
+<p><span style="font-size: 19px;">The following is an example (the value/weight ratio is not given as input, but we can compute it easily):</span></p>
+<pre><span style="font-size: 19px;">W = 100, n = 6</span><br><span style="font-size: 19px;">item                 1     2     3     4     5     6</span><br><span style="font-size: 19px;">value                80    70    85    40    75    65
+weight               25    40    70    15    20    5
+value/weight ratio   3.20  1.75  1.21  2.67  3.75  13</span></pre>
+<p><span style="font-size: 19px;">The following are four greedy strategies:</span></p>
+<ol>
+<li><span style="font-size: 19px;">Most valuable item first</span></li>
+<li><span style="font-size: 19px;">Heaviest item first</span></li>
+<li><span style="font-size: 19px;">Lightest item first</span></li>
+<li><span style="font-size: 19px;">Item with the highest value to weight ratio first</span></li>
+</ol>
+<p><span style="font-size: 19px;">Unfortunately, none of these four strategies works. The above example can be used as a counterexample to show that these strategies do not work.</span></p>
+<p><span style="font-size: 19px;">An optimal solution to the above sample input is to select items 1, 2, 5, and 6. The total weight would be 90, and the total value would be 290.</span></p>
+<p><span style="font-size: 19px;">If greedy strategy 1 is used, then items 3, 1 and 6 are selected. The total weight is 100, and the value is 230.</span></p>
+<p><span style="font-size: 19px;">If greedy strategy 2 is used, it happens that items 3, 1 and 6 are selected again, which is not an optimal solution.</span></p>
+<p><span style="font-size: 19px;">If greedy strategy 3 is used, items 6, 4, 5 and 1 are selected. The total weight is 65, and the value is 260.</span></p>
+<p><span style="font-size: 19px;">If greedy strategy 4 is used, items 6, 5, 1 and 4 are selected. Again, this is not optimal.</span></p>
+<h3><span style="font-size: 19px;">Fractional Knapsack Problem</span></h3>
+<p><span style="font-size: 19px;">One variant of the knapsack problem can be solved using a greedy algorithm. In this variant, instead of having each item in the input representing a single physical item, each item represents a sack of some substance which can be arbitrarily divided. Examples: a sack of sugar, a sack of salt and a sack of gold dust.</span></p>
+<p><span style="font-size: 19px;">Thus, we can take a fraction of an item and put it into our knapsack.</span></p>
+<p><span style="font-size: 19px;">Under these assumptions, greedy strategy 4 works! Using this strategy, we first choose items 6, 5, 1, 4 and we can still put 35kg's items into our knapsack. The next item with the highest value to weight ratio is item 2, and its weight is 40 kg. Then we choose 35/40 (=7/8) of item 2, which is worth 7/8 * 70 = 61.25. With this choice, the total weight is 100, and the total value is 321.25.</span></p>
+<p><span style="font-size: 19px;">The following is the pseudocode:</span></p>
+<pre><span style="font-size: 19px;">greedy(n, v, w, W)</span><br><span style="font-size: 19px;">sort both v and w by the ratio v[i]/w[i] in decreasing order
+free ← W
+sum ← 0
+for i ← 1 to n do
+  x ← min(w[i], free)
+  sum ← sum + v[i] * (x/w[i])
+  free ← free - x
+return sum</span></pre>
 </body></html>
