@@ -60,7 +60,7 @@
 <h2><span style="font-size: 30px;color: rgb(250, 8, 8)">Chapter3</span> </h2>
 <h3><span style="font-size: 19px;">Order (Rate) of Growth</span></h3>
 <p><span style="font-size: 19px;">Another thing to note is that, when presenting the result of analysis, we used Θ to throw away the constant factors. This is because we care about the order (rate) of the growth of the function that represents the running time, and we often care less about the coefficients. Asymptotic notation allows us to make more simplifying abstraction.</span></p>
-<h3><span style="font-size: 19px;">7. Θ-Notation</span></h3>
+<h3><span style="font-size: 19px;">1. Θ-Notation</span></h3>
 <p><span style="font-size: 19px;">First, the definition:</span></p>
 <p><span style="font-size: 19px;">Θ(g(n)) = {f(n): there exist positive constants c<sub>1</sub>, c<sub>2</sub>&nbsp;and n<sub>0</sub>, s.t. 0 &lt;= c<sub>1</sub>g(n) &lt;= f(n) &lt;= c<sub>2</sub>g(n) for all n &gt;= n<sub>0</sub>}</span></p>
 <p><span style="font-size: 19px;">Here we can say that g(n) is an asymptotically tight bound for f(n).</span></p>
@@ -72,15 +72,15 @@
 <p><span style="font-size: 19px;">Setting c<sub>1</sub>&nbsp;= 1/4, c<sub>2</sub>&nbsp;= 3/4 and n<sub>0</sub>&nbsp;= 2 would make this inequality hold (make sure that you do verify this).</span></p>
 <p><span style="font-size: 19px;">There are also other choices of values of these constants that would guarantee the inequality, and in your proof, you just have to show the existence of one set, according to the definition.</span></p>
 <p><span style="font-size: 19px;">Note that asymptotic notation applies to asymptotically positive functions only, which are functions whose values are positive for all sufficiently large n.</span></p>
-<h3><span style="font-size: 19px;">8. O-Notation (Asymptotic Upper Bound)</span></h3>
+<h3><span style="font-size: 19px;">2. O-Notation (Asymptotic Upper Bound)</span></h3>
 <p><span style="font-size: 19px;">Definition: O(g(n)) = {f(n): there exist positive constants c and n<sub>0</sub>, s.t. 0 &lt;= f(n) &lt;= c g(n) for all n &gt;= n<sub>0</sub>}</span></p>
 <p><span style="font-size: 19px;">Following this definition, we can determine that n, n<sup>2</sup>, 3n<sup>2</sup>&nbsp;+ 4n + 5 are all O(n<sup>2</sup>), while n<sup>3</sup>&nbsp;is not.</span></p>
 <p><span style="font-size: 19px;">When we say that the running time of insertion sort is O(n<sup>2</sup>), we mean that the worst-case running time of insertion sort is O(n<sup>2</sup>). When we say that an algorithm runs in polynomial time, we mean that there exists a constant k, s.t. the worst-case running time of this algorithm is O(n<sup>k</sup>).</span></p>
-<h3><span style="font-size: 19px;">9. Ω-Notation (Asymptotic Lower Bound)</span></h3>
+<h3><span style="font-size: 19px;">3. Ω-Notation (Asymptotic Lower Bound)</span></h3>
 <p><span style="font-size: 19px;">Definition: Ω(g(n)) = {f(n): there exist positive constants c and n<sub>0</sub>, s.t. 0 &lt;= c g(n) &lt;= f(n) for all n &gt;= n<sub>0</sub>}</span></p>
 <p><span style="font-size: 19px;">Based on the definitions, we have the following theorem: f(n) = Θ(g(n)) if and only if f(n) = O(g(n)) and f(n) = Ω(g(n)). For example, the statement n<sup>2</sup>/2 + lg n = Θ(n<sup>2</sup>) is equivalent to n<sup>2</sup>/2 + lg n = O(n<sup>2</sup>) and n<sup>2</sup>/2 + lg n = Ω(n<sup>2</sup>).</span></p>
 <p><span style="font-size: 19px;">Some quick examples: n<sup>2</sup>, (lg n) n<sup>2</sup>, 4n<sup>2</sup>+5 are all in Ω(g(n)), while n is not.</span></p>
-<h3><span style="font-size: 19px;">10. o-Notation</span></h3>
+<h3><span style="font-size: 19px;">4. o-Notation</span></h3>
 <p><span style="font-size: 19px;">Definition: o(g(n)) = {f(n): for any positive constant c, there exists a constant n<sub>0</sub>, s.t. 0 &lt;= f(n) &lt; c g(n) for all n &gt;= n<sub>0</sub>}</span></p>
 <p><span style="font-size: 19px;">This definition shows that f(n) grows more slowly than g(n).</span></p>
 <p><span style="font-size: 19px;">Another definition of o-Notation is that f(n) = o(g(n)) if</span></p>
@@ -88,14 +88,14 @@
 </span></pre>
 <p><span style="font-size: 19px;">By the definition of limits in calculus and the first definition of o-notation, we can see that these two definitions of little-oh are equivalent.</span></p>
 <p><span style="font-size: 19px;">This second definition allows us to perform some quick analysis. For example, 2n = o(n<sup>2</sup>), but 2n<sup>2</sup>&nbsp;≠o(n<sup>2</sup>).</span></p>
-<h3><span style="font-size: 19px;">11. ω-Notation</span></h3>
+<h3><span style="font-size: 19px;">5. ω-Notation</span></h3>
 <p><span style="font-size: 19px;">First, f(n) = ω(g(n)) if and only if g(n) = o(f(n)).</span></p>
 <p><span style="font-size: 19px;">Formal definition: ω(g(n)) = {f(n): for any positive constant c, there exists a constant n<sub>0</sub>, s.t. 0 &lt;= c g(n) &lt; f(n) for all n &gt;= n<sub>0</sub>}</span></p>
 <p><span style="font-size: 19px;">Another definition using limits: f(n) = ω(g(n)) if</span></p>
 <pre><span style="font-size: 19px;">lim  f(n)/g(n) = ∞
 n→∞ 
 </span></pre>
-<h3><span style="font-size: 19px;">12. Properties</span></h3>
+<h3><span style="font-size: 19px;">6. Properties</span></h3>
 <p><span style="font-size: 19px;">Here I give some properties of order notation, which are not difficult to prove using definitions. Think about their correctness when reviewing these properties.</span></p>
 <ol>
 <li><span style="font-size: 19px;">Transitivity: If f(n) = Θ(g(n)) and g(n) = Θ(h(n)), then f(n) = Θ(h(n)). This also applies to O, Ω, o and ω.</span></li>
@@ -103,7 +103,7 @@ n→∞
 <li><span style="font-size: 19px;">Symmetry: f(n) = Θ(g(n)) if and only if g(n) = Θ(f(n)).</span></li>
 <li><span style="font-size: 19px;">Transpose Symmetry: f(n) = O(g(n)) if and only if g(n) = Ω(f(n)); f(n) = o(g(n)) if and only g(n) = ω(f(n)).</span></li>
 </ol>
-<h3><span style="font-size: 19px;">13. Tricks</span></h3>
+<h3><span style="font-size: 19px;">7. Tricks</span></h3>
 <p><span style="font-size: 19px;">Here I give some tricks that are useful for comparing functions using order notation.</span></p>
 <p><span style="font-size: 19px;">The first trick is that we can determine order notation by computing</span></p>
 <pre><span style="font-size: 19px;">lim  f(n)/g(n) = c
@@ -383,7 +383,7 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">T(n) &lt;= c(3<sup>lg n + 1</sup>&nbsp;- 2<sup>lg n +1</sup>) = c(3⋅3<sup>lg n</sup>&nbsp;- 2⋅2<sup>lg n</sup>) = c(3 n<sup>lg 3</sup>&nbsp;- 2n) = O(n<sup>lg 3</sup>).</span></p>
 <p><span style="font-size: 19px;">Since lg 3 = 1.58496...., we have T(n) = O(n<sup>1.59</sup>)</span></p>
 <p><span style="font-size: 19px;">Some experimental studies showed that Karatsuba's algorithm outperforms the pencil-and-paper algorithm when n exceeds a certain threshold between 320 and 640. Thus it is good for very large integers, which are often used in math, stats, cryptography and astronomy.</span></p>
-<h3><span style="font-size: 19px;">Master Theorem</span></h3>
+<h3><span style="font-size: 24px;color: red;">Master Theorem</span></h3>
 <p><span style="font-size: 19px;">So far we have learned a few methods to solve recurrences, including iteration and substitution. Now let's learn a general theorem that will cover many cases of recurrences.</span></p>
 <p><span style="font-size: 19px;">Master theorem can be stated as follows:</span></p>
 <p><span style="font-size: 19px;">Let a &gt;=1 and b &gt; 1 be constants. Let f(n) be a function. Let T(n) be defined on nonnegative integers by the recurrence T(n) = a T(n/b) + f(n), where we interpret n/b to mean either ⌊n/b⌋ or ⌈n/b⌉. Then</span></p>
