@@ -508,7 +508,7 @@ return false</span></pre>
 <p><span style="font-size: 19px;">Therefore, our data structure can support both queries in logarithmic time.</span></p>
 <p><span style="font-size: 19px;">An exercise: how to store the tree as an array? Hint: think of heap.</span></p>
 <br>
-<h1><span style="font-size: 24px;color: red">Greedy Algorithms</span></h1>
+<h1><span style="font-size: 24px;color: red">5-Algorithms</span></h1>
 <p><span style="font-size: 19px;">The 5th algorithm design paradigm discussed in this course is greedy algorithms. They are used to solve optimization problems. For an optimization problem, there exist many solutions that satisfy the constraints given in the problem. Each solution has a value, and we would like to find a solution with the optimal (minimum or maximum) value.</span></p>
 <p><span style="font-size: 19px;">The idea of greedy algorithms is to make the choice that looks the best at the moment. More formally, we make a locally optimal choice (i.e., a choice optimal for a subproblem) hoping that this will lead to globally optimal solution. The use of the word "hoping" here implies that a locally optimal choice will not always lead to a globally optimal solution, and thus to master greedy algorithms, we need learn to prove or disprove that a certain greedy strategy will yield an optimal solution.</span></p>
 <h3><span style="font-size: 19px;">1. Activity-Selection Problem</span></h3>
@@ -607,4 +607,48 @@ for i ← 1 to n do
   sum ← sum + v[i] * (x/w[i])
   free ← free - x
 return sum</span></pre>
+
+<p><span style="font-size: 19px;">Now let's give a correctness proof by contradiction. First we consider the case in which v[i]/w[i] are all distinct. Suppose the optimal solution S is better than our greedy solution G. Then S must agree for some number of items (perhaps 0) with G and then differ. Assume that the items have been ordered by v[i]/w[i] in decreasing order. Let item k be the first item of which S and G choose a different amount. Since G chooses the maximum amount of item k that can fit in the knapsack with the previously chosen items, then S must choose less amount of item k than G does. Say G chooses g kg of item k and S chooses s kg of item k. Then we can exchange (g-s) kg of later items that S chooses with (g-s) kg of item k. Doing so would only increase the total value of s, since later items have lower value/weight ratio. Therefore, S is not optimal, which is a contradiction.</span></p>
+<p><span style="font-size: 19px;">For the more general case in which v[i]/w[i] are not necessarily distinct, we can group items of the same v[i]/w[i] ratio into the same group, and apply the reasoning above. It would be good exercise for you to work out all the details.</span></p>
+<h3><span style="font-size: 19px;">4. Egyptian Fractions</span></h3>
+<p><span style="font-size: 19px;">Egyptian fractions were developed in the Middle Kingdom of Egypt, almost 4000 years ago. It is an expression of the form 1/x<sub>1</sub>&nbsp;+ 1/x<sub>2</sub>&nbsp;+ ... + 1/x<sub>n</sub>, in which each x<sub>i</sub>&nbsp;is a distinct positive integer. Thus this expression is a sum of unit fractions. Some examples of expressing fractional numbers using Egyptian Fractions are:</span></p>
+<p><span style="font-size: 19px;">5/6 = 1/2 + 1/3</span></p>
+<p><span style="font-size: 19px;">47/72 = 1/2 + 1/9 + 1/24</span></p>
+<p><span style="font-size: 19px;">Ancient Egyptians were concerned with unit fractions because these helped them to solve problems. For example, a farmer had to pay 72 farmhands with 47 sacks of grain. To distribute these evenly, he had to give each person 47/72 of a sack. Dividing 47 sacks into 72 shares each having 47/72 of a sack was too much work. The farmer however had a much better idea by making use of the equation above.</span></p>
+<p><span style="font-size: 19px;">He first took out 36 sacks of grain and divided each sack in half. He gave each person 1/2 of a sack first.</span></p>
+<p><span style="font-size: 19px;">Then there are 11 sacks left, and he took 8 sacks, and gave each person 1/9 of a sack.</span></p>
+<p><span style="font-size: 19px;">Finally, he divided each of the remaining 3 sacks into 24 equal shares, and gave each person 1/24 of a sack.</span></p>
+<p><span style="font-size: 19px;">By then, everyone had 1/2+1/9+1/24=47/72 of a sack, so the division was fair.</span></p>
+<p><span style="font-size: 19px;">In 1202, Fibonacci came up with a greedy approach that can be used to express any rational number as the sum of unit fractions. The key idea is to make use of the following equation:</span></p>
+<p><span style="font-size: 19px;">x/y = 1/⌈y/x⌉ + ((-y) mod x) / (y ⌈y/x⌉)</span></p>
+<p><span style="font-size: 19px;">To verify the correctness of this equation, the following two identities are useful:</span></p>
+<p><span style="font-size: 19px;">a mod n = a - n * ⌊a/n⌋</span></p>
+<p><span style="font-size: 19px;">⌈x⌉ = -⌊-x⌋</span></p>
+<p><span style="font-size: 19px;">Each time we apply this equation, we produce a unit fraction, and the numerator of the second term decreases. Therefore, this greedy algorithm will always terminate. If we use this algorithm to express 47/72, we have</span></p>
+<p><span style="font-size: 19px;">47/72 = 1/2 + 1/7 + 1/101 + 1/50904</span></p>
+<p><span style="font-size: 19px;">This example shows that the greedy expansion is not necessarily the shortest representation. It does not necessarily have the smallest denominator, either.</span></p>
+<p><span style="font-size: 19px;">As an exercise, compute the greedy expansion of 31/311.</span></p>
+<p><span style="font-size: 19px;">A related open problem is to prove or disprove the following claim: Every fraction of the form 4/n, in which n is an odd integer, has an Egyptian fraction representation with exactly 3 terms.</span></p>
+<p><span style="font-size: 19px;">&nbsp;</span></p>
+<h2><span style="font-size: 24px; color: red">6-Dynamic Programming</span></h2>
+<p><span style="font-size: 19px;">Dynamic programming was popularized by Richard Bellman, who started to describe it in 1940s. It typically applies to optimization problems. It typically reduces the complexity from exponential, e.g. 2<sup>n</sup>&nbsp;to polynomial, e.g. O(n<sup>3</sup>), O(n<sup>2</sup>) or O(n). This is achieved by avoiding the enumeration of all possibilities.</span></p>
+<h3><span style="font-size: 19px;">1. Matrix-Chain Multiplication</span></h3>
+<p><span style="font-size: 19px;">To introduce the matrix-chain multiplication problem, I first briefly reviewed how to multiply two matrices (see Appendix of CLRS). From this we see that to multiple two matrices of dimensions m by n and n by p, the number of scalar multiplications is m*p*n.</span></p>
+<p><span style="font-size: 19px;">Now let's look at the multiplication of the following three matrices:</span></p>
+<pre><span style="font-size: 19px;">matrix dimension</span><br><span style="font-size: 19px;">M<sub>1</sub>     10 x 100
+M<sub>2</sub>     100 x 5</span><br><span style="font-size: 19px;">M<sub>3</sub>     5 x 50
+</span></pre>
+<p><span style="font-size: 19px;">There are two ways of computing M<sub>1</sub>*M<sub>2</sub>*M<sub>3</sub>.</span></p>
+<p><span style="font-size: 19px;">If we compute it as M<sub>1</sub>(M<sub>2</sub>M<sub>3</sub>), then the number of scalar multiplications is 100*5*50 + 10*100*50 = 75,000.</span></p>
+<p><span style="font-size: 19px;">If we compute it as (M<sub>1</sub>M<sub>2</sub>)M<sub>3</sub>, then the number of scalar multiplications is 10*100*5 + 10*5*50 = 7,500.</span></p>
+<p><span style="font-size: 19px;">The difference is a factor of 10!</span></p>
+<p><span style="font-size: 19px;">This promotes us to think about the matrix-chain multiplication problem. In this problem, we are given A chain (M<sub>1</sub>, M<sub>2</sub>, ..., M<sub>n</sub>) of n matrices, in which matrix M<sub>i</sub>&nbsp;has dimension p<sub>i-1</sub>&nbsp;* p<sub>i</sub>. The task is to fully parenthesize the product M<sub>1</sub>M<sub>2</sub>...M<sub>n</sub>&nbsp;in a way that minimizes the number of scalar multiplications.</span></p>
+<p><span style="font-size: 19px;"><strong>Solution1: Brute-force</strong>: We could use the brute-force approach. That is, we try all possibilities and take the minimum. Then the running time depends on the total number of different ways to multiply n matrices. Let W(n) denote this number.</span></p>
+<p><span style="font-size: 19px;">To compute W(n), we make use of the observation that the last multiplication is either M<sub>1</sub>(M<sub>2</sub>...M<sub>n</sub>), or (M<sub>1</sub>M<sub>2</sub>)(M<sub>3</sub>...M<sub>n</sub>), or ..., or (M<sub>1</sub>M<sub>2</sub>...M<sub>n-1</sub>)M<sub>n</sub>.</span></p>
+<p><span style="font-size: 19px;">From this observation, we can conclude that W(n) = 1 if n = 1, and W(n) = Σ<sub>1 &lt;= k &lt;= n-1</sub>W(k)W(n-k). </span></p>
+<p><span style="font-size: 19px; color: #ffba59;">(Section 1 ended here)</span></p>
+<p><span style="font-size: 19px;">Then we can prove by induction that</span></p>
+<p><span style="font-size: 19px;">W(n) = (2n-2 choose n-1)/n</span></p>
+<p><span style="font-size: 19px;">To see how big this value is, we make use of the fomula for bionmial coefficient (a choose b) = a! / (b! (a-b)!), and Stirling's approximation n! = n<sup>n</sup>e<sup>-n</sup>√2πn(1+Θ(1/n)).</span></p>
+
 </body></html>
