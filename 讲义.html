@@ -8,17 +8,17 @@
 <h2><span style="font-size: 24px;">RAM, Algorithm Analysis and Order Notation</span></h2>
 <p><span style="font-size: 19px;">At the beginning of this course, let us learn some basic stuff about algorithm analysis.</span></p>
 <h2><span style="font-size: 30px; color: rgb(250, 8, 8);" >Chapter1&2</span> </h2>
-<h3><span style="font-size: 19px;">Pseudocode</span></h3>
+<h3><span style="font-size: 19px;">1. Pseudocode</span></h3>
 <p><span style="font-size: 19px;">Before we analyze algorithms, let us learn how to describe an algorithm precisely. Instead of using "real" code, we use pseudocode to specify an algorithm. In a piece of pseudocode, we use the most clean and concise expressive method to describe a given algorithm. Sometimes, the pseudocode of an algorithm could even use an English sentence to describe a step of this algorithm. For example, if a complicated algorithm requires us to first sort the given input array, then we could write something like "sort the array A in ascending order using mergesort" as its first step. When writing pseudocode, we are not concerned with software engineering issues, such as data abstraction, modularity, and exception &amp; error handling. Thus, pseudocode focuses on conveying the essence of an algorithm.</span></p>
 <p><span style="font-size: 19px;">In this course, you are allowed to follow any convention of pseudocode that you prefer, as long as your pseudocode is readable and consistent. If you do not have any preference yourself, feel free to follow the way in which I write pseudocode, or the convention described in the textbook (Chapter 2).</span></p>
-<h3><span style="font-size: 19px;">Insertion Sort</span></h3>
+<h3><span style="font-size: 19px;">2. Insertion Sort</span></h3>
 <p><span style="font-size: 19px;">Now, let's write down the pseudocode of insertion sort, which is a sorting algorithm taught in a previous course, before we analyze its running time.</span></p>
 <pre><span style="font-size: 19px;">INSERTION-SORT(A[1..N])
   for j ← 2 to n
     key ← A[j]</span><br><span style="font-size: 19px;">    i ← j - 1
     while i &gt; 0 and A[i] &gt; key</span><br><span style="font-size: 19px;">      A[i+1] ← A[i]</span><br><span style="font-size: 19px;">      i ← i - 1</span><br><span style="font-size: 19px;">    A[i+1] ← key</span></pre>
 <p><span style="font-size: 19px;">How to measure the running time of an algorithm? We may be tempted to use wall-clock time, but this is a bad measurement as it highly depends on the computer on which the algorithm is run. Hence, to analyze an algorithm, we need remove computer details such as processor speed, disk and memory, and one way of achieving this is to count the number of elementary operations only. The goal of algorithm analysis is to predict the resources required by an algorithm, and to do this, we need a machine model under which we express our algorithms, and some way of assigning costs of the operations under this model.</span></p>
-<h3><span style="font-size: 19px;">Random Access Machine (RAM)</span></h3>
+<h3><span style="font-size: 19px;">3. Random Access Machine (RAM)</span></h3>
 <p><span style="font-size: 19px;">We analyze our algorithms under the random-access machine (RAM) model of computation. Algorithms are implimented as computer programs in a RAM.</span></p>
 <p><span style="font-size: 19px;">A figure illustrating RAM:</span></p>
 <p><span style="font-size: 19px;"><img src="Pictures/ram.png" alt="RAM" title="RAM" width="1426" height="751"></span></p>
@@ -114,6 +114,7 @@ n→∞
 <p><span style="font-size: 19px;">Proof. To prove this, we compute</span></p>
 <p><span style="font-size: 19px;">lim<sub>n → ∞</sub>&nbsp;p(n)/n<sup>d</sup>&nbsp;= lim<sub>n → ∞</sub>&nbsp;(a<sub>0</sub>/n<sup>d</sup>&nbsp;+ a<sub>1</sub>/n<sup>d-1</sup>&nbsp;+ ... + a<sub>d-1</sub>/n + a<sub>d</sub>) = a<sub>d</sub>.</span></p>
 <p><span style="font-size: 19px;">Since a<sub>d</sub>&nbsp;is a positive constant, we claim that p(n) = Θ(n<sup>d</sup>). [end of proof]</span></p>
+<p><span style="font-size: 19px;"><strong>8. Useful rules</strong></span></p>
 <p><span style="font-size: 19px;">There are some useful theorems for limits. Here I present them in a form based on the particular task of comparing two functions of complexity (running time, space, etc).</span></p>
 <p><span style="font-size: 19px;">First, L'Hopital's rule:</span></p>
 <pre><span style="font-size: 19px;">lim  (f(n)/g(n)) = lim  (f'(n)/g'(n))
@@ -159,7 +160,7 @@ n→∞        n→∞
 <h2><span style="font-size: 30px;color: rgb(250, 8, 8)">Chapter4</span></h2>
 <h2><span style="font-size: 24px;">Algorithm Design and Maximum Subrange Sum</span></h2>
 <p><span style="font-size: 19px;">I will now start talking about algorithm design. Before discussing each algorithm design paradigm, I will show different algorithmic solutions to the maximum subrange sum problem, to show good algorithm design is essential.</span></p>
-<h3><span style="font-size: 19px;">Maximum Subrange Sum</span></h3>
+<h3><span style="font-size: 19px;">1. Maximum Subrange Sum</span></h3>
 <p><span style="font-size: 19px;">In this problem, the input is an array x of n possibly negative integers. The output of the algorithm for this problem is the maximum sum found in any subarray (possibly empty) of the input.</span></p>
 <p><span style="font-size: 19px;">In the following example, n = 10 and the content of x is: 31, -41, 59, 26, -53, 58, 97, -93, -23, 84. The output is the sum of the subarray x[3..7], which is 187.</span></p>
 <p><span style="font-size: 19px;">To understand this problem better, let us consider some special cases. First, if all the entries are positive, then the subarray with maximum sum is the entire array x. Second, if all the entries are negative, then the answer is 0, which corresponds to an empty subarray.</span></p>
@@ -244,20 +245,22 @@ n→∞        n→∞
 </span><br><span style="font-size: 19px;">  for i ← 1 to n do
     maxsuffixsum ← max(maxsuffixsum + x[i], 0)</span><br><span style="font-size: 19px;">    maxsofar ← max(maxsofar, maxsuffixsum)</span><br><br><span style="font-size: 19px;">  return maxsofar</span></pre>
 <p><span style="font-size: 19px;">This example requires only O(n) time.</span></p>
-<h3><span style="font-size: 21px; color: red;">Algorithm Design Paradigms</span></h3>
-<p><span style="font-size: 19px;">From these five solutions, we can see that good algorithm design techniques are essential. The following are eight algorithm design paradigms</span></p>
+<br>
+<p><span style="font-size: 21px;">From these five solutions, we can see that good algorithm design techniques are essential. The following are eight algorithm design paradigms</span></p>
+<br>
+<h3><span style="font-size: 25px; color: red;"><strong>Algorithm Design Paradigms</strong></span></h3>
 <ol>
-<li><span style="font-size: 19px;">reduce to know problem</span></li>
-<li><span style="font-size: 19px;">recursion</span></li>
-<li><span style="font-size: 19px;">divide-and-conquer</span></li>
-<li><span style="font-size: 19px;">invent (or augment) a data structure</span></li>
-<li><span style="font-size: 19px;">greedy algorithm</span></li>
-<li><span style="font-size: 19px;">dynamic programming</span></li>
-<li><span style="font-size: 19px;">exploit problem structure (algebraic, geometric, etc.)</span></li>
-<li><span style="font-size: 19px;">probabilistic and randomized solution</span></li>
+<li><span style="font-size: 21px;">reduce to know problem</span></li>
+<li><span style="font-size: 21px;">recursion</span></li>
+<li><span style="font-size: 21px;">divide-and-conquer</span></li>
+<li><span style="font-size: 21px;">invent (or augment) a data structure</span></li>
+<li><span style="font-size: 21px;">greedy algorithm</span></li>
+<li><span style="font-size: 21px;">dynamic programming</span></li>
+<li><span style="font-size: 21px;">exploit problem structure (algebraic, geometric, etc.)</span></li>
+<li><span style="font-size: 21px;">probabilistic and randomized solution</span></li>
 </ol>
 <p><span style="font-size: 19px;">&nbsp;</span></p>
-<h2><span style="font-size: 24px; color: red;">Reduce to Known Problem</span></h2>
+<h2><span style="font-size: 24px; color: red;">1-Reduce to Known Problem</span></h2>
 <p><span style="font-size: 19px;"> The first algorithm design paradigm that we will discuss is "reduce to known problem". This is to develop an algorithm for a problem by treating this problem as a special case of a problem that we already know how to solve efficiently. For most of the examples that we will see here, we reduce the problems to sorting, which we know how to solve in O(n lg n) time (e.g., mergesort, heapsort).</span></p>
 <p><span style="font-size: 19px;">Let's apply this paradigm to solve some problems.</span></p>
 <h3><span style="font-size: 19px;">1. Element Distinctness (Uniqueness) Problem</span></h3>
@@ -328,7 +331,7 @@ return S<br><br></span></pre>
 <p>&nbsp;</p>
 
 <p><span style="font-size: 19px;">To analyze the running time of Graham's scan, it is easy to see that Step 1 requires O(n) time and Step 2 requires O(n lg n) time. Step 3 is not obvious. In Step 3, all the lines excluding the while loop requires O(n) time in total. To bound the cost of the while loop, it suffices to find out how many times the POP operation is executed. To find this out, observe that each point is visited at most twice in the pseudocode for Step 3: once when we add it to CH(Q) using PUSH, and possibly the second time when we discard it using POP. Thus the number of times that POP is executed is at most the number of points. Therefore, Step 3 requires O(n) time. The overall running time of Graham's scan is thus O(n lg n).</span></p>
-<h1><span style="font-size: 24px; color: red;">3. Divide-and-Conquer</span></h1>
+<h1><span style="font-size: 24px; color: red;">3-Divide-and-Conquer</span></h1>
 <p><span style="font-size: 19px;">We learned divide-and-conquer in previous courses, and we will learn more about it in this course. The general steps of divide-and-conquer are</span></p>
 <ul>
 <li><span style="font-size: 19px;">DIVIDE the given problem into a number of subproblems</span></li>
@@ -355,7 +358,7 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">Now let's prove it by induction. Clearly it is true for k = 0. Assume it is true for k; we will prove it for k+1. We have</span></p>
 <p><span style="font-size: 19px;">T(2<sup>k+1</sup>) = 2T(2<sup>k</sup>) + 2<sup>k+1</sup>&nbsp;= 2(k+1)2<sup>k</sup>&nbsp;+ 2<sup>k+1</sup>&nbsp;= (k+2)2<sup>k+1</sup></span></p>
 <h3><span style="font-size: 19px;">&nbsp;</span></h3>
-<h3><span style="font-size: 19px;">Multiply two n-bit nonnegative numbers</span></h3>
+<h3><span style="font-size: 19px;">1. Multiply two n-bit nonnegative numbers</span></h3>
 <p><span style="font-size: 19px;">In this problem, we are given two n-bit numbers, and we are to compute the product of these two. Naturally, this makes sense if n is so large that these numbers do not fit in a word. Thus, an array of n entries are used to store the n bits in each of these numbers.</span></p>
 <p><span style="font-size: 19px;">If we design an algorithm based on the pencil-and-paper method, it would require O(n<sup>2</sup>) time. Now let's see if we can make any improvement using divide-and-conquer.</span></p>
 <p><span style="font-size: 19px;">Let X and Y be the two input n-bit numbers. Assume that the n bits representing X is the concatenation of A and B, and the n bits representing Y is the concatenation of C and D, where A, B, C and D are n/2-bit numbers. If we are to write down pseudocode, we can use arrays of 0/1 digits to represent X, Y, A, B, C and D.</span></p>
@@ -383,6 +386,7 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">T(n) &lt;= c(3<sup>lg n + 1</sup>&nbsp;- 2<sup>lg n +1</sup>) = c(3⋅3<sup>lg n</sup>&nbsp;- 2⋅2<sup>lg n</sup>) = c(3 n<sup>lg 3</sup>&nbsp;- 2n) = O(n<sup>lg 3</sup>).</span></p>
 <p><span style="font-size: 19px;">Since lg 3 = 1.58496...., we have T(n) = O(n<sup>1.59</sup>)</span></p>
 <p><span style="font-size: 19px;">Some experimental studies showed that Karatsuba's algorithm outperforms the pencil-and-paper algorithm when n exceeds a certain threshold between 320 and 640. Thus it is good for very large integers, which are often used in math, stats, cryptography and astronomy.</span></p>
+<br>
 <h3><span style="font-size: 24px;color: red;">Master Theorem</span></h3>
 <p><span style="font-size: 19px;">So far we have learned a few methods to solve recurrences, including iteration and substitution. Now let's learn a general theorem that will cover many cases of recurrences.</span></p>
 <p><span style="font-size: 19px;">Master theorem can be stated as follows:</span></p>
@@ -404,7 +408,8 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">Thus f(n) = ω(n<sup>log<sub>b</sub>a-ε</sup>) and case 1 cannot apply.</span><span style="font-size: 19px;"></span></p>
 <p><span style="font-size: 19px;">Therefore, master theorem does not apply to this recurrence.</span></p>
 <p><span style="font-size: 19px;"></span></p>
-<h3><span style="font-size: 19px;">Recursion Tree</span></h3>
+<br>
+<h3><span style="font-size: 23px;">Recursion Tree</span></h3>
 <p><span style="font-size: 19px;">How did people prove the master theorem? They did this with the help of recursion tree, which is another approach of solving recurrences.</span></p>
 <p><span style="font-size: 19px;">In a recursion tree, each node represents the cost of a single subproblem somewhere in the set of recursive function invocation.</span></p>
 <p><span style="font-size: 19px;">Here I will show how to make use of a recursion tree to make a good guess on the running time. Let's take the following recurrence for example:</span></p>
@@ -422,7 +427,7 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">T(n) = cn<sup>2</sup>&nbsp;+ (3/16)c n<sup>2</sup>&nbsp;+ (3/16)<sup>2</sup>c n<sup>2</sup>&nbsp;+ ... + (3/16)<sup>h-2</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">= Σ<sub>i=0, 1, ..., h-2</sub>(3/16)<sup>i</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">&lt;= Σ<sub>i=0, 1, ..., ∞</sub>(3/16)<sup>i</sup>c n<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">= (16/13)cn<sup>2</sup>&nbsp;+ Θ(n<sup>log<sub>4</sub>3</sup>)</span><br><span style="font-size: 19px;">= O(n<sup>2</sup>)</span></p>
 <p><span style="font-size: 19px; color: #ffba59;">Students in Section 2: This was when we lost power.</span></p>
 <p><span style="font-size: 19px;">We often make use of recursion tree to make a good guess, and then prove the guess using substitution method. For this example, we can easily prove by induction that T(n) &lt;= 2cn<sup>2</sup>. In fact, we can even prove that T(n) &lt;= (16/13)cn<sup>2</sup>.</span></p>
-<h3><span style="font-size: 19px;">Closest Pair of Points</span></h3>
+<h3><span style="font-size: 19px;">1. Closest Pair of Points</span></h3>
 <p><span style="font-size: 19px;">In this problem, we look for the closest pair of points in a set, P, of n points.</span></p>
 <p><span style="font-size: 19px;">The distance between two points (x<sub>1</sub>, y<sub>1</sub>) and (x<sub>2</sub>, y<sub>2</sub>) can be computed as d = √(x<sub>1</sub>-x<sub>2</sub>)<sup>2</sup>+(y<sub>1</sub>-y<sub>2</sub>)<sup>2</sup>. To compare the distance between one pair of points with the distance between another pair, we can compare the square of the distance to avoid the square root operation which cannot be performed in constant time. The brute-force approach will check all the pairs of points and thus will require Θ(n<sup>2</sup>) time.</span></p>
 <p><span style="font-size: 19px;">To design a better solution, we use divide and conquer.</span></p>
@@ -450,9 +455,10 @@ T(n)/n 1    2    3    4    5    6</span></pre>
 <p><span style="font-size: 19px;">In the combine step, to sort the points in the strip of width 2δ centered at L, we perform a linear scan in Y and extract these points.</span></p>
 <p><span style="font-size: 19px;">The above strategy allows us to perform sorting by x-coordinate once and by y-coordinate once during the entire execution of the algorithm.</span></p>
 <p><span style="font-size: 19px;">The running time now has two parts: the part for sorting at the beginning (O(n lg n) time), and the part for the recursive algorithm (T(n) time). We now have T(n) = 2T(n/2) + O(n), and thus T(n) = O(n lg n). The total running time is thus O(n lg n) + T(n) = O(n lg n).</span></p>
-<h2><span style="font-size: 24px;">Invent (or Augment) a Data Structure</span></h2>
+<br>
+<h2><span style="font-size: 24px;color: red">4-Invent (or Augment) a Data Structure</span></h2>
 <p><span style="font-size: 19px;">The 4th algorithm design paradigm is to invent or augment a data structure. Data structures is one filed of algorithms, and we often use data structures as essential building blocks of algorithms. Previously we already saw one example of using data structures to design an algorithm. This is the maxsubrange3 algorithm, discussed in a previous lecture. In this algorithm, we created a prefix sum array p and used it to compute a subrange sum. Now let's see more examples.</span></p>
-<h3><span style="font-size: 19px;">Abelian Square Detection in Strings</span></h3>
+<h3><span style="font-size: 19px;">1. Abelian Square Detection in Strings</span></h3>
 <p><span style="font-size: 19px;">In a string, an Abelian square is a substring of the form xx', where |x| = |x'| (|x| is the length of x), and x is a permutation of x'. For example, the English word reappear is an abelian square, in which x = reap and x' = pear, and so is the DNA fragment AACGTCAGAT.</span></p>
 <p><span style="font-size: 19px;">The problem we consider is: Given string S[1..n], determine if it has an abelian square. For example, if S = preappearance, then the answer is true.</span></p>
 <p><span style="font-size: 19px;">How do we determine whether x is a permutation of x'? One way of doing this is to sort both strings, and compare the sorted strings symbol by symbol. If the sorted strings are equal, then x is a permutation of x'.&nbsp;</span></p>
@@ -489,7 +495,7 @@ for len ← 1 to ⌊n/2⌋ do
 
 return false</span></pre>
 <p><span style="font-size: 19px;">The running time of this solution is O(kn<sup>2</sup>). If k is not too large, this is much better than the previous solution.</span></p>
-<h3><span style="font-size: 19px;">Supporting Subrange Sum Under Updates</span></h3>
+<h3><span style="font-size: 19px;">2. Supporting Subrange Sum Under Updates</span></h3>
 <p><span style="font-size: 19px;">Now let's invent a data structure to solve the following problem: We would like to maintain an array A[1..n] to support</span></p>
 <p><span style="font-size: 19px;">Query a: Set A[i] ← A[i] + δ</span><br><span style="font-size: 19px;">Query b: Subrange sum (c, d): Computing A[c] + A[c+1] + ... + A[d]</span></p>
 <p><span style="font-size: 19px;">If we simply store the data in the array A, then query a can be supported in O(1) time, but query b requires O(n) time. Alternatively, if we store the data in the prefix array p, then query b can be supported in O(1) time, but query a requires O(n) time. Now let's design a better data structure.</span></p>
@@ -501,10 +507,11 @@ return false</span></pre>
 <p><span style="font-size: 19px;">As the height of this tree is O(lg n), query b can be answered in O(lg n) time.</span></p>
 <p><span style="font-size: 19px;">Therefore, our data structure can support both queries in logarithmic time.</span></p>
 <p><span style="font-size: 19px;">An exercise: how to store the tree as an array? Hint: think of heap.</span></p>
-<h1><span style="font-size: 24px;">Greedy Algorithms</span></h1>
+<br>
+<h1><span style="font-size: 24px;color: red">Greedy Algorithms</span></h1>
 <p><span style="font-size: 19px;">The 5th algorithm design paradigm discussed in this course is greedy algorithms. They are used to solve optimization problems. For an optimization problem, there exist many solutions that satisfy the constraints given in the problem. Each solution has a value, and we would like to find a solution with the optimal (minimum or maximum) value.</span></p>
 <p><span style="font-size: 19px;">The idea of greedy algorithms is to make the choice that looks the best at the moment. More formally, we make a locally optimal choice (i.e., a choice optimal for a subproblem) hoping that this will lead to globally optimal solution. The use of the word "hoping" here implies that a locally optimal choice will not always lead to a globally optimal solution, and thus to master greedy algorithms, we need learn to prove or disprove that a certain greedy strategy will yield an optimal solution.</span></p>
-<h3><span style="font-size: 19px;">Activity-Selection Problem</span></h3>
+<h3><span style="font-size: 19px;">1. Activity-Selection Problem</span></h3>
 <p><span style="font-size: 19px;">In this problem, we are given a set of activities competing for time intervals on a given resource. Here n denotes the number of activities. Activity i has start time s<sub>i</sub>&nbsp;and finish time f<sub>i</sub>. If selected activity i takes up the half open interval [s<sub>i</sub>, f<sub>i</sub>).</span></p>
 <p><span style="font-size: 19px;">The goal is to produce a schedule containing the maximum number of compatible activities. We say that activity i is compatible with activity j if either s<sub>i</sub>&nbsp;&gt;= f<sub>j</sub>&nbsp;or s<sub>j</sub>&nbsp;&gt;= f<sub>i</sub>&nbsp;holds.</span></p>
 <p><span style="font-size: 19px;">The following figure is an example that I gave in class, in which each interval corresponds to an activity. By choosing the activities circled in green, we get one optimal solution.</span></p>
@@ -566,7 +573,7 @@ for i ← 2 to n do
     k ← i
 return A</span></pre>
 <p><span style="font-size: 19px;">The time complexity is O(n lg n).</span></p>
-<h3><span style="font-size: 19px;">Knapsack Problem</span></h3>
+<h3><span style="font-size: 19px;">2. Knapsack Problem</span></h3>
 <p><span style="font-size: 19px;">In the input, we have n items, and each item i has a weight w<sub>i</sub>&nbsp;(in kg) and a value v<sub>i</sub>&nbsp;(in dollar amount). We also have a knapsack, which has a maximum weight, W, that it can hold.</span></p>
 <p><span style="font-size: 19px;">The problem is which items we should choose to maximize the value we can hold in our knapsack.</span></p>
 <p><span style="font-size: 19px;">(Think of the example of the thief mentioned in class.)</span></p>
@@ -587,7 +594,7 @@ value/weight ratio   3.20  1.75  1.21  2.67  3.75  13</span></pre>
 <p><span style="font-size: 19px;">If greedy strategy 2 is used, it happens that items 3, 1 and 6 are selected again, which is not an optimal solution.</span></p>
 <p><span style="font-size: 19px;">If greedy strategy 3 is used, items 6, 4, 5 and 1 are selected. The total weight is 65, and the value is 260.</span></p>
 <p><span style="font-size: 19px;">If greedy strategy 4 is used, items 6, 5, 1 and 4 are selected. Again, this is not optimal.</span></p>
-<h3><span style="font-size: 19px;">Fractional Knapsack Problem</span></h3>
+<h3><span style="font-size: 19px;">3. Fractional Knapsack Problem</span></h3>
 <p><span style="font-size: 19px;">One variant of the knapsack problem can be solved using a greedy algorithm. In this variant, instead of having each item in the input representing a single physical item, each item represents a sack of some substance which can be arbitrarily divided. Examples: a sack of sugar, a sack of salt and a sack of gold dust.</span></p>
 <p><span style="font-size: 19px;">Thus, we can take a fraction of an item and put it into our knapsack.</span></p>
 <p><span style="font-size: 19px;">Under these assumptions, greedy strategy 4 works! Using this strategy, we first choose items 6, 5, 1, 4 and we can still put 35kg's items into our knapsack. The next item with the highest value to weight ratio is item 2, and its weight is 40 kg. Then we choose 35/40 (=7/8) of item 2, which is worth 7/8 * 70 = 61.25. With this choice, the total weight is 100, and the total value is 321.25.</span></p>
