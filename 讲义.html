@@ -651,4 +651,48 @@ M<sub>2</sub>     100 x 5</span><br><span style="font-size: 19px;">M<sub>3</sub>
 <p><span style="font-size: 19px;">W(n) = (2n-2 choose n-1)/n</span></p>
 <p><span style="font-size: 19px;">To see how big this value is, we make use of the fomula for bionmial coefficient (a choose b) = a! / (b! (a-b)!), and Stirling's approximation n! = n<sup>n</sup>e<sup>-n</sup>√2πn(1+Θ(1/n)).</span></p>
 
+<p><span style="font-size: 19px;">To see how big this value is, we make use of the fomula for bionmial coefficient (a choose b) = a! / (b! (a-b)!), and Stirling's approximation n! = n<sup>n</sup>e<sup>-n</sup>√2πn(1+Θ(1/n)).</span></p>
+<p><span style="font-size: 19px;">We then have (2n choose n) = (2n)! / (n!)<sup>2</sup>&nbsp;≈ (2n)<sup>2n</sup>e<sup>-2n</sup>√2π 2n&nbsp;/ (n<sup>2n</sup>e<sup>-2n</sup>2πn) = 2<sup>2n</sup>&nbsp;/ √πn.</span></p>
+<p><span style="font-size: 19px;">Applying the above equation, we have W(n) ≈ 4<sup>n</sup>/n<sup>3/2</sup>, which is exponential! When n = 20, this is roughly as large as 10<sup>10</sup>.</span></p>
+<p></p>
+<p><span style="font-size: 19px;"><strong>Dynamic Programming</strong>: We now use dynamic programming to avoid all the recomputation of the recursive approach to acheive a polynomial time solution.</span></p>
+<p><span style="font-size: 19px;">We make use of the following observatoin: Suppose the optimal method to compute the product (M<sub>1</sub>M<sub>2</sub>...M<sub>n</sub>) were to first compute the product of M<sub>1</sub>M<sub>2</sub>...M<sub>k</sub>&nbsp;(in some order), then compute M<sub>k+1</sub>M<sub>k+2</sub>...M<sub>n</sub>&nbsp;(in some order), and then multiply these two results together. Then the method used for the computation of M<sub>1</sub>M<sub>2</sub>...M<sub>k</sub>&nbsp;MUST BE OPTIMAL, for otherwise, we could substitute a superior method to compute M<sub>1</sub>M<sub>2</sub>...M<sub>k</sub>&nbsp;and improve the optimal method for the computation of M<sub>1</sub>M<sub>2</sub>...M<sub>n</sub>. Similary, the method used to compute M<sub>k+1</sub>M<sub>k+2</sub>...M<sub>n</sub>&nbsp;must also be optimal. What is left is to find the value of k, and there are n-1 choices.</span></p>
+<p><span style="font-size: 19px;">Based on this, we further develop the idea for our algorithm. Let m[i, j] be the optimal cost for computing M<sub>i</sub>M<sub>i+1</sub>...M<sub>j</sub>. Then we have</span></p>
+<pre><span style="font-size: 19px;">          / 0 if i = j</span><br><span style="font-size: 19px;">m[i,j] = |</span><br><span style="font-size: 19px;">          \ min<sub> i&lt;=k&lt;j</sub> m[i,k]+m[k+1,j]+p[i-1]p[k]p[j] otherwise
+</span></pre>
+<p><span style="font-size: 19px;">We can eailsy translate this into a recursive algorithm. However, before I write down its pseudocode, I would emphesize that this algorithm is BAD! It is BAD! Very BAD! No one should ever use such an algorithm. It is however a common mistake, so we need know about it in order to avoid coming up with a similar solution.</span></p>
+<pre><span style="font-size: 19px;">Recursive_Multi(i, j)
+if i = j then
+  return 0
+else
+  minc ← ∞
+  for k ← i to j-1 do
+    a ← Recursive_Multi(i, k)
+    b ← Recursive_Multi(k+1, j)
+    minc ← min(minc, a+b+p[i-1]*p[k]*p[j])
+return minc</span></pre>
+<p><span style="font-size: 19px;">This algorithm is bad because it essentially checks all possibilities. It is as bad as brute-force. It requires exponential time!</span></p>
+<p><span style="font-size: 19px;">To use dynamic programming correctly, we fix an order in which we compute m[i, j]. Here we first compute m[i, i] for all i. Then we compute m[i, i+1] for all i. Then m[i, i+2] for all i, and so on. That is, we compute answers to smaller subproblems first.</span></p>
+<pre><span style="font-size: 19px;">Matrix_Multi_Order(p, n)</span><br><span style="font-size: 19px;">for i ← 1 to n do</span><br><span style="font-size: 19px;">  m[i,i] ← 0</span><br><br><span style="font-size: 19px;">for d ← 1 to n-1 do</span><br><span style="font-size: 19px;">  for i ← 1 to n-d do
+    j ← i + d
+    m[i,j] ← ∞
+    for k ← i to j-1 do
+      q ← m[i,k] + m[k+1,j] + p[i-1]*p[k]*p[j]
+      if q &lt; m[i,j] then
+        m[i,j] ← q
+        s[i,j] ← k
+return (m, s)</span></pre>
+<p><span style="font-size: 19px;">From the above code we can see why we compute m[i, j] in the order specified above. This is to guarantee that the values of m[i,k] and m[k+1,j] are available when we compute m[i,j].</span></p>
+<p><span style="font-size: 19px;">The running time is O(n<sup>3</sup>), and the optimal cost of multiplying these matrices is stored in m[1, n].</span></p>
+<p><span style="font-size: 19px;">To fully understand the order in which the dynamic programming algorithm computes m[i, j], I used the example on pp. 380 (or pp.376 in the 3rd edition) in CLRS. When you review it, think about how entry m[1,4] is calculated.</span></p>
+<p><span style="font-size: 19px;">Our previous algorithm computes the optimal cost of multiplying the given matrix chain. How do we multiply the matrices optimally? This can be done using recursion.</span></p>
+<p><span style="font-size: 19px;">Say, we wish to multiply M<sub>i</sub>M<sub>i+1</sub>...M<sub>j</sub>&nbsp;optimally, if we know k, then we can compute M<sub>i</sub>M<sub>i+1</sub>...M<sub>k</sub>&nbsp;and M<sub>k+1</sub>M<sub>k+2</sub>...M<sub>j</sub>&nbsp;recursively, and then multiply the products together. How can we find out k? We can simply retrieve its value from s[i, j]. Thus, we can use the following algorithm to multiply matrices optimally after we compute the array s using the previous dynamic programming algorithm:</span></p>
+<pre><span style="font-size: 19px;">Matrix_Mult(M, s, i, j)</span><br><span style="font-size: 19px;">if j &gt; i then
+  X ← Matrix_Mult(M, s, i, s[i,j])
+  Y ← Matrix_Mult(M, s, s[i,j]+1, j)
+  return X*Y
+else
+  return M<sub>i</sub></span></pre>
+
+
 </body></html>
