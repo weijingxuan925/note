@@ -694,5 +694,67 @@ return (m, s)</span></pre>
 else
   return M<sub>i</sub></span></pre>
 
-
+  <p><span style="font-size: 19px;">We claim that the running time is O(n) + the time to do the actual n-1 matrix multiplications. The latter depends on the size of the matrices. To see that the additional cost (other than the actual matrix multiplication cost) is indeed O(n), we observe that O(n) calls are made and each call uses O(1) time.</span></p>
+  <p><span style="font-size: 19px;">Another way of writing down a dynamic programming algorithm is to use memoization. In our solution, the idea is to compute m[1, n] recursively. Each time we compute m[i, j], we check if it has already been computed. If it has, then we retrieve its value. Otherwise, we compute it recursively.</span></p>
+  <p><span style="font-size: 19px;">How do we find out if an entry of m has been computed? For this we simply fill all the entries of m using infinity in the beginning.</span></p>
+  <pre><span style="font-size: 19px;">Memoized_Matrix_Multi(p, n)</span><br><span style="font-size: 19px;">for i ← 1 to n do
+    for j ← 1 to n do
+      m[i,j] ← ∞
+  return Lookup(p, 1, n)
+  
+  Lookup(p, i, j)
+  1  if m[i,j] &lt; ∞ then
+  2    return m[i,j]
+  
+  3  if i = j then
+  4    m[i,j] ← 0</span><br><span style="font-size: 19px;">
+  5  else
+  6    for k ← i to j-1 do
+  7      q ← Lookup(p, i, k) + Lookup(p, k+1, j) + p[i-1]*p[k]*p[j]
+  8      if q &lt; m[i,j] then
+  9        m[i,j] ← q
+  10       s[i,j] ← k
+  
+  11 return m[i,j]</span></pre>
+  <p><span style="font-size: 19px;">To analyze the running time, the crucial part is to analyze the running time for computing Lookup[p, 1, n]. There are two types of calls to Lookup: type-1 call in which line 2 is executed, and type-2 call in which lines 3-11 are executed.</span></p>
+  <p></p>
+  <p><span style="font-size: 19px;">To analyze the running time, the crucial part is to analyze the running time for computing Lookup[p, 1, n]. There are two types of calls to Lookup: type-1 call in which line 2 is executed, and type-2 call in which lines 3-11 are executed.</span></p>
+  <p><span style="font-size: 19px;">Each type-2 call corresponds to an infinity in a different entry of m, and thus the number of type-2 calls is O(n<sup>2</sup>). Since lines 3-10 require O(n) time each time they are executed, the total number of cost for lines 3-10 throughout the execution of the algorithm is O(n<sup>2</sup>*n) = O(n<sup>3</sup>).</span></p>
+  <p><span style="font-size: 19px;">Type-1 calls are made as recursive calls by type-2 calls. Since there are O(n<sup>2</sup>) type-2 calls and each of them makes at most n type-1 calls, the total number of type-1 calls is O(n<sup>3</sup>). This means that line 2 is executed O(n<sup>3</sup>) times and this uses O(n<sup>3</sup>) time in total.</span></p>
+  <p><span style="font-size: 19px;">The number of times line 1 is executed is equal to the total number of calls to Lookup, which is O(n<sup>3</sup>). This uses O(n<sup>3</sup>) time.</span></p>
+  <p><span style="font-size: 19px;">Therefore, the total running time is O(n<sup>3</sup>).</span></p>
+  <h3><span style="font-size: 19px;">Longest Common Subsequence</span></h3>
+  <p><span style="font-size: 19px;">In this problem, we are given two strings: x[1..m] and y[1..n], and out task is to find the longest sequence that appears (not necessarily consecutively) in both strings.</span></p>
+  <p><span style="font-size: 19px;">For example, if x = algorithm and y = exploration, then their LCS (longest common subsequence) is lort.</span></p>
+  <p><span style="font-size: 19px;">Why do we study this problem? The length of the LCS between two strings is often used as a measurement of their similarity. Thus this has applications in text mining and bioinformatics.</span></p>
+  <p><span style="font-size: 19px;">If we solve this problem using a brute-force approach, that is, we enumerate all possible subsequences of x and y and then compute their intersection, the running time would be exponential. The total number of subsequences of x alone is already 2<sup>m</sup>.</span></p>
+  <p><span style="font-size: 19px;">Fortunately, we can use dynamic programming to design a polynomial-time solution.</span></p>
+  <p><span style="font-size: 19px;">The first step of using dynamic programming to solve LCS is to make an observation to come up with a recursion for the length of the longest common subsequence of x and y.</span></p>
+  <p><span style="font-size: 19px;">For this, we look at the last character of either string. There are three cases.</span></p>
+  <ol>
+  <li><span style="font-size: 19px;">If x[m] = y[n] = a, then any longest common subsequence, z[1..k], of x and y will end in z[k] = a (for otherwise, we could append a to z and get a longer common subsequence). We also claim that z[1..k-1] is a longest common subsequence of x[1..m-1] and y[1..n-1].</span></li>
+  <li><span style="font-size: 19px;">If x[m] ≠ y[n], then if z[k] ≠ x[m], we claim that z[1..k] is a longest common subsequence of x[1..m-1] and y[1..n], for if there were a longer longest common subsequence of x[1..m-1] and y[1..n], it would also be a common subsequence of x[1..m] and y[1..n] and is longer than z.</span></li>
+  <li><span style="font-size: 19px;">If x[m] ≠ y[n], then if z[k] ≠ y[n], we claim that z[1..k] is a longest common subsequence of x[1..m] and y[1..n-1], for similar reasons.</span></li>
+  </ol>
+  <p><span style="font-size: 19px;">The next step is to come up with a recursive formula.</span></p>
+  <p><span style="font-size: 19px;">Let c[i, j] be the length of the LCS of these two prefixes: x[1..i] and y[1..j]. Then, based on the above observation, we have</span></p>
+  <pre><span style="font-size: 19px;">         / 0  if i = 0 or j = 0</span><br><span style="font-size: 19px;">c[i,j] = | c[i-1,j-1] + 1     if x[i] = y[j]</span><br><span style="font-size: 19px;">         \ max(c[i-1,j], c[i,j-1])     if x[i] ≠ y[j]
+  
+  </span></pre>
+  <p><span style="font-size: 19px;">Then we can use the following algorithm to compute all the entries of c, and return the length of LCS of x and y.</span></p>
+  <pre><span style="font-size: 19px;">LCS_Length(x[1..m], y[1..n])</span><br><span style="font-size: 19px;">for i ← 1 to m do</span><br><span style="font-size: 19px;">  c[i,0] ← 0</span><br><span style="font-size: 19px;">
+  for j ← 1 to n do
+    c[0,j] ← 0
+  
+  for i ← 1 to m do
+    for j ← 1 to n do
+      if x[i] = y[j] then
+        c[i,j] ← c[i-1, j-1] + 1
+      else
+        c[i,j] ← max(c[i-1,j], c[i,j-1])
+  
+  return c[m,n]</span></pre>
+  <p><span style="font-size: 19px;">In the above algorithm, after filling in the entries for the base case, we compute other entries in increasing order of i. For each i, we compute in increasing order of j. This is important as this order guarantees that the entries of c needed to compute c[i,j] have been computed by the time we look at c[i,j].</span></p>
+  <p><span style="font-size: 19px;">As an exercise, I asked you to fill in a 9x 11 table whose entries record the length of LCS between any pairs of prefixes of strings algorithm (string x) and exploration (string y). More precisely, the entry at the ith row and the jth column records the length of LCS between prefix x[1..i] and prefix y[1..j].</span></p>
+  
 </body></html>
