@@ -757,4 +757,75 @@ else
   <p><span style="font-size: 19px;">In the above algorithm, after filling in the entries for the base case, we compute other entries in increasing order of i. For each i, we compute in increasing order of j. This is important as this order guarantees that the entries of c needed to compute c[i,j] have been computed by the time we look at c[i,j].</span></p>
   <p><span style="font-size: 19px;">As an exercise, I asked you to fill in a 9x 11 table whose entries record the length of LCS between any pairs of prefixes of strings algorithm (string x) and exploration (string y). More precisely, the entry at the ith row and the jth column records the length of LCS between prefix x[1..i] and prefix y[1..j].</span></p>
   
+  <p><span style="font-size: 19px;">To compute the LCS itself, the approach in CLRS stores some extra information (the array b on page 394) and then makes use of it to compute LCS recursively. Here we will use a more space-efficient approach which does not require additional data structures. Assume that the array c has already been computed using our dynamic programming algorithm. Then, we can deduce the LCS of x and y from the content of c as follows:</span></p>
+  <pre><span style="font-size: 19px;">LCS(i, j)    // A recursive algorithm that computes the LCS of x[1..i] and y[1..j]
+  if i = 0 or j = 0 then
+    return empty string
+  
+  else if c[i,j] &gt; max(c[i-1,j], c[i,j-1]) then
+         return (LCS(i-1,j-1), x[i])
+       else if c[i-1,j] &gt;= c[i,j-1] then
+              return LCS(i-1,j)
+            else
+              return LCS(i,j-1)</span></pre>
+  <p><span style="font-size: 19px;">To see the running time of LCS(m, n), observe that each call decreases the values of i, j, or both by 1. Therefore, the number of calls is at most the sum of the initial values of i and j, which is m+n. The work in each call costs constant time, so that total running time is O(m+n).</span></p>
+  <p><span style="font-size: 19px;">An exercise is to ask you to use this algorithm to compute the LCS between x = algorithm and y = exploration.</span></p>
+  <h3><span style="font-size: 19px;">Making Change</span></h3>
+  <p><span style="font-size: 19px;">In this problem, we are given an amount in cents. We are to make change using a system of denominations, using the smallest number of coins possible to make change.</span></p>
+  <p><span style="font-size: 19px;"><strong>Canadian Coinage System (including pennies) and Greedy Algorithms.</strong>&nbsp;Let's first consider the Canadian coinage system, in which we have toonies, loonies, quarters, dimes, nickels and pennies. We actually "had" pennies up to 2012; here we still include pennies as we are studying the problem of making exact change.</span></p>
+  <p><span style="font-size: 19px;">We can model this problem mathematically as follows: We are given an integer n, where 0 &lt;= n &lt; 500, and our goal is to express n = 200a + 100b+ 25c + 10d + 5e + f, where a, b, c, d, e, f are integers &gt;= 0, s.t. a+b+c+d+e+f is minimized.</span></p>
+  <p><span style="font-size: 19px;">How do most cashiers make change? They use the following greedy algorithm: Choose as many toonies as possible (s.t. 200a &lt;= n); then for n-200a, choose as many loonies as possible, etc. For example, if the amount of change is $4.87, then a=2, b=0, c=3, d=1, e=0, f=2. In total, 8 coins are used.</span></p>
+  <p><span style="font-size: 19px;">This greedy algorithm always computes an optimal solution for the Canadian coinage system. But, this is not necessarily true for any arbitrary coinage system.</span></p>
+  <p><span style="font-size: 19px;">For example, if the face values of coins are 12, 5, 1, and the amount of change is 15, then the greedy algorithm will express 15 as 1*12+0*5+3*1, and 4 coins will be used. However, we can use 3 coins to make change, as 15 = 3*5.</span></p>
+  <p><span style="font-size: 19px;">How to tell, for a given coinage, whether the greedy algorithm always gives an optimal solution? If you are interested, you can read the following optimal reading material to find out:</span></p>
+  <p><span style="font-size: 19px;">A polynomial time algorithm for the change-making problem, Operations Research Letters, 33 (3) 2005, 231-234. <a href="http://www.sciencedirect.com/science/article/pii/S0167637704000823">http://www.sciencedirect.com/science/article/pii/S0167637704000823</a></span></p>
+  <p><span style="font-size: 19px;">Another question is, can we design an algorithm that will always compute an optimal solution for any given coinage system? We can indeed design such an algorithm using dynamic programming.</span></p>
+  <p><span style="font-size: 19px;"><strong>Dynamic Programming</strong>. To use dynamic programming for the problem of making change, we assume in the input we have the amount (in cents) n &gt; 0, and an array d[1..k] storing the denominations of the k coins, in which d[1] = 1 (so that we can always make the exact change) and d[i] &lt; d[i+1] for all i.</span></p>
+  <p><span style="font-size: 19px;">We make the following observation: The optimal method must use some denomination d[i]. If we know which d[i] is used, then we can claim that the optimal solution can be computed by first computing the optimal solution for n-d[i], and then adding one coin of denomination d[i]. We do not know which coin is to be used, so we try all d[i] s.t. d[i] &lt;= n.</span></p>
+  <p><span style="font-size: 19px;">This gives us the following recursion, in which opt[j] stores the optimal number of coins to make change for j cents.</span></p>
+  <pre><span style="font-size: 19px;">         / 1, if j = d[i] for some i</span><br><span style="font-size: 19px;">opt[j] = |  
+           \ 1 + min(opt[j-d[i]), where the min is over all i, s.t. d[i] &lt; j, otherwise.</span></pre>
+  <p><span style="font-size: 19px;">We can then write an algorithm to compute opt[j] for j = 1, 2, ..., n.</span></p>
+  <pre><span style="font-size: 19px;">Coins(n, d[1..k])</span><br><span style="font-size: 19px;">for j ← 1 to n do
+    opt[j] ← ∞
+    for i ← k downto 1 do
+      if d[i] = j then
+        opt[j] ← 1
+        largest[j] ← d[i]
+      else if d[i] &lt; j then
+             a ← 1 + opt[j-d[i]]
+             if a &lt; opt[j] then
+               opt[j] ← a
+               largest[j] ← d[i]
+  return opt[n]</span></pre>
+  <p><span style="font-size: 19px;">The running time is O(kn).</span></p>
+  <p><span style="font-size: 19px;">Let's look at an example. In this example, d = {1, 4, 5} and n = 8. Then, the greedy algorithm would express 8 as 5+1+1+1, and uses 4 coins. If we use dynamic programming, we will compute the entries of opt and largest as follows:</span></p>
+  <pre><span style="font-size: 19px;">j     opt[j]     largest[j]</span><br><span style="font-size: 19px;">1          1              1
+  2          2              1
+  3          3              1
+  4          1              4
+  5          1              5
+  6          2              5
+  7          3              5
+  8          2              4</span></pre>
+  <p><span style="font-size: 19px;">For example, the entry opt[8] is computed as 1 + the minimum of opt[8-5], opt[8-4] and opt[8-1].</span></p>
+  <p><span style="font-size: 19px;">How to get the coins used in the optimal solution? Let's look at the above example again. In this example, 8 has a representation of size 2 (=opt[8]), with largest coin 4 (=largest[8]). Then, 8-4=4 has a representation of size 1 (=opt[4]), with largest coin 4 (=largest[4]). From this we can tell that the optimal solution expresses 8 as 4+4.</span></p>
+  <p><span style="font-size: 19px;">Based on the above process, we can design an algorithm that will compute the set of coins used in the optimal solution, assuming that the array largest has already been computed using dynamic programming.</span></p>
+  <pre><span style="font-size: 19px;">Make_Change(n, largest)</span><br><span style="font-size: 19px;">C ← Φ   // a multiset that stores the answer
+  while n &gt; 0 do
+    C ← C ∪ largest[n]
+    n ← n - largest[n]
+  return C
+  </span></pre>
+  <h2><span style="font-size: 19px;">Exploiting the Problem's Structure</span></h2>
+  <p><span style="font-size: 19px;">This is the 7th algorithm design paradigm that we study in this course.</span></p>
+  <p><span style="font-size: 19px;">Many problems have some sort of structure (algebraic, number-theoretic, topological, geometric, etc.) that suggests a solution, so we design algorithms accordingly to make use of such structure.</span></p>
+  <p><span style="font-size: 19px;">As an example, we consider the greatest common divisor problem: Given nonnegative integers u and v, compute their greatest common divisor, gcd(u, v).</span></p>
+  <p><span style="font-size: 19px;">First, let us learn a few definitions. d | u means d is a divisor of u. We say d divides u. This means that there exists an integer k, s.t., u = kd. We say that d is a common divisor of u and v if d | u and d | v. We say that d is the largest common divisor of u and v if d is a common divisor of u and v, and no other common divisor is larger. For example, gcd(24, 18) = 6.</span></p>
+  <p><span style="font-size: 19px; color: #ffba59;">Section 1 stopped here.</span></p>
+  <p><span style="font-size: 19px;">This is useful in algebra. For example, when we reduce a fraction to lowest term, we need the greatest common divisor of the numerator and denominator. Math software would need an algorithm for this problem.</span></p>
+  <p><span style="font-size: 19px;">We probably programmed a simple solution to this problem when we learned our first programming language The brute-force approach is to let t = min(u, v), and try numbers t, t-1, t-2, .... The running time is O(min(u, v)). Is this linear time?</span></p>
+  
+
+
 </body></html>
