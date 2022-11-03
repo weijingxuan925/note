@@ -826,6 +826,66 @@ else
   <p><span style="font-size: 19px;">This is useful in algebra. For example, when we reduce a fraction to lowest term, we need the greatest common divisor of the numerator and denominator. Math software would need an algorithm for this problem.</span></p>
   <p><span style="font-size: 19px;">We probably programmed a simple solution to this problem when we learned our first programming language The brute-force approach is to let t = min(u, v), and try numbers t, t-1, t-2, .... The running time is O(min(u, v)). Is this linear time?</span></p>
   
-
+  <p><span style="font-size: 19px;">We probably programmed a simple solution to this problem when we learned our first programming language The brute-force approach is to let t = min(u, v), and try numbers t, t-1, t-2, .... The running time is O(min(u, v)). Is this linear time?</span></p>
+  <p><span style="font-size: 19px;">Surprisingly, the answer is no. Recall that when we first started to study running time, we learned that we would study the running time as a function of input size. When determining the size of input for a problem, we use something reasonable. Here, we have two integers, u and v. A reasonable measurement is to use the number of bits required to encode these two integers in binary, which is roughly lg u + lg v (we ignore floor/ceiling here for simplicity). Thus, if the values of u and v are close to each other, then the input size is roughly 2 lg u, and the running time O(u) would be approximately O(2<sup>(input size)/2</sup>). This is exponential!</span></p>
+  <p><span style="font-size: 19px;">In cryptography, we often deal with integers that is represented in 128, 256, 512, ... bits. Then, if an algorithm requires 2<sup>256</sup>&nbsp;steps, it would take forever.</span></p>
+  <p><span style="font-size: 19px;">To come up with a better solution, let's make some observations. We develop the following simple idea: If d | u and d | v, then d | (au + bv) for all integers a and b. We then choose a and b to minimize au+bv. One way of doing this is to choose a = 1 and b = -⌊u/v⌋ and then au+bv = u - v⌊u/v⌋ = u mod v.</span></p>
+  <p><span style="font-size: 19px;">We can prove that d | u &amp; d | v if and only if d | v and d | (u mod v) using the equation u mod v = u - v⌊u/v⌋.</span></p>
+  <p><span style="font-size: 19px;">Euclid's algorithm is based on the above structure. It was discovered in 300 B.C.! The pseudocode is simple:</span></p>
+  <pre><span style="font-size: 19px;">Euclid(u, v)</span><br><span style="font-size: 19px;">while (v ≠ 0) do
+    (u, v) ← (v, u mod v)
+  return u</span></pre>
+  <p><span style="font-size: 19px;">Finck analyzed this algorithm in 1841. He proved the following theorem: Euclid's algorithm uses O(lg v) steps on input (u, v), where u &gt; v &gt; 0.</span></p>
+  <p><span style="font-size: 19px;">Proof. Consider replacing (u, v) by (u, r), where r = u mod v. There are three cases.</span></p>
+  <p><span style="font-size: 19px;">Case I: v &gt; u/2. Then r = u - v &lt; u/2.</span></p>
+  <p><span style="font-size: 19px;">Case II: v = u/2. Then r = 0;</span></p>
+  <p><span style="font-size: 19px;">Case III: v &lt; u/2. Then r &lt; v &lt; u/2.</span></p>
+  <p><span style="font-size: 19px;">Hence r &lt; u/2.</span></p>
+  <p><span style="font-size: 19px;">It follows that after two steps, say (u, v) ← (v, r) ← (r, s), we have s &lt; v/2, and r &lt; u/2. Therefore, after two steps, v decreases by a factor of 2. After O(lg v) steps, v will decrease to 0. This completes the proof.</span></p>
+  <p><span style="font-size: 19px;">With greater care, we can prove that the number of steps &lt;= 2 lg v + 1.</span></p>
+  <p><span style="font-size: 19px;">This means that the running time of Euclid's algorithm is linear.</span></p>
+  <p><span style="font-size: 19px;">Can we do better? There is an algorithm called binary algorithm that avoids using integer division, and uses subtraction and shifts instead. Its running time does not beat that of Euclid's algorithm asymptotically. It however often uses less time in practice as subtraction/shift are faster than division. It was proposed by J. Stein in 1967, though an approach used in the 1st century of China is essentially equivalent. Here we use Stein's modern description.</span></p>
+  <p><span style="font-size: 19px;">This algorithm is based on the following recurrence, in which u &gt;= v:</span></p>
+  <pre><span style="font-size: 19px;">            / u, if v = 0
+              | 2 * gcd(u/2, v/2), if u and v are both even
+  gcd(u, v) = | gcd(u, v/2), if u is odd and v is even
+              | gcd(u/2, v), if u is even and v is odd
+              \ gcd((u-v)/2, v), if and v are both odd</span></pre>
+  <p><span style="font-size: 19px;">This gives us the following pseudocode:</span></p>
+  <pre><span style="font-size: 19px;">GCD(u, v)
+  if u &lt; v then
+    return GCD(v, u)
+  if v = 0 then
+    return u
+  if u and v are both even then
+    return 2*GCD(u/2, v/2)
+  if u is odd and v is even then
+    return GCD(u, v/2)
+  if u is even and v is odd then
+    return GCD(u/2, v)
+  return GCD((u-v)/2, v)</span></pre>
+  <p><span style="font-size: 19px;">To see the running time, we first analyze the total number of subtractions, s(u, v). We prove that s(u, v) &lt;= lg(u+v).</span></p>
+  <p><span style="font-size: 19px;">Proof: We prove by induction on u+v.</span></p>
+  <p><span style="font-size: 19px;">In the base case, u+v = 1. Then either u = 1, v = 0, or u = 0, v = 1. In either case, s(u, v) = 0 and the claim holds.</span></p>
+  <p><span style="font-size: 19px;">Now assume the claim holds for u+v &lt; n; we prove it for u + v = n. There are five cases.</span></p>
+  <p><span style="font-size: 19px;">If v = 0 or u = 0, s(u, v) = 0 and the claim holds.</span></p>
+  <p><span style="font-size: 19px;">If u and v are both even, then s(u, v) = s(u/2, v/2) &lt;= lg(u/2 + v/2) = lg(u+v) - 1 &lt;= lg(u+v).</span></p>
+  <p><span style="font-size: 19px;">If u is even and v is odd, then s(u, v) = s(u/2, v) &lt;= lg(u/2 + v) &lt;= lg(u+v).</span></p>
+  <p><span style="font-size: 19px;">The case in which u is odd and v is even is similar to the case above.</span></p>
+  <p><span style="font-size: 19px;">If u and v are both odd, then s(u, v) = s((u-v)/2, v) + 1 &lt;= lg((u-v)/2 + v) + 1 = lg((u+v)/2) + 1 = lg(u+v).</span></p>
+  <p><span style="font-size: 19px;">This completes the proof.</span></p>
+  <p><span style="font-size: 19px;">The total number of right shifts is less than or equal to the total umber of bits in both numbers, which is lg u + lg v.</span></p>
+  <p><span style="font-size: 19px;">With the above reasonings, we can easily show that the total running time O(max(lg u, lg v)).</span></p>
+  <h1><span style="font-size: 19px;">Probabilistic &amp; Randomized Techniques</span></h1>
+  <p><span style="font-size: 19px;">The 8th algorithm design paradigm is probabilistic &amp; randomized techniques. To learn this, we first clear some concepts.</span></p>
+  <p><span style="font-size: 19px;">In probabilistic analysis, we use knowledge of, or make assumptions about the distribution of input. In probabilistic analysis, we use knowledge of, or make assumptions about the distribution of input. We then average the running time over the distribution of possible inputs and get the average-case running time. One classic example is quicksort. In a previous course, we assumed that the input distribution is uniform, i.e., all input permutations are equally likely, and found out that the average-case running time is O(n lg n). Some of you might have also learned interpolation search, whose average-case running time is O(lg lg n).</span></p>
+  <p><span style="font-size: 19px;">Another concept is randomized algorithms. The behavior of randomized algorithms is determined by input and by values produced by a random-number generator. Here "random" means "truly random". That is, each time we ask for a random integer between 1 and n, we get each integer equally likely. The expected running time of a randomized algorithm is the expectation of the running time over the distribution of values returned by the random number generator. Note: NOT over the distribution of input.</span></p>
+  <p><span style="font-size: 19px;">Previously we have only learned deterministic algorithms which do not use random number generators. We have also seen how to perform probabilistic analysis, so in this lecture, we will focus on randomized algorithms only.</span></p>
+  <h3><span style="font-size: 19px;">The Majority Element Problem</span></h3>
+  <p><span style="font-size: 19px;">In this problem, we are given an array A[1..n] of integers, in which one integer (the majority element) occurs more than n/2 times, and our tasks is to find this element. This problem has applications in data mining.</span></p>
+  <p><span style="font-size: 19px;">There indeed exists a deterministic algorithm that can solve this problem in O(n) time. This is the Boyer-Moore's voting algorithm. It is a subtle algorithm. Dr. Gagie taught it in class. Usually I gave the following link to students and asked them to read it if interested to learn this algorithm:</span></p>
+  <p><span style="font-size: 19px;"><a href="http://www.cs.utexas.edu/~moore/best-ideas/mjrty/">http://www.cs.utexas.edu/~moore/best-ideas/mjrty/</a></span></p>
+  <p><span style="font-size: 19px;">It was good that Travis taught it in class; this made it easier to understand. To be consistent with previous terms, I will not require that you understand this algorithm for assignments or exams, but it is good to know it. In the next lecture, the guest lecturers will show a simple randomized algorithm.</span></p>
+  
 
 </body></html>
