@@ -887,5 +887,87 @@ else
   <p><span style="font-size: 19px;"><a href="http://www.cs.utexas.edu/~moore/best-ideas/mjrty/">http://www.cs.utexas.edu/~moore/best-ideas/mjrty/</a></span></p>
   <p><span style="font-size: 19px;">It was good that Travis taught it in class; this made it easier to understand. To be consistent with previous terms, I will not require that you understand this algorithm for assignments or exams, but it is good to know it. In the next lecture, the guest lecturers will show a simple randomized algorithm.</span></p>
   
-
+  <p><span style="font-size: 19px;">The following is a simple randomized algorithm for this problem:</span></p>
+  <pre><span style="font-size: 19px;">Find_Majority(A[1..n])</span><br><span style="font-size: 19px;">while true do
+    i ← RANDOM(1, n)
+    Get the number, j, of occurrences of A[i] in A[1..n]
+    if j &gt; n/2 then
+      return A[i]</span></pre>
+  <p><span style="font-size: 19px;">To get the expected running time, we first observe that since there is a majority element, the probability of finding it in one try (i.e. one iteration of the while loop) is &gt; 1/2. Thus, the expected number of tries to find it is &lt; 2 (why? we will prove this). Each try uses O(n) time, and thus the expected running time is O(n).</span></p>
+  <p><span style="font-size: 19px;">To analyze the expected number of tries, let's first brush up some knowledge in probability theory. The expectation of a random variable X that can take any of the values in a set S is Σ<sub>v in S</sub>P<sub>r</sub>(v) * v. For example, when we toss a die, if the die is fair, the the expected value of the die is 1*(1/6) + 2*(1/6) + ... + 6*(1/6) = 3.5.</span></p>
+  <p><span style="font-size: 19px;">Now let's analyze the expected number of tries. In each try, we guess an index of the array, and we find the majority with probability p &gt; 1/2. (Here p is equal to the number of occurrences of the majority divided by n.) Let x be the expected number of tries. Then x = p*1 + (1-p)*p*2 + (1-p)<sup>2</sup>*p*3 + ... = Σ<sub>i&gt;=1</sub>(1-p)<sup>i-1</sup>*p*i.</span></p>
+  <p><span style="font-size: 19px;">Let y = Σ<sub>i&gt;=1</sub>(1-p)<sup>i</sup>*p. Then y= (1-p)p/(1-(1-p)) = 1-p.</span></p>
+  <p><span style="font-size: 19px;">We have x*(1-p) + y = Σ<sub>i&gt;=1</sub>(1-p)<sup>i</sup>*p*i + Σ<sub>i&gt;=1</sub>(1-p)<sup>i</sup>*p = Σ<sub>i&gt;=1</sub>(1-p)<sup>i</sup>*p*(i+1) = x - p.</span></p>
+  <p><span style="font-size: 19px;">Plugging in the value of y, we have x*(1-p) + (1-p) = x - p. Solving this equation, we have x = 1/p. This is indeed less than 2.</span></p>
+  <p><span style="font-size: 19px;">So far we have shown that the above randomized algorithm uses O(n) expected time, which is efficient. There are however some issues with this solution. First, this solution is not robust: If there is no majority element, then it will loop forever. For some applications, this issue can be resolved in the following way: Terminate the while loop if it has been iterated k times for a certain value k. If no majority element has been found yet, then we can claim that, if there is indeed a majority element, then the probabilities of our algorithm not finding it is less than 1/(2<sup>k</sup>). This is acceptable in many applications in data mining, but may not always be acceptable. Another issue is that it may take a long time, though this is rare.</span></p>
+  <p><span style="font-size: 19px;">Despite these issues, randomized algorithms are often the most practical solutions. For example, if you learn more about computational geometry in the future, you will learn a randomized solution to the point location problem, which is the most practical one.</span></p>
+  <h3><span style="font-size: 19px;">The Selection Problem</span></h3>
+  <p><span style="font-size: 19px;">In the selection problem, we are given an array A[1..n] and an integer i with 1 &lt;= i &lt;= n, and our task is to determine the i-th smallest number in A.</span></p>
+  <p><span style="font-size: 19px;">When i = 1, n, or ⌈n/2⌉, the problem becomes the problem of finding min, max, or median.</span></p>
+  <p><span style="font-size: 19px;">One obvious approach is to sort the array and take the i-th element in the sorted array. This would require O(n lg n) time. Can we do better?</span></p>
+  <p><span style="font-size: 19px;">Now, let's study the following randomized algorithm for selection. It consists of two parts. First, a randomized algorithm that partitions the array A[l..u] into two parts (note that this is character l, not digit 1).</span></p>
+  <pre><span style="font-size: 19px;">Randomized_Partition(A, l, u)
+  i) Choose a random index i' from [l..u]. Assign v ← A[i'].
+  ii) Rearrange the elements of A[l..u] so that there exists an integer p s.t.
+      elements in A[l..p-1] are &lt;= v, 
+      A[p] = v (i.e. v is moved from A[i'] to A[p]), and
+      elements in A[p+1..u] are &gt;= v.
+  iii) return p</span></pre>
+  <p><span style="font-size: 19px;">This is similar to the partition step for quicksort, though in the basic version of quicksort, we do not choose a random element to partition the array. Instead, we choose, say, the last element. Similar to the partition step in quicksort, this can be performed in time linear in the length of the subarray A[l..u].</span></p>
+  <p><span style="font-size: 19px;">With this, we can introduce the randomized selection algorithm.</span></p>
+  <pre><span style="font-size: 19px;">Randomized_Select(A, l, u, i) // find the ith smallest element from A[l..u]
+  if l = r then
+    return A[l]
+  
+  p ← Randomized_Partition(A, l, u)
+  k ← p - l + 1 // note that a[p] is the k-th smallest element in A[l..u]
+  
+  if k = i then
+    return A[p]
+  else if i &lt; k then
+         return Randomized_Select(A, l, p-1, i)
+       else
+         return Randomized_Select(A, p+1, u, i-k)</span></pre>
+  <p><span style="font-size: 19px;">To analyze the expected running time T(n), we observe that Randomized_Select calls itself on either an array of size k-1, or an array of size n-k. In the worst case, we fall in the larger of these two partitions. Thus we have</span></p>
+  <p><span style="font-size: 19px;">T(n) &lt;= ((1/n) * Σ<sub>k=1,2,...,n</sub>T(max(k-1, n-k))) + an, for some constant a.</span></p>
+  <p><span style="font-size: 19px; color: #ffba59;">Section 2 ended here</span></p>
+  <p><span style="font-size: 19px;">We prove that T(n) &lt;= cn for some constant c by induction on n.</span></p>
+  <p><span style="font-size: 19px;">Assume it is true for some base case. We will figure out what the base case should be later.</span></p>
+  <p><span style="font-size: 19px;">Assume it is true for n' &lt; n; we now prove it for n. We have</span></p>
+  <p><span style="font-size: 19px;">T(n) &lt;= ((1/n) * Σ<sub>k=1,2,...,n</sub>T(max(k-1, n-k))) + an</span></p>
+  <p><span style="font-size: 19px;">&lt;= ((2/n)* Σ<sub>k=⌊n/2⌋,⌊n/2⌋+1,...,n</sub>T(k)) + an</span><br><br><span style="font-size: 19px;">&lt;= (2/n)* Σ<sub>k=⌊n/2⌋,⌊n/2⌋+1,...,n</sub>ck + an</span></p>
+  <p><span style="font-size: 19px;">= (2c/n)* Σ<sub>k=⌊n/2⌋,⌊n/2⌋+1,...,n</sub>k + an</span></p>
+  <p><span style="font-size: 19px;">= (2c/n)* ( Σ<sub>k=1,2,...,n</sub>k - Σ<sub>k=1,2,...,⌊n/2⌋-1</sub>k) + an</span></p>
+  <p><span style="font-size: 19px;">= (2c/n)*(n(n-1)/2 - ⌊n/2⌋(⌊n/2⌋-1)/2) + an</span></p>
+  <p><span style="font-size: 19px;">&lt;= (2c/n)*(n(n-1)/2 - (n/2-1)(n/2-2)/2) + an</span></p>
+  <p><span style="font-size: 19px;">= (c/n)((3/4)n<sup>2</sup>&nbsp;+ (1/2)n - 2) + an</span></p>
+  <p><span style="font-size: 19px;">&lt;= 3cn/4 + c/2 + an</span></p>
+  <p><span style="font-size: 19px;">We need choose c s.t. 3cn/4 + c/2 + an &lt;= cn</span></p>
+  <p><span style="font-size: 19px;">Simplifying, we have T(n) &lt;= cn provided n &gt;= 2c/(c-4a).</span></p>
+  <p><span style="font-size: 19px;">Choose c &gt;= 12a. Then 2c/(c-4a) = 2/(1-4a/c) &lt;= 3.</span></p>
+  <p><span style="font-size: 19px;">Thus, T(n) &lt;= cn provided n &gt;= 3.</span></p>
+  <p><span style="font-size: 19px;">To make the base case work, we need ensure that T(n) &lt;= cn for n = 1, 2. This can be done by choosing c = max(12a, T(1), T(2)/2).</span></p>
+  <p><span style="font-size: 19px;">This completes the proof.</span></p>
+  <p><span style="font-size: 19px;">Thus, the randomized selection algorithm uses expected linear time.</span></p>
+  <p><span style="font-size: 19px;">Is there a deterministic algorithm for selection that uses linear worst-case time? Yes. If you are interested, you can read the following optional reading material: Section 9.3 in CLRS. The determinist linear-time algorithm is interesting but fairly complicated. The randomized algorithm above is better in practice.</span></p>
+  <h2><span style="font-size: 19px;">Graph Algorithms</span></h2>
+  <p><span style="font-size: 19px;">In previous lectures, we learned 8 algorithm design paradigms, which gives us a rich toolset for problem solving. Now we use some of these paradigms to solve problems in graphs.</span></p>
+  <p><span style="font-size: 19px;">We learned graphs in CSCI 2110 before, and also in discrete math. I will first review some definitions and graph representations briefly; you have seen most of these in 2110. Then I will focus on the problems that can be solved using paradigms learned in this course.</span></p>
+  <p><span style="font-size: 19px;">As we learned before, a graph is a discrete structure. It is an abstract representation of a set of objects where some pairs of objects are connected by links. We call each object a vertex or node, and each link an edge. Thus, formally, a graph G can be defined as a pair (V, E), in which V is a set of vertices, and E is a set of edges, and E is a subset of V x V. The figure below is the graph that I drew in class.</span></p>
+  <p><span style="font-size: 19px;"><img src="Pictures/graph.jpg" alt="graph" title="graph" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
+  <p><span style="font-size: 19px;">In a directed graph, each edge has a direction. When we draw a directed graph, we will use arrows to orient edges to show the direction. We say that edge (u, v) is incident from (leaves) vertex u and is incident to (enters) vertex v. Or, simply edge (u, v) is from u to v.</span></p>
+  <p><span style="font-size: 19px;">In an undirected graph (as the example above), edges do not have directions. Edge (u, v) is incident on u and v. We say vertex u is adjacent to v if (u, v) is in E.</span></p>
+  <p><span style="font-size: 19px;">We often use graphs to model relationships. Some examples are:</span></p>
+  <ol>
+  <li><span style="font-size: 19px;">A vertex could be a country on the world map, and an edge can be used to join two countries sharing the same border.</span></li>
+  <li><span style="font-size: 19px;">Vertices could be used to represent cities and edges could join cities if there is a direct flight between these two cities.</span></li>
+  <li><span style="font-size: 19px;">Vertices could be electronic components, and an edge would join two components that have a wire connecting them.</span></li>
+  <li><span style="font-size: 19px;">Those social websites such as linked in are essentially based on social graphs, in which each vertex represents a person and an edge joins two persons who know each other.</span></li>
+  </ol>
+  <p><span style="font-size: 19px;">Now, let's quickly go over some definitions.</span></p>
+  <p><span style="font-size: 19px;">The degree of a vertex in an undirected graph is the number of edges incident on it. In the example above, the degree of vertex 1 is 3. In a directed graph, the in-degree of a vertex is the number of edges entering it, and its out-degree is the number of edges leaving it.</span></p>
+  <p><span style="font-size: 19px;">A loop, or self-loop, is an edge from a vertex to itself. A multi-edge is two or more edges incident to the same pair of vertices (we do not study multi-edge in this course). A simple graph is a graph that has no loops or multi-edges.</span></p>
+  <p><span style="font-size: 19px;">A path is a series of vertices in which each vertex is connected to the previous vertex by an edge. One example for the figure above is the path 1, 2, 4, 1, 5. The length of a path is the number of edges in the path. In this example, the length is 4. A simple path is a path without repeated vertices or edges. For example, path 1, 2, 4, 5.</span></p>
+  <p><span style="font-size: 19px;">A cycle is a path whose first vertex is the same as the last vertex. One example is 1, 2, 4, 5, 1. A cycle is simple if, except the repetition of the start and end vertices, there are no repeated vertices or edges.</span></p>
+  
 </body></html>
