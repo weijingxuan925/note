@@ -508,7 +508,7 @@ return false</span></pre>
 <p><span style="font-size: 19px;">Therefore, our data structure can support both queries in logarithmic time.</span></p>
 <p><span style="font-size: 19px;">An exercise: how to store the tree as an array? Hint: think of heap.</span></p>
 <br>
-<h1><span style="font-size: 24px;color: red">5-Algorithms</span></h1>
+<h1><span style="font-size: 24px;color: red">5-Greedy Algorithms</span></h1>
 <p><span style="font-size: 19px;">The 5th algorithm design paradigm discussed in this course is greedy algorithms. They are used to solve optimization problems. For an optimization problem, there exist many solutions that satisfy the constraints given in the problem. Each solution has a value, and we would like to find a solution with the optimal (minimum or maximum) value.</span></p>
 <p><span style="font-size: 19px;">The idea of greedy algorithms is to make the choice that looks the best at the moment. More formally, we make a locally optimal choice (i.e., a choice optimal for a subproblem) hoping that this will lead to globally optimal solution. The use of the word "hoping" here implies that a locally optimal choice will not always lead to a globally optimal solution, and thus to master greedy algorithms, we need learn to prove or disprove that a certain greedy strategy will yield an optimal solution.</span></p>
 <h3><span style="font-size: 19px;">1. Activity-Selection Problem</span></h3>
@@ -723,7 +723,7 @@ else
   <p><span style="font-size: 19px;">Type-1 calls are made as recursive calls by type-2 calls. Since there are O(n<sup>2</sup>) type-2 calls and each of them makes at most n type-1 calls, the total number of type-1 calls is O(n<sup>3</sup>). This means that line 2 is executed O(n<sup>3</sup>) times and this uses O(n<sup>3</sup>) time in total.</span></p>
   <p><span style="font-size: 19px;">The number of times line 1 is executed is equal to the total number of calls to Lookup, which is O(n<sup>3</sup>). This uses O(n<sup>3</sup>) time.</span></p>
   <p><span style="font-size: 19px;">Therefore, the total running time is O(n<sup>3</sup>).</span></p>
-  <h3><span style="font-size: 19px;">Longest Common Subsequence</span></h3>
+  <h3><span style="font-size: 19px;">2. Longest Common Subsequence</span></h3>
   <p><span style="font-size: 19px;">In this problem, we are given two strings: x[1..m] and y[1..n], and out task is to find the longest sequence that appears (not necessarily consecutively) in both strings.</span></p>
   <p><span style="font-size: 19px;">For example, if x = algorithm and y = exploration, then their LCS (longest common subsequence) is lort.</span></p>
   <p><span style="font-size: 19px;">Why do we study this problem? The length of the LCS between two strings is often used as a measurement of their similarity. Thus this has applications in text mining and bioinformatics.</span></p>
@@ -770,7 +770,7 @@ else
               return LCS(i,j-1)</span></pre>
   <p><span style="font-size: 19px;">To see the running time of LCS(m, n), observe that each call decreases the values of i, j, or both by 1. Therefore, the number of calls is at most the sum of the initial values of i and j, which is m+n. The work in each call costs constant time, so that total running time is O(m+n).</span></p>
   <p><span style="font-size: 19px;">An exercise is to ask you to use this algorithm to compute the LCS between x = algorithm and y = exploration.</span></p>
-  <h3><span style="font-size: 19px;">Making Change</span></h3>
+  <h3><span style="font-size: 19px;">3. Making Change</span></h3>
   <p><span style="font-size: 19px;">In this problem, we are given an amount in cents. We are to make change using a system of denominations, using the smallest number of coins possible to make change.</span></p>
   <p><span style="font-size: 19px;"><strong>Canadian Coinage System (including pennies) and Greedy Algorithms.</strong>&nbsp;Let's first consider the Canadian coinage system, in which we have toonies, loonies, quarters, dimes, nickels and pennies. We actually "had" pennies up to 2012; here we still include pennies as we are studying the problem of making exact change.</span></p>
   <p><span style="font-size: 19px;">We can model this problem mathematically as follows: We are given an integer n, where 0 &lt;= n &lt; 500, and our goal is to express n = 200a + 100b+ 25c + 10d + 5e + f, where a, b, c, d, e, f are integers &gt;= 0, s.t. a+b+c+d+e+f is minimized.</span></p>
@@ -817,7 +817,7 @@ else
     n ← n - largest[n]
   return C
   </span></pre>
-  <h2><span style="font-size: 19px;">Exploiting the Problem's Structure</span></h2>
+  <h2><span style="font-size: 24px; color: red">7-Exploiting the Problem's Structure</span></h2>
   <p><span style="font-size: 19px;">This is the 7th algorithm design paradigm that we study in this course.</span></p>
   <p><span style="font-size: 19px;">Many problems have some sort of structure (algebraic, number-theoretic, topological, geometric, etc.) that suggests a solution, so we design algorithms accordingly to make use of such structure.</span></p>
   <p><span style="font-size: 19px;">As an example, we consider the greatest common divisor problem: Given nonnegative integers u and v, compute their greatest common divisor, gcd(u, v).</span></p>
@@ -876,12 +876,12 @@ else
   <p><span style="font-size: 19px;">This completes the proof.</span></p>
   <p><span style="font-size: 19px;">The total number of right shifts is less than or equal to the total umber of bits in both numbers, which is lg u + lg v.</span></p>
   <p><span style="font-size: 19px;">With the above reasonings, we can easily show that the total running time O(max(lg u, lg v)).</span></p>
-  <h1><span style="font-size: 19px;">Probabilistic &amp; Randomized Techniques</span></h1>
+  <h1><span style="font-size: 24px; color: red;">8-Probabilistic &amp; Randomized Techniques</span></h1>
   <p><span style="font-size: 19px;">The 8th algorithm design paradigm is probabilistic &amp; randomized techniques. To learn this, we first clear some concepts.</span></p>
   <p><span style="font-size: 19px;">In probabilistic analysis, we use knowledge of, or make assumptions about the distribution of input. In probabilistic analysis, we use knowledge of, or make assumptions about the distribution of input. We then average the running time over the distribution of possible inputs and get the average-case running time. One classic example is quicksort. In a previous course, we assumed that the input distribution is uniform, i.e., all input permutations are equally likely, and found out that the average-case running time is O(n lg n). Some of you might have also learned interpolation search, whose average-case running time is O(lg lg n).</span></p>
   <p><span style="font-size: 19px;">Another concept is randomized algorithms. The behavior of randomized algorithms is determined by input and by values produced by a random-number generator. Here "random" means "truly random". That is, each time we ask for a random integer between 1 and n, we get each integer equally likely. The expected running time of a randomized algorithm is the expectation of the running time over the distribution of values returned by the random number generator. Note: NOT over the distribution of input.</span></p>
   <p><span style="font-size: 19px;">Previously we have only learned deterministic algorithms which do not use random number generators. We have also seen how to perform probabilistic analysis, so in this lecture, we will focus on randomized algorithms only.</span></p>
-  <h3><span style="font-size: 19px;">The Majority Element Problem</span></h3>
+  <h3><span style="font-size: 19px;">1. The Majority Element Problem</span></h3>
   <p><span style="font-size: 19px;">In this problem, we are given an array A[1..n] of integers, in which one integer (the majority element) occurs more than n/2 times, and our tasks is to find this element. This problem has applications in data mining.</span></p>
   <p><span style="font-size: 19px;">There indeed exists a deterministic algorithm that can solve this problem in O(n) time. This is the Boyer-Moore's voting algorithm. It is a subtle algorithm. Dr. Gagie taught it in class. Usually I gave the following link to students and asked them to read it if interested to learn this algorithm:</span></p>
   <p><span style="font-size: 19px;"><a href="http://www.cs.utexas.edu/~moore/best-ideas/mjrty/">http://www.cs.utexas.edu/~moore/best-ideas/mjrty/</a></span></p>
@@ -901,7 +901,7 @@ else
   <p><span style="font-size: 19px;">Plugging in the value of y, we have x*(1-p) + (1-p) = x - p. Solving this equation, we have x = 1/p. This is indeed less than 2.</span></p>
   <p><span style="font-size: 19px;">So far we have shown that the above randomized algorithm uses O(n) expected time, which is efficient. There are however some issues with this solution. First, this solution is not robust: If there is no majority element, then it will loop forever. For some applications, this issue can be resolved in the following way: Terminate the while loop if it has been iterated k times for a certain value k. If no majority element has been found yet, then we can claim that, if there is indeed a majority element, then the probabilities of our algorithm not finding it is less than 1/(2<sup>k</sup>). This is acceptable in many applications in data mining, but may not always be acceptable. Another issue is that it may take a long time, though this is rare.</span></p>
   <p><span style="font-size: 19px;">Despite these issues, randomized algorithms are often the most practical solutions. For example, if you learn more about computational geometry in the future, you will learn a randomized solution to the point location problem, which is the most practical one.</span></p>
-  <h3><span style="font-size: 19px;">The Selection Problem</span></h3>
+  <h3><span style="font-size: 19px;">2. The Selection Problem</span></h3>
   <p><span style="font-size: 19px;">In the selection problem, we are given an array A[1..n] and an integer i with 1 &lt;= i &lt;= n, and our task is to determine the i-th smallest number in A.</span></p>
   <p><span style="font-size: 19px;">When i = 1, n, or ⌈n/2⌉, the problem becomes the problem of finding min, max, or median.</span></p>
   <p><span style="font-size: 19px;">One obvious approach is to sort the array and take the i-th element in the sorted array. This would require O(n lg n) time. Can we do better?</span></p>
@@ -950,7 +950,7 @@ else
   <p><span style="font-size: 19px;">This completes the proof.</span></p>
   <p><span style="font-size: 19px;">Thus, the randomized selection algorithm uses expected linear time.</span></p>
   <p><span style="font-size: 19px;">Is there a deterministic algorithm for selection that uses linear worst-case time? Yes. If you are interested, you can read the following optional reading material: Section 9.3 in CLRS. The determinist linear-time algorithm is interesting but fairly complicated. The randomized algorithm above is better in practice.</span></p>
-  <h2><span style="font-size: 19px;">Graph Algorithms</span></h2>
+  <h2><span style="font-size: 24px; color: red;">9-Graph Algorithms</span></h2>
   <p><span style="font-size: 19px;">In previous lectures, we learned 8 algorithm design paradigms, which gives us a rich toolset for problem solving. Now we use some of these paradigms to solve problems in graphs.</span></p>
   <p><span style="font-size: 19px;">We learned graphs in CSCI 2110 before, and also in discrete math. I will first review some definitions and graph representations briefly; you have seen most of these in 2110. Then I will focus on the problems that can be solved using paradigms learned in this course.</span></p>
   <p><span style="font-size: 19px;">As we learned before, a graph is a discrete structure. It is an abstract representation of a set of objects where some pairs of objects are connected by links. We call each object a vertex or node, and each link an edge. Thus, formally, a graph G can be defined as a pair (V, E), in which V is a set of vertices, and E is a set of edges, and E is a subset of V x V. The figure below is the graph that I drew in class.</span></p>
@@ -969,5 +969,135 @@ else
   <p><span style="font-size: 19px;">A loop, or self-loop, is an edge from a vertex to itself. A multi-edge is two or more edges incident to the same pair of vertices (we do not study multi-edge in this course). A simple graph is a graph that has no loops or multi-edges.</span></p>
   <p><span style="font-size: 19px;">A path is a series of vertices in which each vertex is connected to the previous vertex by an edge. One example for the figure above is the path 1, 2, 4, 1, 5. The length of a path is the number of edges in the path. In this example, the length is 4. A simple path is a path without repeated vertices or edges. For example, path 1, 2, 4, 5.</span></p>
   <p><span style="font-size: 19px;">A cycle is a path whose first vertex is the same as the last vertex. One example is 1, 2, 4, 5, 1. A cycle is simple if, except the repetition of the start and end vertices, there are no repeated vertices or edges.</span></p>
-  
+
+<p><span style="font-size: 19px; color: #ffba59;">Section 2: Please finish reading the notes for the previous lecture.</span></p>
+<p><span style="font-size: 19px;">An undirected graph is connected if there is a path between any two vertices.</span></p>
+<p><span style="font-size: 19px;">A tree is a special type of graph. In particular, it is a connected, acyclic graph. If we pick one node of the tree as the root, then we call it a rooted tree. If not, it is an unrooted tree.</span></p>
+<h3><span style="font-size: 19px;">Graph Representations</span></h3>
+<p><span style="font-size: 19px;">There are two common approaches of representing a graph.</span></p>
+<p><span style="font-size: 19px;">In the adjacency matrix representation, we represent a graph G = (V, E) as a |V| x |V| matrix A, in which A[i, j] = 1 if (i, j) is in E, and A[i, j] = 0 otherwise. Take the graph shown in the previous lecture as an example, its adjacency matrix representation is:</span></p>
+<table border="1" width="200">
+  <tbody>
+  <tr>
+    <td><span style="font-size: 19px;">0</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">0</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">0</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">0</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 19px;">0</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">0</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">0</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">0</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">0</span></td>
+    <td><span style="font-size: 19px;">0</span></td>
+    <td><span style="font-size: 19px;">1</span></td>
+    <td><span style="font-size: 19px;">0</span></td>
+  </tr>
+  </tbody>
+</table>
+<p><span style="font-size: 19px;">If a graph is directed, then the number of 1's in its adjacency matrix is equal to the number of edges, |E|. If a graph is undirected and has no loops, then the number of 1's is equal to 2|E|.</span></p>
+<p><span style="font-size: 19px;">The adjacency list represents a graph as an array, Adj[1..|V|], of lists. Adj[u] is a list that contains all the vertices v s.t. (u, v) is in E. Take the graph shown in the previous lecture as an example, its adjacency list representation is:</span></p>
+<p><img src="Pictures/adjlist.jpg" alt="adjacency list" title="adjacency list" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
+<p><span style="font-size: 19px;">&nbsp;</span></p>
+<p><span style="font-size: 19px;">To compare these two representations, we have</span></p>
+<table border="1" width="467">
+  <tbody>
+  <tr>
+    <td width="102"><span style="font-size: 19px;">&nbsp;</span></td>
+    <td width="101"><span style="font-size: 19px;">space</span></td>
+    <td width="95"><span style="font-size: 19px;">adjacency test</span></td>
+    <td width="141"><span style="font-size: 19px;">list neighbors of u</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 19px;">adjacency matrix</span></td>
+    <td><span style="font-size: 19px;">O(|V|<sup>2</sup>)</span></td>
+    <td><span style="font-size: 19px;">O(1)</span></td>
+    <td><span style="font-size: 19px;">O(|V|)</span></td>
+  </tr>
+  <tr>
+    <td><span style="font-size: 19px;">adjacency list</span></td>
+    <td><span style="font-size: 19px;">O(|V|+|E|)</span></td>
+    <td><span style="font-size: 19px;">O(|V|)</span></td>
+    <td><span style="font-size: 19px;">O(d(u))</span></td>
+  </tr>
+  </tbody>
+</table>
+<p><span style="font-size: 19px;">Thus adjacency matrix is more efficient for adjacency test, while adjacency list is more efficient when listing the neighbors of a give node. When space usage is a concern, then, if the graph is sparse (informally, if the number of edges is much smaller than |V|<sup>2</sup>), then adjacency list uses less space.</span></p>
+<h3><span style="font-size: 19px;">Weighted Graphs</span></h3>
+<p><span style="font-size: 19px;">When we assign a weight to each edge, then we have a weighted graph. We can modify the above two representations to represent a weighted graph.</span></p>
+<p><span style="font-size: 19px;">In the adjacency matrix, A[i, j] stores w if edge (i, j) has weight w, and ∞ if there is no edge from i to j.</span></p>
+<p><span style="font-size: 19px;">In the adjacency list, we can store weights together with vertices in a list.</span></p>
+<h3><span style="font-size: 19px;">Graph Traversals</span></h3>
+<p><span style="font-size: 19px;">In 2110, we learned two algorithms using which we can traverse all the vertices of a graph. One is breadth-first search, which makes uses of a queue. The other is depth-first search, which is either recursive, or makes use of a stack. They both require O(|V| + |E|) time. Now is a good time to review these two algorithms, and you can find them in Chapters 20.2 and 20.3 in CLRS (22.2 &amp; 22.3 in 3rd ed).</span></p>
+<h3><span style="font-size: 19px;">Minimum Spanning Trees</span></h3>
+<p><span style="font-size: 19px;">The first problem that we discuss here is the problem of finding a minimum spanning tree of a graph.</span></p>
+<p><span style="font-size: 19px;">To describe this problem, let's first learn what a spanning tree is. A spanning tree is an (unrooted) tree that connects all the vertices of a connected, undirected graph. For the graph given in the previous lecture, one minimum spanning tree is:</span></p>
+<p><img src="Pictures/spanningtree.jpg" alt="spanning tree" title="spanning tree" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
+<p><span style="font-size: 19px;">Every connected graph has at least one spanning tree.</span></p>
+<p><span style="font-size: 19px;">If there are weights on edges, then the minimum spanning tree (MST) is the spanning tree that minimizes the sum of the weights of the edges used.</span></p>
+<p><span style="font-size: 19px;">We now discuss two algorithms that can be used to compute a MST of a given weighted graph. These two algorithms are both greedy algorithms.</span></p>
+<h3><span style="font-size: 19px;">Kruskal's Algorithm</span></h3>
+<p><span style="font-size: 19px;">In Kruskal's algorithm, at each step, we choose the minimum-weight edge that does not create a cycle.</span></p>
+<p><span style="font-size: 19px;">More precisely, in this algorithm, we work with the following two sets:</span></p>
+<ul>
+  <li><span style="font-size: 19px;">A forest (i.e., a set of trees). Initially, each vertex of the graph is a tree by itself in this forest.</span></li>
+  <li><span style="font-size: 19px;">A set of edges E'. Initially, E' = E, i.e., E' holds all the edges of the graph.</span></li>
+</ul>
+<p><span style="font-size: 19px;">At each step, we remove and consider a minimum-weight edge from E', breaking ties arbitrarily. If this edge connects two different trees in the forest, then add it to the forest, joining two trees. Otherwise, it connects two edges from the same tree, forming a cycle. In this case, we simply discard this edge. When E' is empty, the forest becomes a MST.</span></p>
+<p><span style="font-size: 19px;">In class, I walked through an example of using Kruskal's algorithm to compute a MST. A different example can be found on pp. 632 in the textbook. When reviewing this part, it is sufficient to study either one of these two examples.</span></p>
+<p><span style="font-size: 19px;">Now let's argue the correctness of Kruskal's algorithm.</span></p>
+<p><span style="font-size: 19px;">Proof. First, we prove that the algorithm produces a spanning tree. The resulting graph produced by Kruskal's algorithm cannot have a cycle, because if it did, the edge added that forms the cycle would join together two vertices in the same tree, and this is not possible by the algorithm.</span></p>
+<p><span style="font-size: 19px;">We also claim that the resulting graph must be connected, for if it weren't, when we considered the edge that connected two components, we would have added it, but we didn't.</span></p>
+<p><span style="font-size: 19px;">Now we prove that the spanning tree, T, produced by Kruskal's algorithm is minimum. Here we give a proof by contradiction.</span></p>
+<p><span style="font-size: 19px;">Assume to the contrary that T is not a MST. Among all the MST's of the graph G, let T' be the one that share the largest number of edges with T. Consider the edge e in T-T' which was the first edge added to T by Kruskal's algorithm.</span></p>
+<p><span style="font-size: 19px;">Because T' is a spanning tree, adding e into T' would create a cycle. Let C be the cycle in T' ∪ {e}. Since T is a tree, it cannot contain all the edges in C. Let f be an edge in C that is not in T.</span></p>
+<p><span style="font-size: 19px; color: #ffba59;">Section 2 stopped here.</span></p>
+<p><span style="font-size: 19px;">Now consider T" = (T'∪ {e}) - {f}, i.e., the tree obtained from T' by adding edge e and removing edge f. T" is also a spanning tree. Since T' is minimum, we have weight(e) &gt;= weight(f), for otherwise, T" would have a smaller total weight than T', but T' is a MST.</span></p>
+<p><span style="font-size: 19px;">If weight(f) &lt; weight(e), then Kruskal's algorithm would have considered edge f before edge e. As e was the first edge of T that is not in T', all the edges added before f are also in T'. Since f is in T', adding it would not create a cycle. Thus Kruskal's algorithm would have added f. As f was not added, this means weight(f) &gt;= weight(e).</span></p>
+<p><span style="font-size: 19px;">Therefore, weight(f) = weight(e). Thus the total weight of T" is equal to the total weight of T', which means that T" is also a MST. We also observe that T" shares one more edge with T than T' does, which contradicts the assumption that T' is the MST that shares the largest number of edges with T.</span></p>
+<p><span style="font-size: 19px;">This completes the proof.</span></p>
+<p><span style="font-size: 19px;">How do we implement Kruskal's algorithm? Naturally we would sort edges by weight. .When considering edge (u, v), how can we decide whether they are in the same tree? For this, we apply another algorithm design paradigm: invent or augment a data structure.</span></p>
+<p><span style="font-size: 19px;">If we treat each tree in the forest as a set of vertices, then we can abstract the problem of implementing Kruskal's algorithm and define a data structure problem called the disjoint-set data structure problem. In this problem, we maintain a collection of disjoint sets, and support the following operations:</span></p>
+<ul>
+  <li><span style="font-size: 19px;">MAKE-SET: Create a set containing a single vertex.</span></li>
+  <li><span style="font-size: 19px;">FIND: Given a vertex, find the name of the set it is in.</span></li>
+  <li><span style="font-size: 19px;">UNION: union together two sets.</span></li>
+</ul>
+<p><span style="font-size: 19px;">This is also called the "union-find" problem.</span></p>
+<p><span style="font-size: 19px;">Assume that we have a data structure solution to the union-find problem, then we can use it to implement Kruskal's algorithm as follows:</span></p>
+<pre><span style="font-size: 19px;">Kruskal(G, w) // G = (V, E) and w is the weight function on edges
+1  A ← Φ
+
+2  for each v in V do
+3    MAKE-SET(v)
+
+4  Sort the edges of E by increasing order of weight
+
+5  for each edge(u, v) in E in increasing order of weight do
+6    if FIND(u) ≠ FIND(v) then
+7      A ← A ∪ {(u, v)}
+8     UNION(u, v)
+
+9  return A</span></pre>
+
 </body></html>
