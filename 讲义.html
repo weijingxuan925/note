@@ -970,10 +970,9 @@ else
   <p><span style="font-size: 19px;">A path is a series of vertices in which each vertex is connected to the previous vertex by an edge. One example for the figure above is the path 1, 2, 4, 1, 5. The length of a path is the number of edges in the path. In this example, the length is 4. A simple path is a path without repeated vertices or edges. For example, path 1, 2, 4, 5.</span></p>
   <p><span style="font-size: 19px;">A cycle is a path whose first vertex is the same as the last vertex. One example is 1, 2, 4, 5, 1. A cycle is simple if, except the repetition of the start and end vertices, there are no repeated vertices or edges.</span></p>
 
-<p><span style="font-size: 19px; color: #ffba59;">Section 2: Please finish reading the notes for the previous lecture.</span></p>
 <p><span style="font-size: 19px;">An undirected graph is connected if there is a path between any two vertices.</span></p>
 <p><span style="font-size: 19px;">A tree is a special type of graph. In particular, it is a connected, acyclic graph. If we pick one node of the tree as the root, then we call it a rooted tree. If not, it is an unrooted tree.</span></p>
-<h3><span style="font-size: 19px;">Graph Representations</span></h3>
+<h3><span style="font-size: 19px;">1. Graph Representations</span></h3>
 <p><span style="font-size: 19px;">There are two common approaches of representing a graph.</span></p>
 <p><span style="font-size: 19px;">In the adjacency matrix representation, we represent a graph G = (V, E) as a |V| x |V| matrix A, in which A[i, j] = 1 if (i, j) is in E, and A[i, j] = 0 otherwise. Take the graph shown in the previous lecture as an example, its adjacency matrix representation is:</span></p>
 <table border="1" width="200">
@@ -1043,20 +1042,20 @@ else
   </tbody>
 </table>
 <p><span style="font-size: 19px;">Thus adjacency matrix is more efficient for adjacency test, while adjacency list is more efficient when listing the neighbors of a give node. When space usage is a concern, then, if the graph is sparse (informally, if the number of edges is much smaller than |V|<sup>2</sup>), then adjacency list uses less space.</span></p>
-<h3><span style="font-size: 19px;">Weighted Graphs</span></h3>
+<h3><span style="font-size: 19px;">2. Weighted Graphs</span></h3>
 <p><span style="font-size: 19px;">When we assign a weight to each edge, then we have a weighted graph. We can modify the above two representations to represent a weighted graph.</span></p>
 <p><span style="font-size: 19px;">In the adjacency matrix, A[i, j] stores w if edge (i, j) has weight w, and ∞ if there is no edge from i to j.</span></p>
 <p><span style="font-size: 19px;">In the adjacency list, we can store weights together with vertices in a list.</span></p>
-<h3><span style="font-size: 19px;">Graph Traversals</span></h3>
+<h3><span style="font-size: 19px;">3. Graph Traversals</span></h3>
 <p><span style="font-size: 19px;">In 2110, we learned two algorithms using which we can traverse all the vertices of a graph. One is breadth-first search, which makes uses of a queue. The other is depth-first search, which is either recursive, or makes use of a stack. They both require O(|V| + |E|) time. Now is a good time to review these two algorithms, and you can find them in Chapters 20.2 and 20.3 in CLRS (22.2 &amp; 22.3 in 3rd ed).</span></p>
-<h3><span style="font-size: 19px;">Minimum Spanning Trees</span></h3>
+<h3><span style="font-size: 19px;">4. Minimum Spanning Trees</span></h3>
 <p><span style="font-size: 19px;">The first problem that we discuss here is the problem of finding a minimum spanning tree of a graph.</span></p>
 <p><span style="font-size: 19px;">To describe this problem, let's first learn what a spanning tree is. A spanning tree is an (unrooted) tree that connects all the vertices of a connected, undirected graph. For the graph given in the previous lecture, one minimum spanning tree is:</span></p>
 <p><img src="Pictures/spanningtree.jpg" alt="spanning tree" title="spanning tree" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></p>
 <p><span style="font-size: 19px;">Every connected graph has at least one spanning tree.</span></p>
 <p><span style="font-size: 19px;">If there are weights on edges, then the minimum spanning tree (MST) is the spanning tree that minimizes the sum of the weights of the edges used.</span></p>
 <p><span style="font-size: 19px;">We now discuss two algorithms that can be used to compute a MST of a given weighted graph. These two algorithms are both greedy algorithms.</span></p>
-<h3><span style="font-size: 19px;">Kruskal's Algorithm</span></h3>
+<h3><span style="font-size: 19px;">5. Kruskal's Algorithm</span></h3>
 <p><span style="font-size: 19px;">In Kruskal's algorithm, at each step, we choose the minimum-weight edge that does not create a cycle.</span></p>
 <p><span style="font-size: 19px;">More precisely, in this algorithm, we work with the following two sets:</span></p>
 <ul>
@@ -1071,7 +1070,6 @@ else
 <p><span style="font-size: 19px;">Now we prove that the spanning tree, T, produced by Kruskal's algorithm is minimum. Here we give a proof by contradiction.</span></p>
 <p><span style="font-size: 19px;">Assume to the contrary that T is not a MST. Among all the MST's of the graph G, let T' be the one that share the largest number of edges with T. Consider the edge e in T-T' which was the first edge added to T by Kruskal's algorithm.</span></p>
 <p><span style="font-size: 19px;">Because T' is a spanning tree, adding e into T' would create a cycle. Let C be the cycle in T' ∪ {e}. Since T is a tree, it cannot contain all the edges in C. Let f be an edge in C that is not in T.</span></p>
-<p><span style="font-size: 19px; color: #ffba59;">Section 2 stopped here.</span></p>
 <p><span style="font-size: 19px;">Now consider T" = (T'∪ {e}) - {f}, i.e., the tree obtained from T' by adding edge e and removing edge f. T" is also a spanning tree. Since T' is minimum, we have weight(e) &gt;= weight(f), for otherwise, T" would have a smaller total weight than T', but T' is a MST.</span></p>
 <p><span style="font-size: 19px;">If weight(f) &lt; weight(e), then Kruskal's algorithm would have considered edge f before edge e. As e was the first edge of T that is not in T', all the edges added before f are also in T'. Since f is in T', adding it would not create a cycle. Thus Kruskal's algorithm would have added f. As f was not added, this means weight(f) &gt;= weight(e).</span></p>
 <p><span style="font-size: 19px;">Therefore, weight(f) = weight(e). Thus the total weight of T" is equal to the total weight of T', which means that T" is also a MST. We also observe that T" shares one more edge with T than T' does, which contradicts the assumption that T' is the MST that shares the largest number of edges with T.</span></p>
@@ -1099,5 +1097,71 @@ else
 8     UNION(u, v)
 
 9  return A</span></pre>
+<p><span style="font-size: 19px;">Chapter 19 (or 21 in the 3rd ed) of CLRS discusses the union-find problem, and it is a typical topic for a 4th-year (elective) algorithm course. If you are interested, you can read that chapter.</span></p>
+<p><span style="font-size: 19px;">In this course, I will show an easy solution whose running time is acceptable here. When applying it to Kruskal's algorithm, we will achieve the same asymptotic running time as what we would achieve by applying the more advanced solutions in Chapter 19 (though, for other problems, those more advanced solutions may be better).</span></p>
+<p><span style="font-size: 19px;">In our solution, we represent each set as a linked list of vertices. The name of each set is the first element in its list. For each set, we also maintain a tail pointer that points to the end of the list, and a number filed which records the number of elements in the list. Each element in the list stores two pointers: one to it next element, and the other to its list head (we call this pointer the head pointer).</span></p>
+<p><span style="font-size: 19px;">With the above structure, it is easy to support MAKE-SET and FIND in O(1) time. To support union(u, v), we perform the following steps:</span></p>
+<ol>
+<li><span style="font-size: 19px;">Follow the head pointer of u to its head. Follow the head pointer of v to its head.</span></li>
+<li><span style="font-size: 19px;">From the number field we can tell which list is smaller. Assume without loss of generality that u is in the smaller list. We link u's list to the end of v's list (the bigger list).</span></li>
+<li><span style="font-size: 19px;">Traverse u's list, updating head pointers.</span></li>
+<li><span style="font-size: 19px;">Update the number field and tail pointer of v's list.</span></li>
+</ol>
+<p><span style="font-size: 19px;">The above process uses O(t) time, where t is the size of the smaller list.</span></p>
+<p><span style="font-size: 19px;">To analyze the running time, we can tell that lines 2-3 use O(|V|) time, line 4 uses O(|E| lg |E|) time, and lines 5-7 use O(|E|) time. What about line 8?</span></p>
+<p><span style="font-size: 19px;">To analyze line 8, let's consider the following problem: If we call UNION n-1 times to union n sets (the initial size of each set is 1), what is the total running time? For this we first observe that in each union, the smaller list becomes part of a list of at least twice the size. Therefore, an element's head pointer is updated at most O(lg n) times during all the n operations. Thus n-1 UNION operations use O(n lg n) time in total.</span></p>
+<p><span style="font-size: 19px;">With the above analysis, we can see that line 8 uses O(|V| lg |V|) time, and thus the total running time of our implementation of Kruskal's running time is O(|E| lg |E|), which is also O(|E| lg |V|), as |V| &lt; |E|<sup>2</sup>.</span></p>
+<h3><span style="font-size: 19px;">6. Prim's Algorithm</span></h3>
+<p><span style="font-size: 19px;">The second algorithm for the MST problem that we discuss is Prim's algorithm. Its greedy strategy is: At each step, choose a previously unconnected vertex that becomes connected by a lowest-weight edge. More precisely, we work with a set of vertices V', which initially contains an initial vertex arbitrarily chosen. We also work with a set of edges E', which is initially empty. At each step of the algorithm, we choose an edge (u, v) of minimal weight with u in V' and v not in V', breaking ties arbitrarily. We add v to V' and (u, v) to E'. When V' = V, E' becomes the MST.</span></p>
+<p><span style="font-size: 19px;">From this description, we can see that Prim's algorithm "grows" a tree into a MST, while Kruskal's algorithm merges a set of trees into a MST.</span></p>
+<p><span style="font-size: 19px;">In class we walked through an example to learn Prim's algorithm. When reviewing this lecture, you could also study the example on page 595 of the textbook.</span></p>
+<p><span style="font-size: 19px;">As with Kruskal's algorithm, we can also prove the correctness of Prim's algorithm using proof by contradiction. I left this as an exercise.</span></p>
+<p><span style="font-size: 19px;">To implement Prim's algorithm, observe that in each step, we pick a vertex v not in V, and this vertex v has the minimum-cost edge connecting v to some vertex in V'. This suggests us to use a priority queue, which can be implemented as a heap. We learned priority queue/heap in CSCI 2110. You could also read Chapter 6 of CLRS to review it. Here for each vertex u, we set its key, key[u], to be the weight of the minimum-cost edge connecting u to some vertex in V', and maintain the vertices not in V' in a heap structure. The following two operations are needed:</span></p>
+<ul>
+<li><span style="font-size: 19px;">EXTRAT-MIN, which removes the element with the minimum key value from the heap and returns it.</span></li>
+<li><span style="font-size: 19px;">DECREASE-KEY, which decreases the key value of a given element.</span></li>
+</ul>
+<p><span style="font-size: 19px;">Both operations can be supported in O(lg n) time, where n is the number of elements in the heap.</span></p>
+<p><span style="font-size: 19px;">In Prim's algorithm, we select an arbitrary vertex as the initial vertex. If we define this vertex as the root of the MST computed, and then we can define the following array π[1..|V|]. In this array, π[u] is the parent of u in MST. Thus in the MST, for each vertex u, there is an edge between u and π(u). Hence the array π defines the MST computed.</span></p>
+<p><span style="font-size: 19px;">We have the following pseudocode:</span></p>
+<pre><span style="font-size: 19px;">PRIM(G, w, r)   // r is the initial vertex / root of MST to be computed
+1  for each vertex u in V do
+2    key[u] ← ∞
+3    π[u] ← NULL
 
+4  key[r] ← 0
+5  Q ← V  // build a heap containing all the vertices in Q
+
+6  while Q ≠ Φ do
+7    u ← EXTRACT-MIN(Q)
+8    for each v in Adj[u] do // Adj is the adjacency list representation of G
+9      if v in Q and w(u,v) &lt; key[v]
+10       π[v] ← u
+11       key[v] ← w(u,v)  // DECREASE-KEY is used here</span></pre>
+<p><span style="font-size: 19px;">There is one minor detail: In line 9, how do we tell if v is in Q? This is easy, as we can simply maintain a flag for each vertex to indicate that.</span></p>
+<p><span style="font-size: 19px;">To analyze the running time, we have that lines 1-3 use O(|V|) time, line 5 uses O(|V| lg |V|) time (as it requires O(n lg n) time to build a heap over n elements), and line 7 uses O(|V| lg |V|) time. To see the number of times that line 8 is executed, we observe that, since this line uses the adjacency list to visit each vertex's neighbor exactly once, it is executed O(|E|) times. From this we can see that line 11 uses O(|E| lg |V|) time. From the above analysis, we can see that the total running time is O(|E| lg |V|), which matches the running time of Kruskal's algorithm.</span></p>
+<p><span style="font-size: 19px;">Finally, I would like to mention that if we use Fibonacci heaps (instead of the standard binary heap) to implement Prim's algorithm, we can improve its running time to O(|E| + |V| lg |V|). Fibonacci heaps are introduced in Chapter 17 (or 19 in the 3rd ed) of CLRS, and they are typically taught in 4th year elective algorithm courses.</span></p>
+<h3><span style="font-size: 19px;">7. Single-Source Shortest Path Problems</span></h3>
+<p><span style="font-size: 19px;">In a weighted, directed graph, the shortest path from a vertex s to another vertex v is a sequence of directed edges from s to v with the smallest total weight.</span></p>
+<p><span style="font-size: 19px;">The computation of shortest path has many applications. The road maps stored in a GPS can be modeled as a graph, in which the vertices are intersections and the edges are roads between intersections. If we assign distances as weights of the edges, then the shortest path corresponds to the route of the shortest distance. Another application is in network routing. There are network routing protocols that use shortest path algorithms, such as IS-IS and GSPF.</span></p>
+<p><span style="font-size: 19px;">In the single-source shortest path problem, we are given a source vertex s and a destination vertex v, and we would like to find the shortest path from s to v. For most of the known algorithms, it is as efficient to find the shortest path from s to all the other vertices of the graph, so in the rest of the lecture, we will compute the shortest paths from s to all other vertices.</span></p>
+<p><span style="font-size: 19px;">Before discussing algorithmic solutions, let's see what happens if some edges weights could be negative. In particular, if there is a negative-weight cycle reachable from S, then there may not be a shortest path from s to another vertex. In this case, our task is to detect the negative-weight cycle. If there is no negative-weight cycle, from s to any vertex, there exists a shortest path that is simple.</span></p>
+<p><span style="font-size: 19px;">We define the following structures that will be used in the two algorithmic solutions that we will learn:</span></p>
+<ul>
+<li><span style="font-size: 19px;">An array π[1..|V|], in which π[v] stores the predecessor of v along a path.</span></li>
+<li><span style="font-size: 19px;">A shortest-path estimate array d[1..|V|], in which d[v] stores the current upper bound on the weight of the shortest path from s to v.</span></li>
+</ul>
+<p><span style="font-size: 19px;">The following procedure will be used to initialize these two arrays:</span></p>
+<pre><span style="font-size: 19px;">INITIALIZE(G, s)</span><br><span style="font-size: 19px;">for each vertex v in V do
+  d[v] ← ∞
+  π[v] ← NULL
+d[s] ← 0</span></pre>
+<p><span style="font-size: 19px;">One key operation used in the two algorithms that we will learn is the relaxation of the edges. In this operation, we have shortest path estimates to two vertices, u and v. Then we consider an edge (u, v) to update our estimate on v. The following is the pseudocode:</span></p>
+<pre><span style="font-size: 19px;">RELAX(u, v, w)</span><br><span style="font-size: 19px;">t ← d[u] + w(u, v)
+
+if d[v] &gt; t then
+  d[v] ← t
+  π[v] ← u
+</span></pre>
+<p><span style="font-size: 19px;">From the pseudocode, we can see that this operation attempts to find a more accurate estimate on v.</span></p>
 </body></html>
