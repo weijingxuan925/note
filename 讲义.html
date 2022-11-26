@@ -1164,4 +1164,119 @@ if d[v] &gt; t then
   π[v] ← u
 </span></pre>
 <p><span style="font-size: 19px;">From the pseudocode, we can see that this operation attempts to find a more accurate estimate on v.</span></p>
-</body></html>
+
+  <p><span style="font-size: 19px; color: #ffba59;">Section 2: Please finish the notes from the last lecture first.</span></p>
+  <h3><span style="font-size: 19px;">The Bellman-Ford Algorithm</span></h3>
+  <p><span style="font-size: 19px;">The Bellman-Ford algorithm solves the problem in the general case in which edge weights may be negative. When there is a reachable negative-weight cycle, it returns false.</span></p>
+  <p><span style="font-size: 19px;">The algorithm essentially uses a loop to keep performing RELAX on all edges. Later we will prove that it is sufficient to iterate this loop |V|-1 times, but first let's see the pseudocode.</span></p>
+  <pre><span style="font-size: 19px;">BELLMAN-FORD(G, w, s)</span><br><span style="font-size: 19px;">1  INITIALIZE(G, s)
+  
+  2  for i ← 1 to |V|-1 do
+  3    for each edge (u, v) in E do
+  4      RELAX(u, v, w)
+  
+  5  for each edge (u, v) in E do
+  6    if d[v] &gt; d[u] + w(u, v) then
+  7      return false
+  
+  8  return true</span></pre>
+  <p><span style="font-size: 19px;">In the above pseudocode, lines 5-7 perform negative cycle detection, by finding whether we can further update the estimates using RELAX on all edges. It is easy to see that this algorithm uses O(|V||E|) time.</span></p>
+  <p><span style="font-size: 19px;">Now let's prove the correctness of the algorithm. We do it in two major steps.</span></p>
+  <p><span style="font-size: 19px;">In the first step, we prove the following lemma: After i iterations of the first "for" loop, the following two properties hold:</span></p>
+  <ol>
+  <li><span style="font-size: 19px;">If d[v] &lt; ∞, then d[v] stores the weight of some path from s to v.</span></li>
+  <li><span style="font-size: 19px;">If there is a path from s to v with at most i edges, then d[v] is less than or equal to the weight of the shortest path from s to v having at most i edges.</span></li>
+  </ol>
+  <p><span style="font-size: 19px;">(Why do we need this lemma? Consider the following question: what is the maximum number of edges in a simple path? The answer is |V|-1. Thus, when i = |V|-1, the algorithm has considered all simple paths, and from the two properties above, we can claim that, if there is no negative-weight cycle, d[v] would store the weight of the shortest-path from s to v after the first "for" loop.)</span></p>
+  <p><span style="font-size: 19px;">Proof: We prove by induction on i.</span></p>
+  <p><span style="font-size: 19px;">In the base case, i = 0. Before the first "for" loop, d[s] = 0, which is correct. For any other vertex u, d[u] = ∞, which is also correct, as there is no path from s to u using 0 edge.</span></p>
+  <p><span style="font-size: 19px;">Assume the claim is true for i-1; we now prove it for i.</span></p>
+  <p><span style="font-size: 19px;">To prove property 1, consider when a vertex v's estimated distance is updated by d[u] + w(u, v). By our induction hypothesis, d[u] is the weight of some path, p, from s to u. Then d[u] + w(u, v) is the weight of the path that follows p from s to u, and then follows a single edge to v.</span></p>
+  <p><span style="font-size: 19px;">To prove property 2, consider the shortest path q from s to v with at most i edges. Let u be the last vertex before v on q. Then the part of q from s to u is the shortest path from s to u with at most i-1 edges. By the induction hypothesis, d[u] after i-1 iterations of the 1st "for" loop is less than or equal to the weight of this path. Therefore, d[u] + w(u, v) is less than or equal to the weight of q. In the i-th iteration of the first "for" loop, d[v] is compared with d[u] + w(u, v), and is set equal to it if d[u] + w(u, v) is smaller. Therefore, after i iterations of the first "for" loop, d[v] is less than or equal to the weight of the shortest path from s to v that uses at most i edges.</span></p>
+  <p><span style="font-size: 19px;">To show the correctness of negative-weight cycle detention, we prove that the algorithm returns true iff there is no reachable negative-weight cycle.</span></p>
+  <p><span style="font-size: 19px;">If there is no reachable negative-weight cycle, then every shortest path visits each vertex at most once, so the second "for" loop doesn't detect any possible shorter path. The algorithm returns true.</span></p>
+  <p><span style="font-size: 19px;">If the algorithm returns true, then no shorter path is detected in the second "for" loop. Then for any reachable cycle v<sub>0</sub>, v<sub>1</sub>, ..., v<sub>k-1</sub>, v<sub>0</sub>, the following inequalities must hold:</span></p>
+  <p><span style="font-size: 19px;">d[v<sub>1</sub>] &lt;= d[v<sub>0</sub>] + w(v<sub>0</sub>, v<sub>1</sub>)</span></p>
+  <p><span style="font-size: 19px;">d[v<sub>2</sub>] &lt;= d[v<sub>1</sub>] + w(v<sub>1</sub>, v<sub>2</sub>)</span></p>
+  <p><span style="font-size: 19px;">...</span></p>
+  <p><span style="font-size: 19px;">d[v<sub>0</sub>] &lt;= d[v<sub>k-1</sub>] + w(v<sub>k-1</sub>, v<sub>0</sub>)</span></p>
+  <p><span style="font-size: 19px;">If we add all these inequalities up, we have 0 &lt;= w(v<sub>0</sub>, v<sub>1</sub>) + w(v<sub>1</sub>, v<sub>2</sub>) + ... + w(v<sub>k-1</sub>, v<sub>0</sub>). That is, the weight of this cycle is nonnegative.</span></p>
+  <h3><span style="font-size: 19px;">Dijkstra's Algorithm</span></h3>
+  <p><span style="font-size: 19px;">Another algorithm for the single-source shortest path problem is Dijkstra's algorithm. This algorithm works for the special case in which all edge weights are nonnegative values. When implemented carefully, it is more efficient than Bellman-Ford.</span></p>
+  <p><span style="font-size: 19px;">The idea is to maintain a set, S, of vertices for which you already know the shortest paths from the source. At each step, choose a vertex u from V-S with the minimum shortest-path estimate, add u to s, and relax all the edges leaving u.</span></p>
+  <p><span style="font-size: 19px;">You can see that this algorithm is similar to the greedy process of Prim's algorithm. Indeed, this algorithm is also a greedy algorithm.</span></p>
+  <p><span style="font-size: 19px;">We use priority queues again to implement Dijkstra's algorithm.</span></p>
+  <pre><span style="font-size: 19px;">DIJKSTRA(G, w, s)</span><br><span style="font-size: 19px;">
+  INITIALIZE(G, s)
+  
+  S ← Φ
+  Q ← a min-priority queue on the vertices in V, keyed by their d values
+  
+  while Q ≠ Φ do
+    u ← EXTRACT-MIN(Q)
+    S ← S ∪ {u}
+    for each vertex v in Adj[u] do
+      RELAX(u, v, w)</span></pre>
+  <p><span style="font-size: 19px; color: #ffba59;">Section 2: We did not have the time to talk about correctness, but we finished the running time analysis after the correctness part in the lecture. We will prove correctness in the next lecture.</span></p>
+  <p><span style="font-size: 19px;">The correctness of Dijkstra's algorithm can be shown by proving the following statement: When a vertex u is added to S, d[u] stores the weight, δ(s, u), of the shortest path from s to u.</span></p>
+  <p><span style="font-size: 19px;">This can be proved by contradiction. Let u be the first vertex added to S for which d[u] ≠ δ(s, u). In class I showed the main idea of this proof, and you can find its details on pages 622-623 (or 660-661 in the 3rd edition) of the textbook. Using the figure on page 622 (or 660 in the 3rd edition), the main steps in the proof show:</span></p>
+  <ol>
+  <li><span style="font-size: 19px;">d[x] = δ(s, x)</span></li>
+  <li><span style="font-size: 19px;">d[y] = δ(s, y) &lt;= δ(s, u) &lt;= d[u] (reasons: edge weighs are nonnegative; assumption)</span></li>
+  <li><span style="font-size: 19px;">d[y] &gt;= δ(s, u) (due to the EXTRACT-MIN step in the algorithm)</span></li>
+  <li><span style="font-size: 19px;">d[y] = δ(s, u), and thus all the &lt;= has to be = in 2.</span></li>
+  </ol>
+  <p><span style="font-size: 19px;">The analysis of the running time of Dijkstra's algorithm is similar to that of the Prim's algorithm. If we use a standard binary heap, the running time is O((|V|+|E|)lg |V|). If all vertices are reachable from s, then this can be simplified to O(|E| lg |V|). If we use a Fibonacci heap, then the running time can be improved to O(|V| lg |V| + |E|). From this we can see that Dijkstra's algorithm is more efficient than Bellman-Ford, but it requires that edge weights are nonnegative.</span></p>
+
+
+<p>Lecture21</p>
+<p><span style="font-size: 19px;"></span></p>
+<h3><span style="font-size: 19px;">All-Pairs Shortest Path</span></h3>
+<p><span style="font-size: 19px;">In the all-pairs shortest path problem, our goal is to find the shortest paths between all pairs of vertices in a graph.</span></p>
+<p><span style="font-size: 19px;">One way of solving this problem is to run algorithms for the single-source shortest path problem |V| times, and each time we run it, we choose a different vertex as the source vertex. If all edge weights are non-negative, we can use Dijkstra's algorithm here. If we implement Dijkstra's algorithm using a heap, then the running time is O(|V|<sup>2</sup>lg|V| + |V||E| lg|V|) = O(|V|<sup>3</sup>lg|V|). If we use a Fibonacci heap instead, the running time is O(|V|<sup>2</sup>lg|V| + |V||E|) = O(|V|<sup>3</sup>). If negative edge weights are allowed, we can use the Bellman-Ford algorithm, requiring O(|V|<sup>2</sup>|E|) = O(|V|<sup>4</sup>) time.</span></p>
+<p><span style="font-size: 19px;">Now, let us learn an elegant solution based on dynamic programming that was specifically designed for this problem.</span></p>
+<h3><span style="font-size: 19px;">Floyd-Warshall Algorithm</span></h3>
+<p><span style="font-size: 19px;">The Floyd-Warshall Algorithm is a dynamic programming algorithm designed for the all-pairs shortest path problem. It allows negative edge weights, but requires that there are no negative-weight cycle in the graph. This means that we just have to consider simple paths when computing the shortest paths.</span></p>
+<p><span style="font-size: 19px;">For this algorithm, we number the vertices 1, 2, ..., n, where n = |V|. Now, consider all paths from vertex i to vertex j in which all intermediate vertices are numbered k or lower (a vertex in the path from i to j that is neither i or j is an intermediate vertex). Then, if vertex k appears in the shortest path, p, from i to j, we refer to the subpath of p from vertex i to vertex k as path p<sub>1</sub>, and the subpath from k to j as p<sub>2</sub>. (It may help if you check the figure on <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=230447&amp;type=content&amp;rcode=dalhousie-2566823" target="_self">page 4 here</a>.) We can immediately conclude that p<sub>1</sub>&nbsp;must be the shortest path from i to k in which all intermediate vertices are numbered k - 1 or lower, and p<sub>2</sub>&nbsp;must be the shortest path from k to j in which all intermediate vertices are numbered k - 1 or lower.</span></p>
+<p><span style="font-size: 19px;">Let d<sub>ij</sub><sup>(k)</sup>&nbsp;denote the weight of the shortest path from i to j in which all intermediate vertices are numbered k or lower. Then, based on the above observation, we have the following recurrence: If k = 0, then d<sub>ij</sub><sup>(k)</sup>&nbsp;= w<sub>ij</sub>. Otherwise, d<sub>ij</sub><sup>(k)</sup>&nbsp;= min(d<sub>ij</sub><sup>(k-1)</sup>, d<sub>ik</sub><sup>(k-1)</sup>&nbsp;+ d<sub>kj</sub><sup>(k-1)</sup>).</span></p>
+<p><span style="font-size: 19px;">We can compute d<sub>ij</sub><sup>(k)</sup>&nbsp;in increasing order of k as follows:</span></p>
+<pre><span style="font-size: 19px;">Floyd-Warshall(W, n)
+   // W is an n by n matrix of weights (the adjacency matrix representation of the weighted graph G)
+   // output array is an n by n array of shortest path weights
+   
+   D<sup>(0)</sup> ← W
+   for k ← 1 to n do
+     let D<sup>(k)</sup> = ( d<sub>ij</sub><sup>(k)</sup>) be a new n by n matrix
+     for i ← 1 to n do
+       for j ← 1 to n do
+         d<sub>ij</sub><sup>(k)</sup> ← min(d<sub>ij</sub><sup>(k-1)</sup>, d<sub>ik</sub><sup>(k-1)</sup> + d<sub>kj</sub><sup>(k-1)</sup>)
+         
+   return D<sup>(n)</sup></span></pre>
+<p><span style="font-size: 19px;">The running time is O(n<sup>3</sup>).&nbsp;</span></p>
+<p><span style="font-size: 19px; color: #ffba59;">Section 2 students can stop here.</span></p>
+<p><span style="font-size: 19px;">The D<sup>(n) </sup>table gives us the weights of shortest paths. How do we construct the shortest paths themselves? There are multiple approaches. Here I will describe one that is the easiest to explain. Alternative approaches can be found in the textbook.</span></p>
+<p><span style="font-size: 19px;">First, recall that we use a predecessor array π to encode the shortest paths in the algorithms for single-source shortest path problem. This time, since any vertex can be the source vertex, we need to define π as an n by n 2D array, in which π[i, j] stores the predecessor of j on the shortest path from i to j. If we can compute all entries of π, then we can get the nodes on the shortest path from vertex i to vertex j in reverse order: j, π[i, j], π[i, π[i, j]], ..., like what we did for the single-source shortest path problem.</span></p>
+<p><span style="font-size: 19px;">Then, how do we compute the entries of π? Let us focus on an arbitrary entry π[i, j]. (It may help if you check the figure on <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=230447&amp;type=content&amp;rcode=dalhousie-2566823" target="_self">page 7 here</a>.) We can see that, if v is the predecessor of the vertex j on the shortest path from i to j, then we have d<sub>iv</sub><sup>(n)</sup> + w(v, j) = d<sub>ij</sub><sup>(n)</sup>. Therefore, we can compute π[i, j] by checking all edges that enter j and find the edge (v, j) that satisfies this equation, and then π[i, j] = v. This can be done by search through the j-th column of the adjacency matrix, which requires O(|V|) time.&nbsp;</span></p>
+<p><span style="font-size: 19px;">Since π has |V|<sup>2</sup> entries, this procedure uses O(|V|<sup>3</sup>) time.</span></p>
+
+
+<p><span style="font-size: 19px;">At the beginning of the term, I said that since the 4th edition of the textbook has been released, I plan to update a few lectures this term. At that time I said I wouldn't have any recorded videos to post for lectures that are heavily updated, but detailed HTML notes will be posted; it should be fine to study these notes if you miss any of these lectures.</span></p>
+<p><span style="font-size: 19px;">This topic is updated; I didn't teach it in the last few years. It is however an important topic which also happens to reinforce our learning of dynamic programming. Therefore, I removed some content from some earlier lectures (in the first half of the term) to have the time to teach this one.&nbsp;</span></p>
+<p><span style="font-size: 19px;">Since I am still recovering from the broken elbow, it is not possible to raise my arm high to write on the whiteboard.&nbsp; On the other hand, in a follow-up doctor's appointment, the doctor told me that it is OK to move my right arm gently now. Therefore, I chose to write on a tablet with a digital stylus in class and project the writing in class. This is close to what we did before I broke the elbow (writing on a tablet in real time vs on whiteboards). Since I was using a tablet anyway, I told the class that I would record the screencast and post it.</span></p>
+<p><span style="font-size: 19px;">However, it turned out that the voice in the second half of the recording is heavily distorted and unusable at all (almost white noise with some unrecognizable words). I tried again in section 2, doing shorter recordings instead of a full-length one, but it turned out to be even worse. After spending much time trying to diagnose this problem, my conclusion is that, because a tablet is typically passively cooled, prolonged screencasts and writing with a stylus in Microsoft OneNote simultaneously would create overheating. The internal sound module is then heavily affected.&nbsp;</span></p>
+<p><span style="font-size: 19px;">This is different from recording lectures given by pre-typed PowerPoint slides, which can be recorded at very low framerates to avoid overheating. A screencast like what I did for online teaching before required high framerates; otherwise, the video would be too choppy to be bearable for most viewers, making it unusable. A PowerPoint presentation would probably also use less CPU than writing in OneNote at real time.</span></p>
+<p><span style="font-size: 19px;">Back then, to make proper screencasts, I used a desktop with dedicated GPU and used a professional grade microphone, so I never encountered this issue. I do not have a highly portable setup for in-class teaching. It is not practical to investigate whether such a portable solution exists near the end of the term. Furthermore, I am also concerned that overheating might even affect in-class teaching when I use the tablet.</span></p>
+<p><span style="font-size: 19px;">Therefore, in the remaining three lectures, I will continue to write on the tablet, but I will not attempt to record the live lectures to avoid hardware failure. I will ensure that detailed HTML notes will be posted, and the notes I wrote in class in OneNote will be posted as well. This is the original plan set at the beginning of the term for heavily updated lectures, with the notes from OneNote as a bonus.</span></p>
+<p><span style="font-size: 19px;">The video posted below has only the first half of the live lecture. Please refer to the HTML notes and handwritten notes for the second half.</span></p>
+
+<video width="800" height="400" controls="controls" preload="none" ><source src="Video/lec21.mp4" type="video/mp4" /></video>
+<p>Lecture note in onenote</p>
+<img src="Pictures/21-1.png" alt="21-1">
+<img src="Pictures/21-2.png" alt="21-2">
+<img src="Pictures/21-3.png" alt="21-3">
+<img src="Pictures/21-4.png" alt="21-4">
+<img src="Pictures/21-5.png" alt="21-5">
+<img src="Pictures/21-6.png" alt="21-6">
+<img src="Pictures/21-7.png" alt="21-7">
+
+</body>
