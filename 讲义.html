@@ -1278,5 +1278,43 @@ if d[v] &gt; t then
 <img src="Pictures/21-5.png" alt="21-5">
 <img src="Pictures/21-6.png" alt="21-6">
 <img src="Pictures/21-7.png" alt="21-7">
+<p><span style="color: #ffba59; font-size: 19px;">We used the first 20 minutes for Student Feedback on Learning Experiences. Thank you for participating. If you have not provided any feedback, you could still do it till the lectures end.</span></p>
+<p><span style="color: #ffba59; font-size: 19px;">Section 2: Please first finish the notes for the previous lecture</span></p>
+<h1><span style="font-size: 19px;">NP-Completeness</span></h1>
+<p><span style="font-size: 19px;">So far in this course, we have discussed mostly problems that can be solved efficiently. However, there are problems that are solvable, but for which no fast algorithm is known to exist. It is important to know these problems, so that we wouldn't spend time finding fast solutions.</span></p>
+<p><span style="font-size: 19px;">In this lecture, we say that an algorithm is fast if its running time is bounded by a polynomial in input size. That is, its worst-case running time is O(n<sup>k</sup>), where n is input size and k is a constant.</span></p>
+<p><span style="font-size: 19px;">Running times such as O(n<sup>3</sup>) and O(n lg n) are polynomial.</span></p>
+<p><span style="font-size: 19px;">Why do we consider polynomial time to be fast? The reason is more philosophical than mathematical.</span></p>
+<p><span style="font-size: 19px;">First, nearly every algorithm that is fast in practice runs in polynomial time in theory. Running times such as Θ(n<sup>1000</sup>) (still polynomial) is rare in practice.</span></p>
+<p><span style="font-size: 19px;">Second, for many reasonable models of computation, a problem that can be solved in polynomial time in one model can be solved in polynomial time in another. For example, it can be proved that problems that can be solved in polynomial time in the random access machine (RAM) model can be solved in polynomial time in the Turing machine model (a model to be studied in the Theory of Computation course), and vice versa. Proofs for these claims are not easy though. One exception is quantum computation models: not all the problems that can be solved in polynomial time in quantum computation models can be solved in polynomial time in RAM. However, there are no practical quantum computers yet; people have only built computers that have some but not all properties of quantum computers.</span></p>
+<p><span style="font-size: 19px;">Third, the class of polynomial-time solvable problems has nice closure properties, since polynomials are closed under addition, multiplication and composition.</span></p>
+<h3><span style="font-size: 19px;">The Complexity Class P</span></h3>
+<p><span style="font-size: 19px;">The complexity class P is the class of decision problems solvable in polynomial time. Here a decision problem is a problem with a yes/no answer.</span></p>
+<p><span style="font-size: 19px;">When computing input size, numbers in the input are usually represented in binary. Usually two different reasonable encoding are polynomially-related, that is, there is a polynomial-time algorithm converting one to the other. Take graph representation for example. The adjacency matrix uses O(|V|<sup>2</sup>) space and the adjacency list uses O(|V|+|E|) space. It is easy to design a polynomial-time algorithm to do the conversion between these two representations. Since |E| = O(|V|<sup>2</sup>), we can say that a graph algorithm uses polynomial time if its running time is a polynomial of n = |V|.</span></p>
+<p><span style="font-size: 19px;">One problem in P is: Given an array and a number, find if the number is in the array.</span></p>
+<p><span style="font-size: 19px;">The following decision problem is not in P. ERE: Given two extended regular expressions E and F over an alphabet Σ, decide if E and F specify the same set of strings. It can be proved that any algorithm that solves it uses Ω(2<sup>cn/lg n</sup>) time, where c is some constant. This time is exponential. Problems that we know for sure are not in P are few however.</span></p>
+<h3><span style="font-size: 19px;">The Complexity Class NP</span></h3>
+<p><span style="font-size: 19px;">Informally we can define the complexity class NP to be the class of decision problems having the property that their "yes" instances can be verified in polynomial time. Here an instance is the input to the algorithm solving the problem. A "yes" instance is an instance of the problem with a "yes" answer.</span></p>
+<p><span style="font-size: 19px;">Let's see an example. We define a Hamiltonian cycle of an undirected graph G = (V,E) to be a simple cycle that contains all the vertices in V. </span></p>
+<p><span style="font-size: 19px; color: #ffba59;">Section 2 lecture ended here today.</span></p>
+<p><span style="font-size: 19px;">Then the Hamiltonian cycle problem (HAM-CYCLE) is: Given a graph G, does it have a Hamiltonian cycle?</span></p>
+<p><span style="font-size: 19px;">We do not know any polynomial-time algorithm for this problem, but we know that this problem is in NP. Why?</span></p>
+<p><span style="font-size: 19px;">If I claim that a particular graph has a Hamiltonian cycle, and you demand proof, then I can produce a certificate that you can check easily: the certificate is the vertices forming the cycle. With this certificate, you can first check if the cycle is simple, then if its edges are all in E, and finally whether it contains all the vertices of V. All this can be done in polynomial time.</span></p>
+<p><span style="font-size: 19px;">The key here is that the verification is easy.</span></p>
+<p><span style="font-size: 19px;">To compare P vs NP, we have</span></p>
+<ol>
+<li><span style="font-size: 19px;">Problems in P can be solved quickly.</span></li>
+<li><span style="font-size: 19px;">Problems in NP are not necessarily solved quickly, but the "yes" answer can be verified quickly provided you have the certificate.</span></li>
+</ol>
+<p><span style="font-size: 19px;">To clarify the distinction, I told the story of F. N. Cole presenting 2<sup>67</sup>&nbsp;- 1 = 193,707,721 * 761,838,257,287 in 1903 ("3 years of Sundays" vs minutes). </span></p>
+<p><span style="font-size: 19px;">One very common mistake: Many people think that NP means "not polynomial", but they are wrong (wrong, wrong, wrong)! NP in fact means nondeterministic polynomial, as it is related to nondeterministic Turing machines. You will understand what nondeterminism means when you learn theory of computation.</span></p>
+<p><span style="font-size: 19px;">In fact, we don't know whether the hard problems in NP can be solved in polynomial time. Thus we don't know that they cannot be solved in polynomial time.</span></p>
+<p><span style="font-size: 19px;">To define NP formally, we first learn the definition of a verifier. A verifier for a decision problem is an algorithm V that takes two inputs</span></p>
+<ol>
+<li><span style="font-size: 19px;">An instance I of the decision problem;</span></li>
+<li><span style="font-size: 19px;">A certificate C.</span></li>
+</ol>
+<p><span style="font-size: 19px;">V returns "true" if C verifies that the answer to I is "yes" and "false" otherwise. For each "yes" instance I, there must be at least one such certificate. For each "no" instance there must be no certificate showing it is "yes".</span></p>
+<p><span style="font-size: 19px;">V is a polynomial-time verifier if it runs in time bounded by a polynomial in the size of I.</span></p>
 
 </body>
