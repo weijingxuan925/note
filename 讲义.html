@@ -1316,5 +1316,63 @@ if d[v] &gt; t then
 </ol>
 <p><span style="font-size: 19px;">V returns "true" if C verifies that the answer to I is "yes" and "false" otherwise. For each "yes" instance I, there must be at least one such certificate. For each "no" instance there must be no certificate showing it is "yes".</span></p>
 <p><span style="font-size: 19px;">V is a polynomial-time verifier if it runs in time bounded by a polynomial in the size of I.</span></p>
+<p><span style="font-size: 19px;">We next prove that G has a clique of size k if and only if&nbsp;G&nbsp;has a vertex cover of size |V| - k.</span></p>
+<p><span style="font-size: 19px;">Suppose V' is a clique of size k in G = (V, E). Let (u, v) be an edge in&nbsp;E. Then (u, v) is not in E. Hence, either u is not in V', or v is not in V, for if they were both in V', (u, v) must be in E. Therefore, either u is in V-V', or v is in V-V'. Thus, each edge (u, v) ∈&nbsp;E&nbsp;has at least one endpoint in V - V', so V - V' is a vertex cover for&nbsp;G, of size |V| - k.</span></p>
+<p><span style="font-size: 19px;">Conversely, suppose&nbsp;G&nbsp;has a vertex cover V" of size |V| - k. Then for any edge (u, v) ∈&nbsp;E, either u is in V" or v is in V". Taking the contrapositive, if u ∉ V" and v ∉ V", then (u, v) ∉&nbsp;E. In other words, if u ∈V - V" and v ∈V - V", then (u, v) ∈E. Therefore, V-V" is a clique in G, of size |V| - (|V| - k) = k.</span></p>
+<p><span style="font-size: 19px;">This completes the proof.</span></p>
+<p><span style="font-size: 19px;">Once we know that a problem is NP-complete, what can we do to solve it? There are many approaches that cope with NP-completeness, and most of them are typically covered in advanced and graduate level courses. One approach is approximation algorithms, and it is supposed to be covered by Algorithms II. Exhaustive search is another approach, and it will be covered in this course.</span></p>
+<p><span style="font-size: 19px;">Finally, why do people use decision problems only when defining P, NP and NP-completeness? One reason is that decision problems are usually no harder than the related optimization problem. For example, if you have a solution to the VERTEX-COVER problem, then you can use it to solve the related optimization problem which asks you to find the smallest vertex cover: Simply run the solution to VERTEX-COVER to test whether there is a vertex cover of size k = 1, 2, 3, ....</span></p>
+<p><span style="font-size: 19px; color: #ffba59;">Note: The final exam coverage ends here. This is because Section 2 lost the time for almost one lecture due to an unexpected power outage on a Friday afternoon. Therefore, in Section 2 (the afternoon section), after finishing NP-completeness, I talked about the algorithm design paradigm of inventing and augmenting a data structure (part of Lectures 9 &amp; 10). For that, I also covered the example of abelian square detection only. To be clear, in terms of final exam coverage, we have</span></p>
+<ul>
+  <li><span style="font-size: 19px; color: #ffba59;">NP-completeness is within the coverage of the final exam</span></li>
+  <li><span style="font-size: 19px; color: #ffba59;">The example of abelian square detection for inventing and augmenting a data structure is also within the coverage of the final exam</span></li>
+  <li><span style="font-size: 19px; color: #ffba59;">The next example (maintaining subrange sum under updates) is not (because it was taught in Section 1 only)</span></li>
+  <li><span style="font-size: 19px; color: #ffba59;">Exhaustive search is not (because it was taught in Section 1 only; see notes below)</span></li>
+</ul>
+<h1><span style="font-size: 24px;">Exhaustive Search</span></h1>
+<p><span style="font-size: 19px;">Sometimes we fail to find a fast algorithm, and we end up doing an exhaustive search of a solution space, i.e., we consider all possibilities in a solution space.</span></p>
+<h3><span style="font-size: 19px;">Backtracking</span></h3>
+<p><span style="font-size: 19px;">Backtracking is a way of exhaustively considering a large search space, without actually having to traverse every possibility, using very little space.</span></p>
+<p><span style="font-size: 19px;">The basic idea is to think of the solution space as a tree of possibilities, where we have to consider every possible node. The leaf of this tree corresponds to a candidate for a solution, while an internal node represents a candidate for a partial solution. Sometimes, we can reject an entire subtree based on some property of the partial solution we have constructed so far. This avoids the need to traverse the rest of the subtree. I will use the N-queen problem as an example to explain this idea.</span></p>
+<h3><span style="font-size: 19px;">The N-Queen Problem</span></h3>
+<p><span style="font-size: 19px;">In the N-queen problem, you are given a chessboard which is an N by N grid, and you want to place N queens so that no queen attacks any other queen. In chess, One queen attacks another if they are on the same row, column or diagonal.</span></p>
+<p><span style="font-size: 19px;">In class I showed a solution when N = 8. More solutions for N = 8 can be found in the following wikipedia article on eight queens puzzle:</span></p>
+<p><span style="font-size: 19px;"><a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">https://en.wikipedia.org/wiki/Eight_queens_puzzle</a></span></p>
+<p><span style="font-size: 19px;">The following figure illustrates the search space. The root (level 0) corresponds to the empty board. The nodes at level 1 corresponds to candidates for partial solutions in which we have placed a queen in the first column. These nodes (i.e., the children of the root) correspond to the N ways we could place the queen in the 1st column. The children of each of these nodes are the N ways we could place the queen in the 2nd column, and so on.</span></p>
+<p><span style="font-size: 19px;"><img src="Pictures/n-queen.png" alt="n queen" title="n queen" data-d2l-editor-default-img-style="true" style="max-width: 100%;"></span></p>
+<p><span style="font-size: 19px;">The number of nodes in the above tree is 1 + N<sup>2</sup>&nbsp;+ ... + N<sup>N</sup>, which is large. For example, when N = 23, the number of nodes is greater than 2 * 10<sup>31</sup>.</span></p>
+<p><span style="font-size: 19px;">We do not have to explore the entire tree to fine the answer. Take the left most node at level 2 for example. This node corresponds to a candidate for a partial solution in which we place a queen in row 1, column 1, and another queen in row 1, column 2. These two queens can attack each other. Therefore, this will never be a solution, no matter how far we extend it.</span></p>
+<p><span style="font-size: 19px;">This observation gives us the following idea: each time we place a new queen, we check whether it attacks any of the queens previously placed. If it does, we stop exploring that node. We can use an implicit depth-first search in the tree of possibilities as follows:</span></p>
+<ol>
+  <li><span style="font-size: 19px;">Maintain a sequence of the rows the queens in columns 1, 2, 3, ... appear in.</span></li>
+  <li><span style="font-size: 19px;">At each step, try to expand this sequence by concatenating on 1, 2, ..., N and checking if the resulting configuration is valid.</span></li>
+  <li><span style="font-size: 19px;">If it is, we try to expand it further.</span></li>
+  <li><span style="font-size: 19px;">If all possibilities for a particular column are tried, and none works, then we backtrack by going back one step, and increasing the last number stored.</span></li>
+  <li><span style="font-size: 19px;">This might result in getting N+1, and we must backtrack again, etc. In the tree of possibilities, this corresponding to retreating to the parent node and then trying the next child. If there is no next child, we retreat to the next parent, etc.</span></li>
+  <li><span style="font-size: 19px;">If we create a sequence of length N, then we have found the lexicographically first solution in the solution space.</span></li>
+</ol>
+<p><span style="font-size: 19px;">The following is the pseudocode:</span></p>
+<pre><span style="font-size: 19px;">QUEEN(N)
+   X ← {1}  // the sequence
+   i ← 1
+   while length(X) &lt; N
+     while i ≤ N and not (QCHECK(N, X, i)) // When calling QCHECK, X is a valid configuration
+                                            // on an N by N board
+                                            // QCHECK returns true if concat(X, i) is also valid
+       i ← i + 1
+
+     if i ≤ N
+       X ← concat(X, i)
+       i ← 1
+     else if length(X) ≥ 1
+            i ← last(X) + 1
+            X ← droplast(X)
+          else
+            return false
+
+   return X</span></pre>
+<p><span style="font-size: 19px;">If you implement this algorithm, you can see that it will solve the problem quickly when N is not too large. For example, when N = 29, it will give you a solution in a few minutes.</span></p>
+<p><span style="font-size: 19px;">The algorithm uses O(N) space.</span></p>
+<p><span style="font-size: 19px;">There are many ways of speeding up this algorithm further. One easy approach is to make use of the fact that if we mirror the board, the solution remains a valid solution. Thus, if there is a solution for a particular value of N, then there is at least one solution in which the position of the queen in the first column are in rows 1, 2, ..., the floor of n/2. If you cannot find a valid solution after you try all these values for the queen in the first column, then you can terminate the program, claiming that there is no solution.</span></p>
 
 </body>
