@@ -1165,8 +1165,7 @@ if d[v] &gt; t then
 </span></pre>
 <p><span style="font-size: 19px;">From the pseudocode, we can see that this operation attempts to find a more accurate estimate on v.</span></p>
 
-  <p><span style="font-size: 19px; color: #ffba59;">Section 2: Please finish the notes from the last lecture first.</span></p>
-  <h3><span style="font-size: 19px;">The Bellman-Ford Algorithm</span></h3>
+  <h3><span style="font-size: 19px;">8. The Bellman-Ford Algorithm</span></h3>
   <p><span style="font-size: 19px;">The Bellman-Ford algorithm solves the problem in the general case in which edge weights may be negative. When there is a reachable negative-weight cycle, it returns false.</span></p>
   <p><span style="font-size: 19px;">The algorithm essentially uses a loop to keep performing RELAX on all edges. Later we will prove that it is sufficient to iterate this loop |V|-1 times, but first let's see the pseudocode.</span></p>
   <pre><span style="font-size: 19px;">BELLMAN-FORD(G, w, s)</span><br><span style="font-size: 19px;">1  INITIALIZE(G, s)
@@ -1201,7 +1200,7 @@ if d[v] &gt; t then
   <p><span style="font-size: 19px;">...</span></p>
   <p><span style="font-size: 19px;">d[v<sub>0</sub>] &lt;= d[v<sub>k-1</sub>] + w(v<sub>k-1</sub>, v<sub>0</sub>)</span></p>
   <p><span style="font-size: 19px;">If we add all these inequalities up, we have 0 &lt;= w(v<sub>0</sub>, v<sub>1</sub>) + w(v<sub>1</sub>, v<sub>2</sub>) + ... + w(v<sub>k-1</sub>, v<sub>0</sub>). That is, the weight of this cycle is nonnegative.</span></p>
-  <h3><span style="font-size: 19px;">Dijkstra's Algorithm</span></h3>
+  <h3><span style="font-size: 19px;">9. Dijkstra's Algorithm</span></h3>
   <p><span style="font-size: 19px;">Another algorithm for the single-source shortest path problem is Dijkstra's algorithm. This algorithm works for the special case in which all edge weights are nonnegative values. When implemented carefully, it is more efficient than Bellman-Ford.</span></p>
   <p><span style="font-size: 19px;">The idea is to maintain a set, S, of vertices for which you already know the shortest paths from the source. At each step, choose a vertex u from V-S with the minimum shortest-path estimate, add u to s, and relax all the edges leaving u.</span></p>
   <p><span style="font-size: 19px;">You can see that this algorithm is similar to the greedy process of Prim's algorithm. Indeed, this algorithm is also a greedy algorithm.</span></p>
@@ -1229,9 +1228,9 @@ if d[v] &gt; t then
   <p><span style="font-size: 19px;">The analysis of the running time of Dijkstra's algorithm is similar to that of the Prim's algorithm. If we use a standard binary heap, the running time is O((|V|+|E|)lg |V|). If all vertices are reachable from s, then this can be simplified to O(|E| lg |V|). If we use a Fibonacci heap, then the running time can be improved to O(|V| lg |V| + |E|). From this we can see that Dijkstra's algorithm is more efficient than Bellman-Ford, but it requires that edge weights are nonnegative.</span></p>
 
 
-<p>Lecture21</p>
+
 <p><span style="font-size: 19px;"></span></p>
-<h3><span style="font-size: 19px;">All-Pairs Shortest Path</span></h3>
+<h3><span style="font-size: 19px;">10. All-Pairs Shortest Path</span></h3>
 <p><span style="font-size: 19px;">In the all-pairs shortest path problem, our goal is to find the shortest paths between all pairs of vertices in a graph.</span></p>
 <p><span style="font-size: 19px;">One way of solving this problem is to run algorithms for the single-source shortest path problem |V| times, and each time we run it, we choose a different vertex as the source vertex. If all edge weights are non-negative, we can use Dijkstra's algorithm here. If we implement Dijkstra's algorithm using a heap, then the running time is O(|V|<sup>2</sup>lg|V| + |V||E| lg|V|) = O(|V|<sup>3</sup>lg|V|). If we use a Fibonacci heap instead, the running time is O(|V|<sup>2</sup>lg|V| + |V||E|) = O(|V|<sup>3</sup>). If negative edge weights are allowed, we can use the Bellman-Ford algorithm, requiring O(|V|<sup>2</sup>|E|) = O(|V|<sup>4</sup>) time.</span></p>
 <p><span style="font-size: 19px;">Now, let us learn an elegant solution based on dynamic programming that was specifically designed for this problem.</span></p>
@@ -1240,7 +1239,7 @@ if d[v] &gt; t then
 <p><span style="font-size: 19px;">For this algorithm, we number the vertices 1, 2, ..., n, where n = |V|. Now, consider all paths from vertex i to vertex j in which all intermediate vertices are numbered k or lower (a vertex in the path from i to j that is neither i or j is an intermediate vertex). Then, if vertex k appears in the shortest path, p, from i to j, we refer to the subpath of p from vertex i to vertex k as path p<sub>1</sub>, and the subpath from k to j as p<sub>2</sub>. (It may help if you check the figure on <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=230447&amp;type=content&amp;rcode=dalhousie-2566823" target="_self">page 4 here</a>.) We can immediately conclude that p<sub>1</sub>&nbsp;must be the shortest path from i to k in which all intermediate vertices are numbered k - 1 or lower, and p<sub>2</sub>&nbsp;must be the shortest path from k to j in which all intermediate vertices are numbered k - 1 or lower.</span></p>
 <p><span style="font-size: 19px;">Let d<sub>ij</sub><sup>(k)</sup>&nbsp;denote the weight of the shortest path from i to j in which all intermediate vertices are numbered k or lower. Then, based on the above observation, we have the following recurrence: If k = 0, then d<sub>ij</sub><sup>(k)</sup>&nbsp;= w<sub>ij</sub>. Otherwise, d<sub>ij</sub><sup>(k)</sup>&nbsp;= min(d<sub>ij</sub><sup>(k-1)</sup>, d<sub>ik</sub><sup>(k-1)</sup>&nbsp;+ d<sub>kj</sub><sup>(k-1)</sup>).</span></p>
 <p><span style="font-size: 19px;">We can compute d<sub>ij</sub><sup>(k)</sup>&nbsp;in increasing order of k as follows:</span></p>
-<pre><span style="font-size: 19px;">Floyd-Warshall(W, n)
+<pre><span style="font-size: 19px;">11. Floyd-Warshall(W, n)
    // W is an n by n matrix of weights (the adjacency matrix representation of the weighted graph G)
    // output array is an n by n array of shortest path weights
    
