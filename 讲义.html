@@ -1234,12 +1234,12 @@ if d[v] &gt; t then
 <p><span style="font-size: 19px;">In the all-pairs shortest path problem, our goal is to find the shortest paths between all pairs of vertices in a graph.</span></p>
 <p><span style="font-size: 19px;">One way of solving this problem is to run algorithms for the single-source shortest path problem |V| times, and each time we run it, we choose a different vertex as the source vertex. If all edge weights are non-negative, we can use Dijkstra's algorithm here. If we implement Dijkstra's algorithm using a heap, then the running time is O(|V|<sup>2</sup>lg|V| + |V||E| lg|V|) = O(|V|<sup>3</sup>lg|V|). If we use a Fibonacci heap instead, the running time is O(|V|<sup>2</sup>lg|V| + |V||E|) = O(|V|<sup>3</sup>). If negative edge weights are allowed, we can use the Bellman-Ford algorithm, requiring O(|V|<sup>2</sup>|E|) = O(|V|<sup>4</sup>) time.</span></p>
 <p><span style="font-size: 19px;">Now, let us learn an elegant solution based on dynamic programming that was specifically designed for this problem.</span></p>
-<h3><span style="font-size: 19px;">Floyd-Warshall Algorithm</span></h3>
+<h3><span style="font-size: 19px;">10.1. Floyd-Warshall Algorithm</span></h3>
 <p><span style="font-size: 19px;">The Floyd-Warshall Algorithm is a dynamic programming algorithm designed for the all-pairs shortest path problem. It allows negative edge weights, but requires that there are no negative-weight cycle in the graph. This means that we just have to consider simple paths when computing the shortest paths.</span></p>
 <p><span style="font-size: 19px;">For this algorithm, we number the vertices 1, 2, ..., n, where n = |V|. Now, consider all paths from vertex i to vertex j in which all intermediate vertices are numbered k or lower (a vertex in the path from i to j that is neither i or j is an intermediate vertex). Then, if vertex k appears in the shortest path, p, from i to j, we refer to the subpath of p from vertex i to vertex k as path p<sub>1</sub>, and the subpath from k to j as p<sub>2</sub>. (It may help if you check the figure on <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=230447&amp;type=content&amp;rcode=dalhousie-2566823" target="_self">page 4 here</a>.) We can immediately conclude that p<sub>1</sub>&nbsp;must be the shortest path from i to k in which all intermediate vertices are numbered k - 1 or lower, and p<sub>2</sub>&nbsp;must be the shortest path from k to j in which all intermediate vertices are numbered k - 1 or lower.</span></p>
 <p><span style="font-size: 19px;">Let d<sub>ij</sub><sup>(k)</sup>&nbsp;denote the weight of the shortest path from i to j in which all intermediate vertices are numbered k or lower. Then, based on the above observation, we have the following recurrence: If k = 0, then d<sub>ij</sub><sup>(k)</sup>&nbsp;= w<sub>ij</sub>. Otherwise, d<sub>ij</sub><sup>(k)</sup>&nbsp;= min(d<sub>ij</sub><sup>(k-1)</sup>, d<sub>ik</sub><sup>(k-1)</sup>&nbsp;+ d<sub>kj</sub><sup>(k-1)</sup>).</span></p>
 <p><span style="font-size: 19px;">We can compute d<sub>ij</sub><sup>(k)</sup>&nbsp;in increasing order of k as follows:</span></p>
-<pre><span style="font-size: 19px;">11. Floyd-Warshall(W, n)
+<pre><span style="font-size: 19px;">Floyd-Warshall(W, n)
    // W is an n by n matrix of weights (the adjacency matrix representation of the weighted graph G)
    // output array is an n by n array of shortest path weights
    
@@ -1252,7 +1252,6 @@ if d[v] &gt; t then
          
    return D<sup>(n)</sup></span></pre>
 <p><span style="font-size: 19px;">The running time is O(n<sup>3</sup>).&nbsp;</span></p>
-<p><span style="font-size: 19px; color: #ffba59;">Section 2 students can stop here.</span></p>
 <p><span style="font-size: 19px;">The D<sup>(n) </sup>table gives us the weights of shortest paths. How do we construct the shortest paths themselves? There are multiple approaches. Here I will describe one that is the easiest to explain. Alternative approaches can be found in the textbook.</span></p>
 <p><span style="font-size: 19px;">First, recall that we use a predecessor array π to encode the shortest paths in the algorithms for single-source shortest path problem. This time, since any vertex can be the source vertex, we need to define π as an n by n 2D array, in which π[i, j] stores the predecessor of j on the shortest path from i to j. If we can compute all entries of π, then we can get the nodes on the shortest path from vertex i to vertex j in reverse order: j, π[i, j], π[i, π[i, j]], ..., like what we did for the single-source shortest path problem.</span></p>
 <p><span style="font-size: 19px;">Then, how do we compute the entries of π? Let us focus on an arbitrary entry π[i, j]. (It may help if you check the figure on <a href="/d2l/common/dialogs/quickLink/quickLink.d2l?ou=230447&amp;type=content&amp;rcode=dalhousie-2566823" target="_self">page 7 here</a>.) We can see that, if v is the predecessor of the vertex j on the shortest path from i to j, then we have d<sub>iv</sub><sup>(n)</sup> + w(v, j) = d<sub>ij</sub><sup>(n)</sup>. Therefore, we can compute π[i, j] by checking all edges that enter j and find the edge (v, j) that satisfies this equation, and then π[i, j] = v. This can be done by search through the j-th column of the adjacency matrix, which requires O(|V|) time.&nbsp;</span></p>
@@ -1277,9 +1276,8 @@ if d[v] &gt; t then
 <img src="Pictures/21-5.png" alt="21-5">
 <img src="Pictures/21-6.png" alt="21-6">
 <img src="Pictures/21-7.png" alt="21-7">
-<p><span style="color: #ffba59; font-size: 19px;">We used the first 20 minutes for Student Feedback on Learning Experiences. Thank you for participating. If you have not provided any feedback, you could still do it till the lectures end.</span></p>
-<p><span style="color: #ffba59; font-size: 19px;">Section 2: Please first finish the notes for the previous lecture</span></p>
-<h1><span style="font-size: 19px;">NP-Completeness</span></h1>
+
+<h1><span style="font-size: 30px;">6.NP-Completeness</span></h1>
 <p><span style="font-size: 19px;">So far in this course, we have discussed mostly problems that can be solved efficiently. However, there are problems that are solvable, but for which no fast algorithm is known to exist. It is important to know these problems, so that we wouldn't spend time finding fast solutions.</span></p>
 <p><span style="font-size: 19px;">In this lecture, we say that an algorithm is fast if its running time is bounded by a polynomial in input size. That is, its worst-case running time is O(n<sup>k</sup>), where n is input size and k is a constant.</span></p>
 <p><span style="font-size: 19px;">Running times such as O(n<sup>3</sup>) and O(n lg n) are polynomial.</span></p>
@@ -1295,7 +1293,6 @@ if d[v] &gt; t then
 <h3><span style="font-size: 19px;">The Complexity Class NP</span></h3>
 <p><span style="font-size: 19px;">Informally we can define the complexity class NP to be the class of decision problems having the property that their "yes" instances can be verified in polynomial time. Here an instance is the input to the algorithm solving the problem. A "yes" instance is an instance of the problem with a "yes" answer.</span></p>
 <p><span style="font-size: 19px;">Let's see an example. We define a Hamiltonian cycle of an undirected graph G = (V,E) to be a simple cycle that contains all the vertices in V. </span></p>
-<p><span style="font-size: 19px; color: #ffba59;">Section 2 lecture ended here today.</span></p>
 <p><span style="font-size: 19px;">Then the Hamiltonian cycle problem (HAM-CYCLE) is: Given a graph G, does it have a Hamiltonian cycle?</span></p>
 <p><span style="font-size: 19px;">We do not know any polynomial-time algorithm for this problem, but we know that this problem is in NP. Why?</span></p>
 <p><span style="font-size: 19px;">If I claim that a particular graph has a Hamiltonian cycle, and you demand proof, then I can produce a certificate that you can check easily: the certificate is the vertices forming the cycle. With this certificate, you can first check if the cycle is simple, then if its edges are all in E, and finally whether it contains all the vertices of V. All this can be done in polynomial time.</span></p>
@@ -1315,6 +1312,65 @@ if d[v] &gt; t then
 </ol>
 <p><span style="font-size: 19px;">V returns "true" if C verifies that the answer to I is "yes" and "false" otherwise. For each "yes" instance I, there must be at least one such certificate. For each "no" instance there must be no certificate showing it is "yes".</span></p>
 <p><span style="font-size: 19px;">V is a polynomial-time verifier if it runs in time bounded by a polynomial in the size of I.</span></p>
+
+<p><span style="font-size: 19px;">Now, the formal definition of NP: A decision problem is in NP if it has a polynomial-time verifier.</span></p>
+<p><span style="font-size: 19px;">From this definition, we can prove that P ⊆ NP. That is, every problem in P is also in NP. Why? For a problem in P, we can construct the following verifier V: V solves the problem in polynomial time and returns the answer without even looking at C.</span></p>
+<p><span style="font-size: 19px;">To argue formally the the HAM-CYCLE problem is in NP, we can say: A polynomial-time verifier takes I = G and C = a claimed list of vertices forming the cycle as input. It checks to ensure that all vertices are represented, the edges actually exist in G and the cycle is simple. This uses polynomial time.</span></p>
+<p><span style="font-size: 19px;">In the second example we study the following problem: Given an integer n, is n a composite number? To prove this problem is in NP, we can design the following polynomial-time verifier: it takes I=n and C = (a, b) (a pair of integers) as input. It then verifies that both a, b &gt;= 2 and u = ab. If so, it answers true. Otherwise, it returns false. This uses constant time (also polynomial time).</span></p>
+<p><span style="font-size: 19px;">Another example is the Traveling Salesman Problem (TSP). In this problem, we are given a directed, weighted graph G, and a number B. Our task is to find out whether there exists a directed cycle passing through all the vertices with total weight &lt;= B.</span></p>
+<p><span style="font-size: 19px;">To prove that TSP is in NP, we can say : A polynomial-time verifier takes I = G and C = a claimed list of vertices forming the cycle as input. It checks to ensure that all vertices are represented, the edges actually exist in G and the sum of the weights of the edges on the cycle is indeed less than or equal to B. This uses polynomial time.</span></p>
+<h3><span style="font-size: 19px;">Polynomial-Time Reductions</span></h3>
+<p><span style="font-size: 19px;">Problem A reduces to problem B if you can solve A given access to an algorithm to solve B as a subroutine. If A reduces to B, then B is at least as hard as A, because having an algorithm for B allows us to solve A, but the converse is not necessarily true. When learning the algorithm design paradigm of reducing to known problems, we learned the element distinctness problem can be reduced to sorting, the convex hull problem can be reduced to sorting, and sorting can be reduced to convex hull.</span></p>
+<p><span style="font-size: 19px;">A decision problem A reduces to a decision problem B in polynomial time if there exists a polynomial-time computable function f that maps instances of A to instances of B, such that the answers to the instances are preserved. That is, if x is an "yes" instance of A, then f(x) is a "yes" instance of B. If x is a "no" instance of A, then f(x) is a "no" instance of B.</span></p>
+<p><span style="font-size: 19px;">A ≤<sub>P</sub>&nbsp;B denotes A reduces to B in polynomial time.</span></p>
+<p><span style="font-size: 19px;">With this definition, we can prove the following theorem:</span></p>
+<p><span style="font-size: 19px;">If A and B are decision problems, B ∈ P and A ≤<sub>P</sub>&nbsp;B, then A ∈ P.</span></p>
+<p><span style="font-size: 19px;">Proof. Since A ≤<sub>P</sub>&nbsp;B, there is a polynomial-time computable function f mapping instances of A to instances of B, preserving answers. Let x be an instance of A. To decide x, we compute f(x) and feed it to our algorithm to solve B. Whatever the answer is for B, we use it as the answer for A. The running time of our algorithm is equal to the time required to compute f(x) plus the time required to solve B on f(x), which is the sum of two polynomials. Thus the total running time of our algorithm to solve A is polynomial, and therefore, A ∈ P.</span></p>
+<p><span style="font-size: 19px;">We can also make use of our definitions to prove the following theorems:</span></p>
+<p><span style="font-size: 19px;">If A ≤<sub>P</sub>&nbsp;B and B ≤<sub>P</sub>C, then A ≤<sub>P</sub>C.</span></p>
+<p><span style="font-size: 19px;">If A ≤<sub>P</sub>&nbsp;B and B ∈ NP, then A ∈ NP.</span></p>
+<h3><span style="font-size: 19px;">NP-Complete</span></h3>
+<p><span style="font-size: 19px;">A decision problem A is NP-hard if B ≤<sub>P</sub>&nbsp;A for every B ∈ NP. A decision problem A is NP-complete if A is NP-hard and A ∈ NP.</span></p>
+<p><span style="font-size: 19px;">From the above definition, we can see that each NP-Complete problem is the "hardest" problem in NP.</span></p>
+<p><span style="font-size: 19px;">Furthermore, if there is a polynomial-time algorithm for any one NP-complete problem, then there is a polynomial-time algorithm for every problem in NP. Thus if a single NP-complete problem is in P, then P = NP. We however do not know whether there is any NP-complete problem that is in P. We can also claim that if no polynomial-time algorithm exists for any single problem in NP, then there is no polynomial-time algorithm for any NP-complete problem. However, we do not know if there is any NP-complete problem that does not have a polynomial-time algorithm for it.</span></p>
+<p><span style="font-size: 19px;">Thus, the following problem is open: Is P = NP? This is the most important open problem in computer science. This is one of the seven Millennium Prize Problems. If anyone solves this problem, he/she can claim a million-dollar prize from the Clay Mathematics institute.</span></p>
+<p><span style="font-size: 19px;">Why does everyone in computer science should know this problem? In your future career, you may come across problems that you find very difficult to solve. If you can prove that it is indeed NP-complete, then you know it is probably wise to give up finding efficient algorithms for it.</span></p>
+<p><span style="font-size: 19px;">What problems are NP-complete? The Hamiltonian cycle and TSP problem that we learned before are both NP-complete.</span></p>
+<p><span style="font-size: 19px;">How do we prove that a problem is NP-complete? We can do it in two steps. First, we prove that it is in NP. Then we show that a known NP-complete problem can be reduced to this problem in polynomial time. We do not require you to be able to prove the NP-completeness of a problem yourself in this course; you will learn how to prove it after you take the 4-th year Algorithms II.</span></p>
+<p><span style="font-size: 19px;">You are also supposed to be able to identify some problems to be NP-complete after taking this course. That is, if a computation problem can be formalized as a known NP-complete problem, you are supposed to be able to see it. Thus it is necessary to know a set of NP-complete problems. We already learned that HAM-CYCLE and TSP are NP-complete. Read the textbook to learn the definitions of the following NP-complete problems (page numbers are given in brackets, and they are numbers in the 4th edition followed by those in the 3rd edition, separated by a /):</span></p>
+<ul>
+  <li><span style="font-size: 19px;">CIRCUIT-SAT (1064/1072)</span></li>
+  <li><span style="font-size: 19px;">SAT (1073/1079)</span></li>
+  <li><span style="font-size: 19px;">3-CNF-SAT (1076/1082)</span></li>
+  <li><span style="font-size: 19px;">CLIQUE (1081/1086)</span></li>
+  <li><span style="font-size: 19px;">VERTEX-COVER (1084/1089)</span></li>
+  <li><span style="font-size: 19px;">SUBSET-SUM (1092/1097)</span></li>
+</ul>
+<p><span style="font-size: 19px;">I will also show one NP-completeness proof. This way you will be able to understand such proofs shown to you in the future, and by studying this specific proof, you will also understand all these concepts better. We will also define the CLIQUE and VERTEX-COVER problems, so that you need not read the textbook for their definitions. </span></p>
+<p><span style="font-size: 19px;">We can use the following four-step method to prove that a problem A is NP-complete:</span></p>
+<ol>
+  <li><span style="font-size: 19px;">Prove A is in NP by describing the polynomial-time verifier V that verfies "yes" instances of A. When you describe V, thinking about the following questions: What is the certificate? How is it verified?</span></li>
+  <li><span style="font-size: 19px;">Select a problem B that you already know to be NP-complete.</span></li>
+  <li><span style="font-size: 19px;">Design a function f that maps instance, x, of B to instance y = f(x) of A, such that the answer on x is the same as the answer on y. Prove this.</span></li>
+  <li><span style="font-size: 19px;">Show that f can be computed in polynomial time.</span></li>
+</ol>
+<p><span style="font-size: 19px;">To show an example, let us first see some definitions (check the notes exported from OneNote for figures for these definitions and the proofs):</span></p>
+<p><span style="font-size: 19px;">Definition. A graph G = (V, E) has a clique of size k if there exists a subset V', with |V'| = k, of V, such that for all u, v ∈ V', the edge (u, v) is in E.</span></p>
+<p><span style="font-size: 19px;">In other words, the induced subgraph on the vertices V' is the complete graph of k vertices.</span></p>
+<p><span style="font-size: 19px;">Definition [the CLIQUE problem]. Given a graph G = (V, E), and an integer k, does G have a clique of size k?</span></p>
+<p><span style="font-size: 19px;">It is known that the CLIQUE problem is NP-complete.</span></p>
+<p><span style="font-size: 19px;">Definition. A graph G = (V, E) has a vertex cover of size k if there is a subset V' of V such that for any edge (u, v) ∈ E, either u ∈ V' or v ∈ V' (or both).</span></p>
+<p><span style="font-size: 19px;">In other words, a vertex cover is a set of vertices V' such that every edge in E is incident on a vertex in V'.</span></p>
+<p><span style="font-size: 19px;">Definition [the VERTEX-COVER problem]: Given a graph G and an integer k, does it have a vertex cover V' of size k?</span></p>
+<p><span style="font-size: 19px;">We now use the 4-step method to prove that VERTEX-COVER is NP-complete.</span></p>
+<p><span style="font-size: 19px;">First, we prove that VERTEX-COVER is in NP. The verifier V takes as input an instance (G, k) and a certificate that is a list of vertices V' forming alleged vertex cover. V checks if |V'| = k, and whether each edge in E is incident on some vertex in V'. It is easy to do this in polynomial time.</span></p>
+<p><span style="font-size: 19px;">We now prove that CLIQUE ≤<sub>P</sub>&nbsp;VERTEX-COVER. We transform an instance, (G, k), of CLIQUE to an instance (G, |V|-k) of VERTEX COVER. Here&nbsp;G&nbsp;= (V,&nbsp;E), where&nbsp;E&nbsp;= {(u, v) | u and v are in V, u is not v, and (u, v) is not in E}. It is easy to see that this transformation requires polynomial time.</span></p>
+<p><span style="font-size: 19px;">We will finish this proof in the next lecture.</span></p>
+
+
+
+
+
 <p><span style="font-size: 19px;">We next prove that G has a clique of size k if and only if&nbsp;G&nbsp;has a vertex cover of size |V| - k.</span></p>
 <p><span style="font-size: 19px;">Suppose V' is a clique of size k in G = (V, E). Let (u, v) be an edge in&nbsp;E. Then (u, v) is not in E. Hence, either u is not in V', or v is not in V, for if they were both in V', (u, v) must be in E. Therefore, either u is in V-V', or v is in V-V'. Thus, each edge (u, v) ∈&nbsp;E&nbsp;has at least one endpoint in V - V', so V - V' is a vertex cover for&nbsp;G, of size |V| - k.</span></p>
 <p><span style="font-size: 19px;">Conversely, suppose&nbsp;G&nbsp;has a vertex cover V" of size |V| - k. Then for any edge (u, v) ∈&nbsp;E, either u is in V" or v is in V". Taking the contrapositive, if u ∉ V" and v ∉ V", then (u, v) ∉&nbsp;E. In other words, if u ∈V - V" and v ∈V - V", then (u, v) ∈E. Therefore, V-V" is a clique in G, of size |V| - (|V| - k) = k.</span></p>
@@ -1328,7 +1384,7 @@ if d[v] &gt; t then
   <li><span style="font-size: 19px; color: #ffba59;">The next example (maintaining subrange sum under updates) is not (because it was taught in Section 1 only)</span></li>
   <li><span style="font-size: 19px; color: #ffba59;">Exhaustive search is not (because it was taught in Section 1 only; see notes below)</span></li>
 </ul>
-<h1><span style="font-size: 24px;">Exhaustive Search</span></h1>
+<h1><span style="font-size: 24px;">7. Exhaustive Search</span></h1>
 <p><span style="font-size: 19px;">Sometimes we fail to find a fast algorithm, and we end up doing an exhaustive search of a solution space, i.e., we consider all possibilities in a solution space.</span></p>
 <h3><span style="font-size: 19px;">Backtracking</span></h3>
 <p><span style="font-size: 19px;">Backtracking is a way of exhaustively considering a large search space, without actually having to traverse every possibility, using very little space.</span></p>
